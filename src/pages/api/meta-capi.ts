@@ -1,70 +1,139 @@
 import type { APIRoute } from 'astro';
 
-/**
- * Meta Conversions API (CAPI) server-side pixel proxy.
- * Forwards browser events to Meta's CAPI for improved signal quality.
- * TODO: Set META_PIXEL_ID and META_CAPI_ACCESS_TOKEN env vars.
- */
+// ─── SHA-256 helper (Web Crypto — available in Workers) ──────────────────────
+async function sha256(value: string): Promise<string> {
+  const data = new TextEncoder().encode(value.trim().toLowerCase());
+  const hash = await crypto.subtle.digest('SHA-256', data);
+  return Array.from(new Uint8Array(hash))
+    .map((b) => b.toString(16).padStart(2, '0'))
+    .join('');
+}
+
+// Only hash if value looks un-hashed (< 64 hex chars)
+async function maybeHash(value: string | undefined): Promise<string | undefined> {
+  if (!value) return undefined;
+  if (/^[a-f0-9]{64}$/.test(value)) return value; // already hashed
+  return sha256(value);
+}
+
+// ─── Route ───────────────────────────────────────────────────────────────────
 export const POST: APIRoute = async ({ request }) => {
-  const body = await request.json().catch(() => ({}));
+  let body: Record<string, unknown>;
+  try {
+    body = await request.json();
+  } catch {
+    return json({ error: 'Invalid JSON' }, 400);
+  }
 
   const {
     event_name,
     event_time = Math.floor(Date.now() / 1000),
-    user_data = {},
+    event_id,          // deduplication ID (client must supply)
+    user_data = {} as Record<string, string>,
     custom_data = {},
     event_source_url,
     action_source = 'website',
-  } = body;
+  } = body as {
+    event_name?: string;
+    event_time?: number;
+    event_id?: string;
+    user_data?: Record<string, string>;
+    custom_data?: Record<string, unknown>;
+    event_source_url?: string;
+    action_source?: string;
+  };
 
-  if (!event_name) {
-    return new Response(JSON.stringify({ error: 'event_name required' }), {
-      status: 400,
-      headers: { 'Content-Type': 'application/json' },
-    });
+  const VALID_EVENTS = ['PageView', 'ViewContent', 'AddToCart', 'InitiateCheckout', 'Purchase'];
+
+  if (!event_name || !VALID_EVENTS.includes(event_name)) {
+    return json({ error: `event_name must be one of: ${VALID_EVENTS.join(', ')}` }, 400);
   }
 
-  const META_PIXEL_ID = process.env.META_PIXEL_ID;
-  const META_CAPI_TOKEN = process.env.META_CAPI_ACCESS_TOKEN;
+  // Read env (Cloudflare Workers / Astro SSR)
+  const META_PIXEL_ID = (import.meta.env.META_PIXEL_ID as string | undefined)
+    ?? (typeof process !== 'undefined' ? process.env.META_PIXEL_ID : undefined);
+  const META_CAPI_TOKEN = (import.meta.env.META_CAPI_ACCESS_TOKEN as string | undefined)
+    ?? (typeof process !== 'undefined' ? process.env.META_CAPI_ACCESS_TOKEN : undefined);
 
   if (!META_PIXEL_ID || !META_CAPI_TOKEN) {
-    // Stub mode — log and return success
-    console.log('[meta-capi] Stub mode (no env vars):', event_name);
-    return new Response(JSON.stringify({ success: true, stubbed: true }), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    console.log('[meta-capi] Stub mode — no env vars set. Event:', event_name);
+    return json({ success: true, stubbed: true });
   }
+
+  // Extract & hash PII from user_data
+  const ip = request.headers.get('cf-connecting-ip')
+    ?? request.headers.get('x-forwarded-for')?.split(',')[0].trim();
+  const ua = request.headers.get('user-agent') ?? undefined;
+
+  const [em, ph, fbc, fbp] = await Promise.all([
+    maybeHash(user_data.em ?? user_data.email),
+    maybeHash(user_data.ph ?? user_data.phone),
+    Promise.resolve(user_data.fbc),
+    Promise.resolve(user_data.fbp),
+  ]);
+
+  const hashedUserData: Record<string, string | undefined> = {
+    ...(em && { em }),
+    ...(ph && { ph }),
+    ...(ip && { client_ip_address: ip }),
+    ...(ua && { client_user_agent: ua }),
+    ...(fbc && { fbc }),
+    ...(fbp && { fbp }),
+  };
+
+  // Remove undefined values
+  Object.keys(hashedUserData).forEach(
+    (k) => hashedUserData[k] === undefined && delete hashedUserData[k]
+  );
 
   const payload = {
     data: [
       {
         event_name,
         event_time,
+        event_id: event_id ?? `${event_name}-${Date.now()}-${Math.random().toString(36).slice(2)}`,
         action_source,
         event_source_url,
-        user_data,
+        user_data: hashedUserData,
         custom_data,
       },
     ],
+    test_event_code: import.meta.env.META_TEST_EVENT_CODE ?? undefined,
   };
 
-  const metaRes = await fetch(
-    `https://graph.facebook.com/v19.0/${META_PIXEL_ID}/events?access_token=${META_CAPI_TOKEN}`,
-    {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
+  // Remove test_event_code if not set
+  if (!payload.test_event_code) delete payload.test_event_code;
+
+  try {
+    const metaRes = await fetch(
+      `https://graph.facebook.com/v18.0/${META_PIXEL_ID}/events?access_token=${META_CAPI_TOKEN}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      }
+    );
+
+    if (!metaRes.ok) {
+      const errBody = await metaRes.text().catch(() => '');
+      console.error('[meta-capi] API error:', metaRes.status, errBody);
+      return json({ success: false, error: 'Upstream error' }, 502);
     }
-  ).catch(() => null);
 
-  if (!metaRes?.ok) {
-    console.error('[meta-capi] Failed to forward event');
-    return new Response(JSON.stringify({ success: false }), { status: 502 });
+    const result = await metaRes.json().catch(() => ({}));
+    return json({ success: true, result });
+  } catch (err) {
+    console.error('[meta-capi] Fetch error:', err);
+    return json({ success: false, error: 'Network error' }, 502);
   }
-
-  return new Response(JSON.stringify({ success: true }), {
-    status: 200,
-    headers: { 'Content-Type': 'application/json' },
-  });
 };
+
+function json(data: unknown, status = 200): Response {
+  return new Response(JSON.stringify(data), {
+    status,
+    headers: {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': 'https://pieceofstass.com',
+    },
+  });
+}

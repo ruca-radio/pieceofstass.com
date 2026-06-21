@@ -1,6 +1,6 @@
 globalThis.process ??= {}; globalThis.process.env ??= {};
 import { f as createComponent, k as renderComponent, r as renderTemplate, m as maybeRenderHead } from '../chunks/astro/server_WCqRE2GV.mjs';
-import { $ as $$BaseLayout } from '../chunks/BaseLayout_CtbDq2BL.mjs';
+import { $ as $$BaseLayout } from '../chunks/BaseLayout_D9r1jel8.mjs';
 import { u as useStore, c as cartItems, a as cartSubtotal, j as jsxRuntimeExports, b as updateCartItem, r as removeFromCart } from '../chunks/store_C5mL8FT6.mjs';
 export { r as renderers } from '../chunks/_@astro-renderers_DtL-lId1.mjs';
 

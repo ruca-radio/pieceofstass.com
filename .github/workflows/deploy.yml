@@ -1,0 +1,260 @@
+# ============================================================
+# Piece of Stass — CI/CD Pipeline
+# Astro 5 + Cloudflare Workers via wrangler-action@v3
+#
+# Required GitHub Secrets (Settings → Secrets and variables → Actions):
+#   CLOUDFLARE_API_TOKEN       — CF API token with Workers:Edit + Workers Routes:Edit
+#                                + Account:Read permissions. Create at:
+#                                Cloudflare Dashboard → My Profile → API Tokens
+#                                → "Edit Cloudflare Workers" template.
+#   CLOUDFLARE_ACCOUNT_ID      — Found in CF Dashboard right sidebar (32-char hex ID).
+#
+# Required GitHub Secrets — Runtime env vars injected into the Worker:
+#   STRIPE_PUBLISHABLE_KEY     — pk_live_... (safe for browser, but set as secret anyway)
+#   STRIPE_WEBHOOK_SECRET      — whsec_...
+#   MEDUSA_BACKEND_URL         — https://api.pieceofstass.com
+#   MEDUSA_PUBLISHABLE_KEY     — Medusa Storefront API key (read-only)
+#   CHECKOUT_URL               — https://api.pieceofstass.com/store/carts
+#   META_PIXEL_ID              — xxxxxxxxxxxxxxxx
+#   META_CAPI_ACCESS_TOKEN     — EAAxxxxxxx
+#   META_TEST_EVENT_CODE       — TEST12345 (remove in production — only for staging)
+#   TIKTOK_PIXEL_ID            — Cxxxxxxxxxxxxxxx
+#   TIKTOK_ACCESS_TOKEN        — (TikTok Events API token)
+#   TIKTOK_TEST_EVENT_CODE     — (remove in production)
+#   KLAVIYO_API_KEY            — pk_xxx (private — server-side only)
+#   KLAVIYO_LIST_ID            — XXXXXX (newsletter list ID)
+#   RESEND_API_KEY             — re_... (if using Resend for transactional email)
+#   SENTRY_DSN                 — https://xxx@oXXX.ingest.sentry.io/xxx (optional)
+#   GA4_MEASUREMENT_ID         — G-XXXXXXXXXX (Cloudflare env var, not a secret)
+#   CF_WEB_ANALYTICS_TOKEN     — Cloudflare Web Analytics beacon token
+#
+# Note: Never commit actual values. Use `wrangler secret put` for runtime secrets
+# or inject via this workflow's `secrets` block.
+# ============================================================
+
+name: CI / Deploy
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ─────────────────────────────────────────────────
+  # Job 1: Lint, Typecheck & Build (runs on every PR and push)
+  # ─────────────────────────────────────────────────
+  ci:
+    name: Lint · Typecheck · Build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npx tsc --noEmit
+        # If tsconfig.json doesn't exist, this is a no-op-safe step:
+        # add "typecheck": "tsc --noEmit" to package.json scripts for clarity.
+
+      - name: Build
+        env:
+          # Inject non-secret public vars so the build can reference them
+          PUBLIC_SITE_URL: https://pieceofstass.com
+          CHECKOUT_URL: ${{ secrets.CHECKOUT_URL }}
+          MEDUSA_BACKEND_URL: ${{ secrets.MEDUSA_BACKEND_URL }}
+        run: npm run build
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-${{ github.sha }}
+          path: dist/
+          retention-days: 7
+
+  # ─────────────────────────────────────────────────
+  # Job 2: Preview Deploy (PRs only)
+  # Deploys a named preview to Workers; URL is posted as a PR comment.
+  # ─────────────────────────────────────────────────
+  preview:
+    name: Preview Deploy
+    needs: ci
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      pull-requests: write   # needed to post the preview URL comment
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-${{ github.sha }}
+          path: dist/
+
+      - name: Deploy preview to Cloudflare Workers
+        id: deploy
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          # Deploy to "preview" environment defined in wrangler.toml
+          command: deploy --env preview --name pieceofstass-preview-pr${{ github.event.pull_request.number }}
+          # Inject runtime secrets as wrangler vars for preview
+          secrets: |
+            STRIPE_PUBLISHABLE_KEY
+            STRIPE_WEBHOOK_SECRET
+            MEDUSA_BACKEND_URL
+            MEDUSA_PUBLISHABLE_KEY
+            CHECKOUT_URL
+            META_PIXEL_ID
+            META_CAPI_ACCESS_TOKEN
+            META_TEST_EVENT_CODE
+            TIKTOK_PIXEL_ID
+            TIKTOK_ACCESS_TOKEN
+            TIKTOK_TEST_EVENT_CODE
+            KLAVIYO_API_KEY
+            KLAVIYO_LIST_ID
+        env:
+          STRIPE_PUBLISHABLE_KEY: ${{ secrets.STRIPE_PUBLISHABLE_KEY }}
+          STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
+          MEDUSA_BACKEND_URL: ${{ secrets.MEDUSA_BACKEND_URL }}
+          MEDUSA_PUBLISHABLE_KEY: ${{ secrets.MEDUSA_PUBLISHABLE_KEY }}
+          CHECKOUT_URL: ${{ secrets.CHECKOUT_URL }}
+          META_PIXEL_ID: ${{ secrets.META_PIXEL_ID }}
+          META_CAPI_ACCESS_TOKEN: ${{ secrets.META_CAPI_ACCESS_TOKEN }}
+          META_TEST_EVENT_CODE: ${{ secrets.META_TEST_EVENT_CODE }}
+          TIKTOK_PIXEL_ID: ${{ secrets.TIKTOK_PIXEL_ID }}
+          TIKTOK_ACCESS_TOKEN: ${{ secrets.TIKTOK_ACCESS_TOKEN }}
+          TIKTOK_TEST_EVENT_CODE: ${{ secrets.TIKTOK_TEST_EVENT_CODE }}
+          KLAVIYO_API_KEY: ${{ secrets.KLAVIYO_API_KEY }}
+          KLAVIYO_LIST_ID: ${{ secrets.KLAVIYO_LIST_ID }}
+
+      - name: Comment preview URL on PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const url = '${{ steps.deploy.outputs.deployment-url }}';
+            const body = [
+              '## Preview Deploy',
+              '',
+              `**URL:** ${url || 'https://pieceofstass-preview-pr${{ github.event.pull_request.number }}.pieceofstass.workers.dev'}`,
+              '',
+              `**Commit:** \`${{ github.sha }}\``,
+              `**Branch:** \`${{ github.head_ref }}\``,
+              '',
+              '> This preview Worker will be automatically cleaned up when the PR is merged or closed.',
+            ].join('\n');
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body,
+            });
+
+  # ─────────────────────────────────────────────────
+  # Job 3: Production Deploy (push to main only)
+  # ─────────────────────────────────────────────────
+  deploy:
+    name: Production Deploy
+    needs: ci
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: production
+      url: https://pieceofstass.com
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-${{ github.sha }}
+          path: dist/
+
+      - name: Deploy to Cloudflare Workers (production)
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: deploy --env production
+          secrets: |
+            STRIPE_PUBLISHABLE_KEY
+            STRIPE_WEBHOOK_SECRET
+            MEDUSA_BACKEND_URL
+            MEDUSA_PUBLISHABLE_KEY
+            CHECKOUT_URL
+            META_PIXEL_ID
+            META_CAPI_ACCESS_TOKEN
+            TIKTOK_PIXEL_ID
+            TIKTOK_ACCESS_TOKEN
+            KLAVIYO_API_KEY
+            KLAVIYO_LIST_ID
+            RESEND_API_KEY
+            SENTRY_DSN
+        env:
+          STRIPE_PUBLISHABLE_KEY: ${{ secrets.STRIPE_PUBLISHABLE_KEY }}
+          STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
+          MEDUSA_BACKEND_URL: ${{ secrets.MEDUSA_BACKEND_URL }}
+          MEDUSA_PUBLISHABLE_KEY: ${{ secrets.MEDUSA_PUBLISHABLE_KEY }}
+          CHECKOUT_URL: ${{ secrets.CHECKOUT_URL }}
+          META_PIXEL_ID: ${{ secrets.META_PIXEL_ID }}
+          META_CAPI_ACCESS_TOKEN: ${{ secrets.META_CAPI_ACCESS_TOKEN }}
+          TIKTOK_PIXEL_ID: ${{ secrets.TIKTOK_PIXEL_ID }}
+          TIKTOK_ACCESS_TOKEN: ${{ secrets.TIKTOK_ACCESS_TOKEN }}
+          KLAVIYO_API_KEY: ${{ secrets.KLAVIYO_API_KEY }}
+          KLAVIYO_LIST_ID: ${{ secrets.KLAVIYO_LIST_ID }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+
+      - name: Notify deploy success
+        if: success()
+        run: |
+          echo "✓ Deployed pieceofstass.com @ ${{ github.sha }} to production"
+
+      - name: Notify deploy failure
+        if: failure()
+        run: |
+          echo "✗ Production deploy FAILED for ${{ github.sha }}" >&2
+          # Add Slack/email notification here if desired
+          exit 1

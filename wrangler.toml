@@ -1,5 +1,14 @@
+# ============================================================
+# Piece of Stass — Cloudflare Workers Configuration
+# wrangler.toml — production-hardened config
+# ============================================================
+# IMPORTANT: Never put secrets in this file.
+# Secrets are set via: wrangler secret put <VAR_NAME> --env <env>
+# Public vars (non-secret) are safe to commit in [vars] blocks.
+# ============================================================
+
 name = "pieceofstass"
-compatibility_date = "2024-12-30"
+compatibility_date = "2026-06-01"
 compatibility_flags = ["nodejs_compat"]
 
 main = "./dist/_worker.js"
@@ -7,6 +16,141 @@ main = "./dist/_worker.js"
 [site]
 bucket = "./dist"
 
+# ─── Smart Placement ────────────────────────────────────────
+# Cloudflare automatically places the Worker in the region
+# closest to the most-used backend (Medusa on Railway).
+[placement]
+mode = "smart"
+
+# ─── Observability ──────────────────────────────────────────
+# Enables Workers Observability dashboard: request traces,
+# CPU time, memory, error rates — no code changes needed.
+[observability]
+enabled = true
+head_sampling_rate = 1  # 100% sampling; reduce to 0.1 after launch if volume is high
+
+# ─── Default (non-production) vars ──────────────────────────
+# These are overridden by [env.production] and [env.preview].
+# Used during local `wrangler dev` only.
 [vars]
-CHECKOUT_URL = ""
 PUBLIC_SITE_URL = "https://pieceofstass.com"
+CHECKOUT_URL = ""
+
+# ─── R2 Bucket Binding ──────────────────────────────────────
+# Binding name: IMAGES
+# Bucket name: pieceofstass-images
+# Create bucket: npx wrangler r2 bucket create pieceofstass-images
+[[r2_buckets]]
+binding = "IMAGES"
+bucket_name = "pieceofstass-images"
+# preview_bucket_name = "pieceofstass-images-preview"  # Uncomment after creating preview bucket
+
+# ─── KV Namespace Binding ───────────────────────────────────
+# Used for cart session storage (server-side cart state, guest sessions).
+# Create: npx wrangler kv:namespace create CART_KV
+# Paste the returned id below.
+[[kv_namespaces]]
+binding = "CART_KV"
+id = "REPLACE_WITH_KV_NAMESPACE_ID"          # ← run: wrangler kv:namespace create CART_KV
+preview_id = "REPLACE_WITH_PREVIEW_KV_ID"   # ← run: wrangler kv:namespace create CART_KV --preview
+
+# ─── D1 Database Binding (optional) ─────────────────────────
+# Local persistence for: wishlists, recently viewed, A/B test assignments.
+# Create: npx wrangler d1 create pieceofstass-db
+# Then paste returned database_id below.
+# [[d1_databases]]
+# binding = "DB"
+# database_name = "pieceofstass-db"
+# database_id = "REPLACE_WITH_D1_DATABASE_ID"  # ← from wrangler d1 create output
+
+# ============================================================
+# PRODUCTION ENVIRONMENT
+# ============================================================
+[env.production]
+name = "pieceofstass"
+
+# Routes — Workers Routes bind the hostname to this Worker.
+# Both apex and www are routed here; www → apex redirect is
+# handled via Cloudflare Redirect Rule (see docs/devops/dns-setup.md).
+routes = [
+  { pattern = "pieceofstass.com/*", zone_name = "pieceofstass.com" },
+  { pattern = "www.pieceofstass.com/*", zone_name = "pieceofstass.com" },
+]
+
+# Public vars — safe to commit; injected into Worker and accessible
+# via import.meta.env in Astro SSR.
+[env.production.vars]
+PUBLIC_SITE_URL = "https://pieceofstass.com"
+PUBLIC_STRIPE_PUBLISHABLE_KEY = "pk_live_REPLACE_ME"   # ← replace with live key
+PUBLIC_GA4_MEASUREMENT_ID = "G-REPLACE_ME"             # ← replace with GA4 property ID
+PUBLIC_CF_WEB_ANALYTICS_TOKEN = "REPLACE_ME"           # ← CF Dashboard → Web Analytics token
+
+# Secrets (set via wrangler secret put, NOT here):
+#   STRIPE_WEBHOOK_SECRET
+#   MEDUSA_BACKEND_URL
+#   MEDUSA_PUBLISHABLE_KEY
+#   CHECKOUT_URL
+#   META_PIXEL_ID
+#   META_CAPI_ACCESS_TOKEN
+#   TIKTOK_PIXEL_ID
+#   TIKTOK_ACCESS_TOKEN
+#   KLAVIYO_API_KEY
+#   KLAVIYO_LIST_ID
+#   RESEND_API_KEY
+#   SENTRY_DSN
+
+# R2 binding — production bucket
+[[env.production.r2_buckets]]
+binding = "IMAGES"
+bucket_name = "pieceofstass-images"
+
+# KV binding — production namespace
+[[env.production.kv_namespaces]]
+binding = "CART_KV"
+id = "REPLACE_WITH_KV_NAMESPACE_ID"
+
+# D1 binding — production database (uncomment when created)
+# [[env.production.d1_databases]]
+# binding = "DB"
+# database_name = "pieceofstass-db"
+# database_id = "REPLACE_WITH_D1_DATABASE_ID"
+
+# ============================================================
+# PREVIEW ENVIRONMENT (PR previews)
+# ============================================================
+[env.preview]
+name = "pieceofstass-preview"
+
+# No routes — preview Workers are accessed via their workers.dev subdomain
+# (https://pieceofstass-preview-prXXX.pieceofstass.workers.dev)
+
+[env.preview.vars]
+PUBLIC_SITE_URL = "https://pieceofstass-preview.pieceofstass.workers.dev"
+PUBLIC_STRIPE_PUBLISHABLE_KEY = "pk_test_REPLACE_ME"   # ← ALWAYS use test keys in preview
+PUBLIC_GA4_MEASUREMENT_ID = ""                          # ← leave blank; don't pollute GA4 with preview traffic
+PUBLIC_CF_WEB_ANALYTICS_TOKEN = ""                      # ← leave blank in preview
+
+# Secrets for preview (set via wrangler secret put --env preview):
+#   STRIPE_WEBHOOK_SECRET      (use test whsec_...)
+#   MEDUSA_BACKEND_URL         (can point to staging Medusa)
+#   MEDUSA_PUBLISHABLE_KEY
+#   CHECKOUT_URL
+#   META_PIXEL_ID              (use test pixel or your real one with TEST_EVENT_CODE)
+#   META_CAPI_ACCESS_TOKEN
+#   META_TEST_EVENT_CODE       (TEST12345 — prevent real event counts in Meta)
+#   TIKTOK_PIXEL_ID
+#   TIKTOK_ACCESS_TOKEN
+#   TIKTOK_TEST_EVENT_CODE
+#   KLAVIYO_API_KEY
+#   KLAVIYO_LIST_ID
+
+# R2 binding — preview can share the production bucket (images are immutable)
+# or use a separate preview bucket for isolation.
+[[env.preview.r2_buckets]]
+binding = "IMAGES"
+bucket_name = "pieceofstass-images"
+
+# KV binding — preview namespace
+[[env.preview.kv_namespaces]]
+binding = "CART_KV"
+id = "REPLACE_WITH_PREVIEW_KV_ID"

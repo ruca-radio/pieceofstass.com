@@ -7,6 +7,7 @@ import AnnouncementBar from '../components/AnnouncementBar.astro';
 import CartDrawer from '../components/islands/CartDrawer';
 import SearchOverlay from '../components/islands/SearchOverlay';
 import ToastContainer from '../components/islands/ToastContainer';
+import CookieBanner from '../components/islands/CookieBanner';
 
 interface Props {
   title: string;
@@ -29,6 +30,22 @@ const {
   noindex,
   transparentHeader = false,
 } = Astro.props;
+
+// Read env vars (available at SSR time on Cloudflare Workers)
+const GA4_ID = import.meta.env.GA4_MEASUREMENT_ID ?? '';
+const CF_ANALYTICS = import.meta.env.CF_WEB_ANALYTICS_TOKEN ?? '';
+const META_PIXEL_ID = import.meta.env.META_PIXEL_ID ?? '';
+const TIKTOK_PIXEL_ID = import.meta.env.TIKTOK_PIXEL_ID ?? '';
+const KLAVIYO_SITE_ID = import.meta.env.KLAVIYO_SITE_ID ?? '';
+
+// CF-IPCountry header for consent gating (injected by Cloudflare at runtime)
+// try/catch so static analysis passes during build time prerender
+let country = '';
+try {
+  country = Astro.request.headers.get('cf-ipcountry') ?? '';
+} catch {
+  // Build-time prerender pass — banner will default to showing
+}
 ---
 
 <!doctype html>
@@ -48,6 +65,58 @@ const {
       jsonLd={jsonLd}
       noindex={noindex}
     />
+
+    {/* ── GA4 — consent mode defaults set before gtag loads ── */}
+    {GA4_ID && (
+      <>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(...args: unknown[]) { window.dataLayer!.push(args); }
+          window.gtag = gtag as typeof window.gtag;
+          // Default all consent to denied — CookieBanner will update
+          gtag('consent', 'default', {
+            analytics_storage: 'denied',
+            ad_storage: 'denied',
+            ad_user_data: 'denied',
+            ad_personalization: 'denied',
+            wait_for_update: 2000,
+          });
+          gtag('js', new Date());
+        </script>
+        <script
+          async
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA4_ID}`}
+        ></script>
+        <script define:vars={{ GA4_ID }}>
+          window.gtag('config', GA4_ID, {
+            send_page_view: true,
+            cookie_flags: 'SameSite=None;Secure',
+          });
+        </script>
+      </>
+    )}
+
+    {/* ── Meta Pixel — noscript fallback ── */}
+    {META_PIXEL_ID && (
+      <noscript>
+        <img
+          height="1"
+          width="1"
+          style="display:none"
+          src={`https://www.facebook.com/tr?id=${META_PIXEL_ID}&ev=PageView&noscript=1`}
+          alt=""
+        />
+      </noscript>
+    )}
+
+    {/* ── Cloudflare Web Analytics ── */}
+    {CF_ANALYTICS && (
+      <script
+        defer
+        src="https://static.cloudflareinsights.com/beacon.min.js"
+        data-cf-beacon={`{"token": "${CF_ANALYTICS}"}`}
+      ></script>
+    )}
   </head>
   <body>
     <AnnouncementBar />
@@ -59,5 +128,64 @@ const {
     <CartDrawer client:load />
     <SearchOverlay client:load />
     <ToastContainer client:load />
+
+    {/* ── Cookie Consent Banner ── */}
+    <CookieBanner client:load country={country} />
+
+    {/* ── Meta Pixel init (gated by consent via analytics.ts) ── */}
+    {META_PIXEL_ID && (
+      <script define:vars={{ META_PIXEL_ID }}>
+        // Meta Pixel base code — fires PageView only after consent check
+        !function(f,b,e,v,n,t,s){
+          if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+          n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+          if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+          n.queue=[];t=b.createElement(e);t.async=!0;
+          t.src=v;s=b.getElementsByTagName(e)[0];
+          s.parentNode.insertBefore(t,s)
+        }(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', META_PIXEL_ID);
+        // PageView is fired from analytics.ts after consent is checked
+      </script>
+    )}
+
+    {/* ── TikTok Pixel init ── */}
+    {TIKTOK_PIXEL_ID && (
+      <script define:vars={{ TIKTOK_PIXEL_ID }}>
+        !function(w,d,t){
+          w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];
+          ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie"];
+          ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};
+          for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);
+          ttq.instance=function(t){for(var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e};
+          ttq.load=function(e,n){var i="https://analytics.tiktok.com/i18n/pixel/events.js";
+          ttq._i=ttq._i||{};ttq._i[e]=[];ttq._i[e]._u=i;ttq._t=ttq._t||{};ttq._t[e]=+new Date;
+          ttq._o=ttq._o||{};ttq._o[e]=n||{};
+          var o=document.createElement("script");o.type="text/javascript";o.async=!0;o.src=i+"?sdkid="+e+"&lib="+t;
+          var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(o,a)};
+          ttq.load(TIKTOK_PIXEL_ID);
+          // Do NOT call ttq.page() here — analytics.ts handles it after consent check
+        }(window,document,'ttq');
+      </script>
+    )}
+
+    {/* ── Klaviyo onsite JS (gated by marketing consent) ── */}
+    {KLAVIYO_SITE_ID && (
+      <script define:vars={{ KLAVIYO_SITE_ID }}>
+        // Load Klaviyo only when marketing consent is given
+        function loadKlaviyo() {
+          if (!window.consent?.marketing) return;
+          if (document.getElementById('klaviyo-js')) return;
+          var s = document.createElement('script');
+          s.id = 'klaviyo-js';
+          s.async = true;
+          s.src = 'https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=' + KLAVIYO_SITE_ID;
+          document.head.appendChild(s);
+        }
+        // Try on load, and again when consent updates
+        window.addEventListener('load', loadKlaviyo);
+        document.addEventListener('consentUpdated', loadKlaviyo);
+      </script>
+    )}
   </body>
 </html>

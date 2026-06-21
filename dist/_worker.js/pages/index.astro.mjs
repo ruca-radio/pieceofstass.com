@@ -1,6 +1,6 @@
 globalThis.process ??= {}; globalThis.process.env ??= {};
 import { f as createComponent, k as renderComponent, r as renderTemplate, m as maybeRenderHead, h as addAttribute } from '../chunks/astro/server_WCqRE2GV.mjs';
-import { $ as $$BaseLayout } from '../chunks/BaseLayout_CtbDq2BL.mjs';
+import { $ as $$BaseLayout } from '../chunks/BaseLayout_D9r1jel8.mjs';
 import { P as ProductCard } from '../chunks/ProductCard_CATYbnRf.mjs';
 import { g as getTrendingProducts, b as allCategories, a as allProducts, f as formatPriceDollars } from '../chunks/products_hRpZN1wD.mjs';
 /* empty css                                 */

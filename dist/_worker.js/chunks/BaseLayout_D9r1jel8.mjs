@@ -711,6 +711,312 @@ function ToastContainer() {
   );
 }
 
+const CONSENT_REQUIRED_COUNTRIES = /* @__PURE__ */ new Set([
+  // EU/EEA
+  "AT",
+  "BE",
+  "BG",
+  "CY",
+  "CZ",
+  "DE",
+  "DK",
+  "EE",
+  "ES",
+  "FI",
+  "FR",
+  "GR",
+  "HR",
+  "HU",
+  "IE",
+  "IS",
+  "IT",
+  "LI",
+  "LT",
+  "LU",
+  "LV",
+  "MT",
+  "NL",
+  "NO",
+  "PL",
+  "PT",
+  "RO",
+  "SE",
+  "SI",
+  "SK",
+  // UK
+  "GB",
+  // Canada
+  "CA",
+  // Brazil (LGPD)
+  "BR"
+]);
+const COOKIE_NAME = "pos_consent";
+const COOKIE_MAX_AGE = 60 * 60 * 24 * 365;
+function parseCookie() {
+  if (typeof document === "undefined") return null;
+  const match = document.cookie.match(new RegExp(`(?:^|; )${COOKIE_NAME}=([^;]*)`));
+  if (!match) return null;
+  try {
+    return JSON.parse(decodeURIComponent(match[1]));
+  } catch {
+    return null;
+  }
+}
+function setCookie(consent) {
+  const value = encodeURIComponent(JSON.stringify(consent));
+  document.cookie = `${COOKIE_NAME}=${value}; max-age=${COOKIE_MAX_AGE}; path=/; SameSite=Lax; Secure`;
+}
+function applyConsent(consent) {
+  window.consent = consent;
+  if (typeof window.gtag === "function") {
+    window.gtag("consent", "update", {
+      analytics_storage: consent.analytics ? "granted" : "denied",
+      ad_storage: consent.marketing ? "granted" : "denied",
+      ad_user_data: consent.marketing ? "granted" : "denied",
+      ad_personalization: consent.marketing ? "granted" : "denied"
+    });
+  }
+}
+function CookieBanner({ country = "" }) {
+  const [visible, setVisible] = reactExports.useState(false);
+  const [showDetails, setShowDetails] = reactExports.useState(false);
+  const [analytics, setAnalytics] = reactExports.useState(true);
+  const [marketing, setMarketing] = reactExports.useState(true);
+  reactExports.useEffect(() => {
+    const gpcActive = navigator.globalPrivacyControl === true;
+    const existing = parseCookie();
+    if (existing) {
+      applyConsent(existing);
+      return;
+    }
+    if (gpcActive) {
+      const consent = { necessary: true, analytics: false, marketing: false };
+      setCookie(consent);
+      applyConsent(consent);
+      return;
+    }
+    if (country && !CONSENT_REQUIRED_COUNTRIES.has(country.toUpperCase())) {
+      const consent = { necessary: true, analytics: true, marketing: true };
+      setCookie(consent);
+      applyConsent(consent);
+      return;
+    }
+    setVisible(true);
+    if (typeof window.gtag === "function") {
+      window.gtag("consent", "default", {
+        analytics_storage: "denied",
+        ad_storage: "denied",
+        ad_user_data: "denied",
+        ad_personalization: "denied",
+        wait_for_update: 2e3
+      });
+    }
+  }, [country]);
+  if (!visible) return null;
+  const handleAcceptAll = () => {
+    const consent = { necessary: true, analytics: true, marketing: true };
+    setCookie(consent);
+    applyConsent(consent);
+    setVisible(false);
+  };
+  const handleRejectAll = () => {
+    const consent = { necessary: true, analytics: false, marketing: false };
+    setCookie(consent);
+    applyConsent(consent);
+    setVisible(false);
+  };
+  const handleSavePreferences = () => {
+    const consent = { necessary: true, analytics, marketing };
+    setCookie(consent);
+    applyConsent(consent);
+    setVisible(false);
+  };
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    "div",
+    {
+      role: "dialog",
+      "aria-label": "Cookie preferences",
+      "aria-modal": "false",
+      style: {
+        position: "fixed",
+        bottom: "24px",
+        left: "50%",
+        transform: "translateX(-50%)",
+        width: "min(640px, calc(100vw - 32px))",
+        background: "var(--color-charcoal, #1a1a1c)",
+        border: "1px solid var(--color-slate, #2c2c2e)",
+        borderRadius: "16px",
+        padding: "24px",
+        zIndex: 9999,
+        boxShadow: "0 8px 40px rgba(0,0,0,0.6)",
+        fontFamily: "var(--font-family-sans, system-ui, sans-serif)",
+        color: "var(--color-paper, #f5f5f0)"
+      },
+      children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { marginBottom: "12px" }, children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { style: { margin: 0, fontWeight: 700, fontSize: "15px" }, children: "We use cookies" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { style: { margin: "6px 0 0", fontSize: "13px", color: "var(--color-muted, #888)", lineHeight: 1.5 }, children: [
+            "We use cookies to improve your experience, measure site performance, and serve relevant ads. You can manage your preferences below. ",
+            /* @__PURE__ */ jsxRuntimeExports.jsx("a", { href: "/cookies", style: { color: "var(--color-lime, #c8f135)", textDecoration: "underline" }, children: "Cookie policy" })
+          ] })
+        ] }),
+        showDetails && /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          "div",
+          {
+            style: {
+              margin: "16px 0",
+              padding: "16px",
+              background: "rgba(255,255,255,0.04)",
+              borderRadius: "10px",
+              display: "flex",
+              flexDirection: "column",
+              gap: "14px"
+            },
+            role: "group",
+            "aria-label": "Cookie categories",
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { style: { display: "flex", alignItems: "flex-start", gap: "12px", cursor: "default" }, children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "checkbox", checked: true, disabled: true, "aria-disabled": "true", style: { marginTop: "2px", accentColor: "var(--color-lime, #c8f135)" } }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("p", { style: { margin: 0, fontSize: "13px", fontWeight: 600 }, children: "Necessary" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("p", { style: { margin: "2px 0 0", fontSize: "12px", color: "var(--color-muted, #888)" }, children: "Required for the site to function. Cannot be disabled." })
+                ] })
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { style: { display: "flex", alignItems: "flex-start", gap: "12px", cursor: "pointer" }, children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  "input",
+                  {
+                    type: "checkbox",
+                    checked: analytics,
+                    onChange: (e) => setAnalytics(e.target.checked),
+                    "aria-label": "Analytics cookies",
+                    style: { marginTop: "2px", accentColor: "var(--color-lime, #c8f135)", cursor: "pointer" }
+                  }
+                ),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("p", { style: { margin: 0, fontSize: "13px", fontWeight: 600 }, children: "Analytics" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("p", { style: { margin: "2px 0 0", fontSize: "12px", color: "var(--color-muted, #888)" }, children: "Help us understand how visitors use the site (GA4, Cloudflare Analytics)." })
+                ] })
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { style: { display: "flex", alignItems: "flex-start", gap: "12px", cursor: "pointer" }, children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  "input",
+                  {
+                    type: "checkbox",
+                    checked: marketing,
+                    onChange: (e) => setMarketing(e.target.checked),
+                    "aria-label": "Marketing cookies",
+                    style: { marginTop: "2px", accentColor: "var(--color-lime, #c8f135)", cursor: "pointer" }
+                  }
+                ),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("p", { style: { margin: 0, fontSize: "13px", fontWeight: 600 }, children: "Marketing" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("p", { style: { margin: "2px 0 0", fontSize: "12px", color: "var(--color-muted, #888)" }, children: "Used to deliver relevant ads and measure campaign performance (Meta Pixel, TikTok Pixel)." })
+                ] })
+              ] })
+            ]
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          "div",
+          {
+            style: {
+              display: "flex",
+              flexWrap: "wrap",
+              gap: "10px",
+              marginTop: "16px",
+              alignItems: "center"
+            },
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "button",
+                {
+                  onClick: handleRejectAll,
+                  style: {
+                    flex: "1 1 auto",
+                    padding: "12px 20px",
+                    borderRadius: "999px",
+                    border: "1.5px solid var(--color-slate, #2c2c2e)",
+                    background: "transparent",
+                    color: "var(--color-paper, #f5f5f0)",
+                    fontSize: "13px",
+                    fontWeight: 600,
+                    cursor: "pointer",
+                    fontFamily: "inherit",
+                    whiteSpace: "nowrap"
+                  },
+                  children: "Reject all"
+                }
+              ),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "button",
+                {
+                  onClick: () => setShowDetails((s) => !s),
+                  "aria-expanded": showDetails,
+                  style: {
+                    flex: "1 1 auto",
+                    padding: "12px 20px",
+                    borderRadius: "999px",
+                    border: "1.5px solid var(--color-slate, #2c2c2e)",
+                    background: "transparent",
+                    color: "var(--color-muted, #888)",
+                    fontSize: "13px",
+                    fontWeight: 600,
+                    cursor: "pointer",
+                    fontFamily: "inherit",
+                    whiteSpace: "nowrap"
+                  },
+                  children: showDetails ? "Hide details" : "Manage"
+                }
+              ),
+              showDetails && /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "button",
+                {
+                  onClick: handleSavePreferences,
+                  style: {
+                    flex: "1 1 auto",
+                    padding: "12px 20px",
+                    borderRadius: "999px",
+                    border: "1.5px solid var(--color-lime, #c8f135)",
+                    background: "transparent",
+                    color: "var(--color-lime, #c8f135)",
+                    fontSize: "13px",
+                    fontWeight: 600,
+                    cursor: "pointer",
+                    fontFamily: "inherit",
+                    whiteSpace: "nowrap"
+                  },
+                  children: "Save preferences"
+                }
+              ),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "button",
+                {
+                  onClick: handleAcceptAll,
+                  style: {
+                    flex: "1 1 auto",
+                    padding: "12px 20px",
+                    borderRadius: "999px",
+                    border: "1.5px solid var(--color-lime, #c8f135)",
+                    background: "var(--color-lime, #c8f135)",
+                    color: "var(--color-ink, #0a0a0b)",
+                    fontSize: "13px",
+                    fontWeight: 700,
+                    cursor: "pointer",
+                    fontFamily: "inherit",
+                    whiteSpace: "nowrap"
+                  },
+                  children: "Accept all"
+                }
+              )
+            ]
+          }
+        )
+      ]
+    }
+  );
+}
+
 const $$Astro = createAstro("https://pieceofstass.com");
 const $$BaseLayout = createComponent(($$result, $$props, $$slots) => {
   const Astro2 = $$result.createAstro($$Astro, $$props, $$slots);
@@ -725,7 +1031,17 @@ const $$BaseLayout = createComponent(($$result, $$props, $$slots) => {
     noindex,
     transparentHeader = false
   } = Astro2.props;
-  return renderTemplate`<html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#0A0A0B"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="apple-touch-icon" href="/apple-touch-icon.png">${renderComponent($$result, "SEO", $$SEO, { "title": title, "description": description, "canonical": canonical, "ogImage": ogImage, "ogType": ogType, "jsonLd": jsonLd, "noindex": noindex })}${renderHead()}</head> <body> ${renderComponent($$result, "AnnouncementBar", $$AnnouncementBar, {})} ${renderComponent($$result, "Header", $$Header, { "transparent": transparentHeader })} <main id="main-content"> ${renderSlot($$result, $$slots["default"])} </main> ${renderComponent($$result, "Footer", $$Footer, {})} ${renderComponent($$result, "CartDrawer", CartDrawer, { "client:load": true, "client:component-hydration": "load", "client:component-path": "/home/user/workspace/pieceofstass.com/src/components/islands/CartDrawer", "client:component-export": "default" })} ${renderComponent($$result, "SearchOverlay", SearchOverlay, { "client:load": true, "client:component-hydration": "load", "client:component-path": "/home/user/workspace/pieceofstass.com/src/components/islands/SearchOverlay", "client:component-export": "default" })} ${renderComponent($$result, "ToastContainer", ToastContainer, { "client:load": true, "client:component-hydration": "load", "client:component-path": "/home/user/workspace/pieceofstass.com/src/components/islands/ToastContainer", "client:component-export": "default" })} </body></html>`;
+  const GA4_ID = "";
+  const CF_ANALYTICS = "";
+  const META_PIXEL_ID = "";
+  const TIKTOK_PIXEL_ID = "";
+  const KLAVIYO_SITE_ID = "";
+  let country = "";
+  try {
+    country = Astro2.request.headers.get("cf-ipcountry") ?? "";
+  } catch {
+  }
+  return renderTemplate`<html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#0A0A0B"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="apple-touch-icon" href="/apple-touch-icon.png">${renderComponent($$result, "SEO", $$SEO, { "title": title, "description": description, "canonical": canonical, "ogImage": ogImage, "ogType": ogType, "jsonLd": jsonLd, "noindex": noindex })}${GA4_ID}${META_PIXEL_ID}${CF_ANALYTICS}${renderHead()}</head> <body> ${renderComponent($$result, "AnnouncementBar", $$AnnouncementBar, {})} ${renderComponent($$result, "Header", $$Header, { "transparent": transparentHeader })} <main id="main-content"> ${renderSlot($$result, $$slots["default"])} </main> ${renderComponent($$result, "Footer", $$Footer, {})} ${renderComponent($$result, "CartDrawer", CartDrawer, { "client:load": true, "client:component-hydration": "load", "client:component-path": "/home/user/workspace/pieceofstass.com/src/components/islands/CartDrawer", "client:component-export": "default" })} ${renderComponent($$result, "SearchOverlay", SearchOverlay, { "client:load": true, "client:component-hydration": "load", "client:component-path": "/home/user/workspace/pieceofstass.com/src/components/islands/SearchOverlay", "client:component-export": "default" })} ${renderComponent($$result, "ToastContainer", ToastContainer, { "client:load": true, "client:component-hydration": "load", "client:component-path": "/home/user/workspace/pieceofstass.com/src/components/islands/ToastContainer", "client:component-export": "default" })}  ${renderComponent($$result, "CookieBanner", CookieBanner, { "client:load": true, "country": country, "client:component-hydration": "load", "client:component-path": "/home/user/workspace/pieceofstass.com/src/components/islands/CookieBanner", "client:component-export": "default" })}  ${META_PIXEL_ID}  ${TIKTOK_PIXEL_ID}  ${KLAVIYO_SITE_ID} </body> </html>`;
 }, "/home/user/workspace/pieceofstass.com/src/layouts/BaseLayout.astro", void 0);
 
 export { $$BaseLayout as $, showToast as s };

@@ -1,6 +1,6 @@
 globalThis.process ??= {}; globalThis.process.env ??= {};
 import { f as createComponent, k as renderComponent, r as renderTemplate, m as maybeRenderHead, h as addAttribute } from '../chunks/astro/server_WCqRE2GV.mjs';
-import { $ as $$BaseLayout } from '../chunks/BaseLayout_CtbDq2BL.mjs';
+import { $ as $$BaseLayout } from '../chunks/BaseLayout_D9r1jel8.mjs';
 import { P as PLPFilters } from '../chunks/PLPFilters_DzjUtRCn.mjs';
 import { a as allProducts, b as allCategories } from '../chunks/products_hRpZN1wD.mjs';
 export { r as renderers } from '../chunks/_@astro-renderers_DtL-lId1.mjs';

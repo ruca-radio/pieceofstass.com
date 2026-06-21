@@ -1,6 +1,6 @@
 globalThis.process ??= {}; globalThis.process.env ??= {};
 import { e as createAstro, f as createComponent, k as renderComponent, r as renderTemplate, m as maybeRenderHead } from '../../chunks/astro/server_WCqRE2GV.mjs';
-import { $ as $$BaseLayout } from '../../chunks/BaseLayout_CtbDq2BL.mjs';
+import { $ as $$BaseLayout } from '../../chunks/BaseLayout_D9r1jel8.mjs';
 export { r as renderers } from '../../chunks/_@astro-renderers_DtL-lId1.mjs';
 
 const $$Astro = createAstro("https://pieceofstass.com");
