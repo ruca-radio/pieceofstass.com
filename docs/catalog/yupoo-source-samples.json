@@ -1,0 +1,570 @@
+{
+  "footwear": {
+    "source_url": "https://chenyico.x.yupoo.com/albums?tab=gallery",
+    "status_code": 200,
+    "page_title_redacted": "Yupoo supplier catalog page",
+    "visible_category_count": 54,
+    "visible_album_count": 40,
+    "access_notes": "Page exposed album/category metadata while also showing encrypted/password/login interface text.",
+    "sample_album_urls": [
+      {
+        "url": "https://chenyico.x.yupoo.com/albums/207427779?uid=1",
+        "image": "https://photo.yupoo.com/chenyico/52ac704f/medium.jpeg"
+      },
+      {
+        "url": "https://chenyico.x.yupoo.com/albums/207427755?uid=1",
+        "image": "https://photo.yupoo.com/chenyico/65ccd5d0/small.jpeg"
+      },
+      {
+        "url": "https://chenyico.x.yupoo.com/albums/207427736?uid=1",
+        "image": "https://photo.yupoo.com/chenyico/f6618311/small.jpeg"
+      },
+      {
+        "url": "https://chenyico.x.yupoo.com/albums/207427711?uid=1",
+        "image": "https://photo.yupoo.com/chenyico/43a49b31/small.jpeg"
+      },
+      {
+        "url": "https://chenyico.x.yupoo.com/albums/207427692?uid=1",
+        "image": "https://photo.yupoo.com/chenyico/7704aba6/small.jpeg"
+      },
+      {
+        "url": "https://chenyico.x.yupoo.com/albums/207427682?uid=1",
+        "image": "https://photo.yupoo.com/chenyico/509284cc/small.jpeg"
+      },
+      {
+        "url": "https://chenyico.x.yupoo.com/albums/207427660?uid=1",
+        "image": "https://photo.yupoo.com/chenyico/05df0719/small.jpeg"
+      },
+      {
+        "url": "https://chenyico.x.yupoo.com/albums/207427644?uid=1",
+        "image": "https://photo.yupoo.com/chenyico/9d8beb42/small.jpeg"
+      },
+      {
+        "url": "https://chenyico.x.yupoo.com/albums/207427623?uid=1",
+        "image": "https://photo.yupoo.com/chenyico/16b0d8d3/small.jpeg"
+      },
+      {
+        "url": "https://chenyico.x.yupoo.com/albums/207427606?uid=1",
+        "image": "https://photo.yupoo.com/chenyico/94071ad4/small.png"
+      },
+      {
+        "url": "https://chenyico.x.yupoo.com/albums/207427588?uid=1",
+        "image": "https://photo.yupoo.com/chenyico/675bebc2/small.jpeg"
+      },
+      {
+        "url": "https://chenyico.x.yupoo.com/albums/207427571?uid=1",
+        "image": "https://photo.yupoo.com/chenyico/4c679c04/small.jpeg"
+      },
+      {
+        "url": "https://chenyico.x.yupoo.com/albums/207427299?uid=1",
+        "image": "https://photo.yupoo.com/chenyico/900cd74c/small.png"
+      },
+      {
+        "url": "https://chenyico.x.yupoo.com/albums/207427228?uid=1",
+        "image": "https://photo.yupoo.com/chenyico/829f5a95/small.jpeg"
+      },
+      {
+        "url": "https://chenyico.x.yupoo.com/albums/207427218?uid=1",
+        "image": "https://photo.yupoo.com/chenyico/12b69694/small.jpeg"
+      }
+    ],
+    "cleaning_note": "Raw supplier titles/category names intentionally redacted here; use cleaned products.json for publishable copy."
+  },
+  "watches": {
+    "source_url": "https://117034687.x.yupoo.com/albums?tab=gallery",
+    "status_code": 200,
+    "page_title_redacted": "Yupoo supplier catalog page",
+    "visible_category_count": 18,
+    "visible_album_count": 40,
+    "access_notes": "Page exposed album/category metadata while also showing encrypted/password/login interface text.",
+    "sample_album_urls": [
+      {
+        "url": "https://117034687.x.yupoo.com/albums/226700942?uid=1",
+        "image": "https://photo.yupoo.com/117034687/73d261f9/medium.jpg"
+      },
+      {
+        "url": "https://117034687.x.yupoo.com/albums/226700933?uid=1",
+        "image": "https://photo.yupoo.com/117034687/41f134c6/small.jpg"
+      },
+      {
+        "url": "https://117034687.x.yupoo.com/albums/226700922?uid=1",
+        "image": "https://photo.yupoo.com/117034687/8c843303/small.jpg"
+      },
+      {
+        "url": "https://117034687.x.yupoo.com/albums/226700912?uid=1",
+        "image": "https://photo.yupoo.com/117034687/e1dd890a/small.jpg"
+      },
+      {
+        "url": "https://117034687.x.yupoo.com/albums/226700900?uid=1",
+        "image": "https://photo.yupoo.com/117034687/4965b498/small.jpg"
+      },
+      {
+        "url": "https://117034687.x.yupoo.com/albums/226700892?uid=1",
+        "image": "https://photo.yupoo.com/117034687/3c96117d/small.jpg"
+      },
+      {
+        "url": "https://117034687.x.yupoo.com/albums/226700887?uid=1",
+        "image": "https://photo.yupoo.com/117034687/fd9fa880/small.jpg"
+      },
+      {
+        "url": "https://117034687.x.yupoo.com/albums/226700875?uid=1",
+        "image": "https://photo.yupoo.com/117034687/8b14ebe8/small.jpg"
+      },
+      {
+        "url": "https://117034687.x.yupoo.com/albums/226700864?uid=1",
+        "image": "https://photo.yupoo.com/117034687/19f9a38a/small.jpg"
+      },
+      {
+        "url": "https://117034687.x.yupoo.com/albums/226700858?uid=1",
+        "image": "https://photo.yupoo.com/117034687/5e8538cb/small.jpg"
+      },
+      {
+        "url": "https://117034687.x.yupoo.com/albums/226700842?uid=1",
+        "image": "https://photo.yupoo.com/117034687/298a3a4a/small.jpg"
+      },
+      {
+        "url": "https://117034687.x.yupoo.com/albums/226700827?uid=1",
+        "image": "https://photo.yupoo.com/117034687/7b50b2a5/small.jpg"
+      },
+      {
+        "url": "https://117034687.x.yupoo.com/albums/226700821?uid=1",
+        "image": "https://photo.yupoo.com/117034687/85658ccc/small.jpg"
+      },
+      {
+        "url": "https://117034687.x.yupoo.com/albums/226700791?uid=1",
+        "image": "https://photo.yupoo.com/117034687/17fdc1f5/small.jpg"
+      },
+      {
+        "url": "https://117034687.x.yupoo.com/albums/226700779?uid=1",
+        "image": "https://photo.yupoo.com/117034687/d19d830b/small.jpg"
+      }
+    ],
+    "cleaning_note": "Raw supplier titles/category names intentionally redacted here; use cleaned products.json for publishable copy."
+  },
+  "bags": {
+    "source_url": "https://3293950449.x.yupoo.com/albums?tab=gallery",
+    "status_code": 200,
+    "page_title_redacted": "Yupoo supplier catalog page",
+    "visible_category_count": 26,
+    "visible_album_count": 40,
+    "access_notes": "Page exposed album/category metadata while also showing encrypted/password/login interface text.",
+    "sample_album_urls": [
+      {
+        "url": "https://3293950449.x.yupoo.com/albums/241018249?uid=1",
+        "image": "https://photo.yupoo.com/3293950449/bc7b59debc/medium.jpg"
+      },
+      {
+        "url": "https://3293950449.x.yupoo.com/albums/241018208?uid=1",
+        "image": "https://photo.yupoo.com/3293950449/8c66753b6b/small.jpg"
+      },
+      {
+        "url": "https://3293950449.x.yupoo.com/albums/241018176?uid=1",
+        "image": "https://photo.yupoo.com/3293950449/e62b6ac024/small.jpg"
+      },
+      {
+        "url": "https://3293950449.x.yupoo.com/albums/241018147?uid=1",
+        "image": "https://photo.yupoo.com/3293950449/d6e302210a/small.jpg"
+      },
+      {
+        "url": "https://3293950449.x.yupoo.com/albums/241018098?uid=1",
+        "image": "https://photo.yupoo.com/3293950449/c23379fe2d/small.jpg"
+      },
+      {
+        "url": "https://3293950449.x.yupoo.com/albums/241018049?uid=1",
+        "image": "https://photo.yupoo.com/3293950449/beeccd0025/small.jpg"
+      },
+      {
+        "url": "https://3293950449.x.yupoo.com/albums/241018009?uid=1",
+        "image": "https://photo.yupoo.com/3293950449/a88dcb3ff0/small.jpg"
+      },
+      {
+        "url": "https://3293950449.x.yupoo.com/albums/241017967?uid=1",
+        "image": "https://photo.yupoo.com/3293950449/fdeee72aa2/small.jpg"
+      },
+      {
+        "url": "https://3293950449.x.yupoo.com/albums/241017934?uid=1",
+        "image": "https://photo.yupoo.com/3293950449/3325f1752a/small.jpg"
+      },
+      {
+        "url": "https://3293950449.x.yupoo.com/albums/241017897?uid=1",
+        "image": "https://photo.yupoo.com/3293950449/42fa487655/small.jpg"
+      },
+      {
+        "url": "https://3293950449.x.yupoo.com/albums/241017821?uid=1",
+        "image": "https://photo.yupoo.com/3293950449/7d4a384c4c/small.jpg"
+      },
+      {
+        "url": "https://3293950449.x.yupoo.com/albums/241017770?uid=1",
+        "image": "https://photo.yupoo.com/3293950449/22d4ccddcb/small.jpg"
+      },
+      {
+        "url": "https://3293950449.x.yupoo.com/albums/241017750?uid=1",
+        "image": "https://photo.yupoo.com/3293950449/7b2893526d/small.jpg"
+      },
+      {
+        "url": "https://3293950449.x.yupoo.com/albums/241017725?uid=1",
+        "image": "https://photo.yupoo.com/3293950449/75bff1773c/small.jpg"
+      },
+      {
+        "url": "https://3293950449.x.yupoo.com/albums/241017705?uid=1",
+        "image": "https://photo.yupoo.com/3293950449/45a271234f/small.jpg"
+      }
+    ],
+    "cleaning_note": "Raw supplier titles/category names intentionally redacted here; use cleaned products.json for publishable copy."
+  },
+  "men": {
+    "source_url": "https://miao2017.x.yupoo.com/albums?tab=gallery",
+    "status_code": 200,
+    "page_title_redacted": "Yupoo supplier catalog page",
+    "visible_category_count": 62,
+    "visible_album_count": 40,
+    "access_notes": "Page exposed album/category metadata while also showing encrypted/password/login interface text.",
+    "sample_album_urls": [
+      {
+        "url": "https://miao2017.x.yupoo.com/albums/242829386?uid=1",
+        "image": "https://alfred-internal-1365252509.cos.ap-shanghai.myqcloud.com/yupoo/album/im_photo_album.png"
+      },
+      {
+        "url": "https://miao2017.x.yupoo.com/albums/242829337?uid=1",
+        "image": "https://alfred-internal-1365252509.cos.ap-shanghai.myqcloud.com/yupoo/album/im_photo_album.png"
+      },
+      {
+        "url": "https://miao2017.x.yupoo.com/albums/242829292?uid=1",
+        "image": "https://alfred-internal-1365252509.cos.ap-shanghai.myqcloud.com/yupoo/album/im_photo_album.png"
+      },
+      {
+        "url": "https://miao2017.x.yupoo.com/albums/242829087?uid=1",
+        "image": "https://photo.yupoo.com/miao2017/8c1c435ea7/small.jpeg"
+      },
+      {
+        "url": "https://miao2017.x.yupoo.com/albums/242829050?uid=1",
+        "image": "https://photo.yupoo.com/miao2017/5b588059e1/small.png"
+      },
+      {
+        "url": "https://miao2017.x.yupoo.com/albums/242828813?uid=1",
+        "image": "https://photo.yupoo.com/miao2017/266ff71d60/small.jpeg"
+      },
+      {
+        "url": "https://miao2017.x.yupoo.com/albums/242828764?uid=1",
+        "image": "https://photo.yupoo.com/miao2017/485fb99b78/small.jpeg"
+      },
+      {
+        "url": "https://miao2017.x.yupoo.com/albums/242828684?uid=1",
+        "image": "https://photo.yupoo.com/miao2017/66eaedaee4/small.jpeg"
+      },
+      {
+        "url": "https://miao2017.x.yupoo.com/albums/242828637?uid=1",
+        "image": "https://photo.yupoo.com/miao2017/9085080a5b/small.jpeg"
+      },
+      {
+        "url": "https://miao2017.x.yupoo.com/albums/242828444?uid=1",
+        "image": "https://photo.yupoo.com/miao2017/d644448acb/small.jpeg"
+      },
+      {
+        "url": "https://miao2017.x.yupoo.com/albums/242828376?uid=1",
+        "image": "https://photo.yupoo.com/miao2017/7895275a8f/small.png"
+      },
+      {
+        "url": "https://miao2017.x.yupoo.com/albums/242828335?uid=1",
+        "image": "https://photo.yupoo.com/miao2017/7501a6e1dd/small.png"
+      },
+      {
+        "url": "https://miao2017.x.yupoo.com/albums/242828287?uid=1",
+        "image": "https://photo.yupoo.com/miao2017/f2e1eb3096/small.jpeg"
+      },
+      {
+        "url": "https://miao2017.x.yupoo.com/albums/242828186?uid=1",
+        "image": "https://photo.yupoo.com/miao2017/72e7993967/small.jpeg"
+      },
+      {
+        "url": "https://miao2017.x.yupoo.com/albums/242828152?uid=1",
+        "image": "https://photo.yupoo.com/miao2017/9df4f09d6b/small.png"
+      }
+    ],
+    "cleaning_note": "Raw supplier titles/category names intentionally redacted here; use cleaned products.json for publishable copy."
+  },
+  "women": {
+    "source_url": "https://ypd2023.x.yupoo.com/albums?tab=gallery",
+    "status_code": 200,
+    "page_title_redacted": "Yupoo supplier catalog page",
+    "visible_category_count": 37,
+    "visible_album_count": 40,
+    "access_notes": "Page exposed album/category metadata while also showing encrypted/password/login interface text.",
+    "sample_album_urls": [
+      {
+        "url": "https://ypd2023.x.yupoo.com/albums/242792675?uid=1",
+        "image": "https://photo.yupoo.com/ypd2023/947d263689/medium.jpeg"
+      },
+      {
+        "url": "https://ypd2023.x.yupoo.com/albums/242792651?uid=1",
+        "image": "https://photo.yupoo.com/ypd2023/71b572c6b0/small.jpeg"
+      },
+      {
+        "url": "https://ypd2023.x.yupoo.com/albums/242792616?uid=1",
+        "image": "https://photo.yupoo.com/ypd2023/12ab83de0d/small.jpeg"
+      },
+      {
+        "url": "https://ypd2023.x.yupoo.com/albums/242792557?uid=1",
+        "image": "https://photo.yupoo.com/ypd2023/6b36ad1a9f/small.jpeg"
+      },
+      {
+        "url": "https://ypd2023.x.yupoo.com/albums/242792519?uid=1",
+        "image": "https://photo.yupoo.com/ypd2023/e43ab93dc6/small.jpeg"
+      },
+      {
+        "url": "https://ypd2023.x.yupoo.com/albums/242792487?uid=1",
+        "image": "https://photo.yupoo.com/ypd2023/277eb3887f/small.jpeg"
+      },
+      {
+        "url": "https://ypd2023.x.yupoo.com/albums/242792400?uid=1",
+        "image": "https://photo.yupoo.com/ypd2023/411f2f9098/small.jpeg"
+      },
+      {
+        "url": "https://ypd2023.x.yupoo.com/albums/242792355?uid=1",
+        "image": "https://photo.yupoo.com/ypd2023/b40606d69c/small.jpeg"
+      },
+      {
+        "url": "https://ypd2023.x.yupoo.com/albums/242792336?uid=1",
+        "image": "https://photo.yupoo.com/ypd2023/20d0a629c3/small.jpeg"
+      },
+      {
+        "url": "https://ypd2023.x.yupoo.com/albums/242792308?uid=1",
+        "image": "https://photo.yupoo.com/ypd2023/2fb0710f2d/small.jpeg"
+      },
+      {
+        "url": "https://ypd2023.x.yupoo.com/albums/242792295?uid=1",
+        "image": "https://photo.yupoo.com/ypd2023/01eb49767b/small.jpeg"
+      },
+      {
+        "url": "https://ypd2023.x.yupoo.com/albums/242792264?uid=1",
+        "image": "https://photo.yupoo.com/ypd2023/c5288640b9/small.jpeg"
+      },
+      {
+        "url": "https://ypd2023.x.yupoo.com/albums/242792245?uid=1",
+        "image": "https://photo.yupoo.com/ypd2023/9762a2dd23/small.jpeg"
+      },
+      {
+        "url": "https://ypd2023.x.yupoo.com/albums/242792209?uid=1",
+        "image": "https://photo.yupoo.com/ypd2023/5c1e8dba1b/small.jpeg"
+      },
+      {
+        "url": "https://ypd2023.x.yupoo.com/albums/242792192?uid=1",
+        "image": "https://photo.yupoo.com/ypd2023/fae77f5d2c/small.jpeg"
+      }
+    ],
+    "cleaning_note": "Raw supplier titles/category names intentionally redacted here; use cleaned products.json for publishable copy."
+  },
+  "kids": {
+    "source_url": "https://775180006.x.yupoo.com/albums?tab=gallery",
+    "status_code": 200,
+    "page_title_redacted": "Yupoo supplier catalog page",
+    "visible_category_count": 19,
+    "visible_album_count": 40,
+    "access_notes": "Page exposed album/category metadata while also showing encrypted/password/login interface text.",
+    "sample_album_urls": [
+      {
+        "url": "https://775180006.x.yupoo.com/albums/242220373?uid=1",
+        "image": "https://photo.yupoo.com/775180006/7f768efba6/medium.jpeg"
+      },
+      {
+        "url": "https://775180006.x.yupoo.com/albums/242027720?uid=1",
+        "image": "https://photo.yupoo.com/775180006/1b9c33d3b8/small.jpeg"
+      },
+      {
+        "url": "https://775180006.x.yupoo.com/albums/242027014?uid=1",
+        "image": "https://photo.yupoo.com/775180006/10f928a197/small.jpeg"
+      },
+      {
+        "url": "https://775180006.x.yupoo.com/albums/241798206?uid=1",
+        "image": "https://photo.yupoo.com/775180006/7455c399b3/small.jpeg"
+      },
+      {
+        "url": "https://775180006.x.yupoo.com/albums/241798035?uid=1",
+        "image": "https://photo.yupoo.com/775180006/95266c9f68/small.jpeg"
+      },
+      {
+        "url": "https://775180006.x.yupoo.com/albums/241797782?uid=1",
+        "image": "https://photo.yupoo.com/775180006/5813eb3ce5/small.jpeg"
+      },
+      {
+        "url": "https://775180006.x.yupoo.com/albums/241631803?uid=1",
+        "image": "https://photo.yupoo.com/775180006/1955949b06/small.jpeg"
+      },
+      {
+        "url": "https://775180006.x.yupoo.com/albums/241520840?uid=1",
+        "image": "https://photo.yupoo.com/775180006/ba33258798/small.jpeg"
+      },
+      {
+        "url": "https://775180006.x.yupoo.com/albums/241132127?uid=1",
+        "image": "https://photo.yupoo.com/775180006/4a4300b433/small.jpeg"
+      },
+      {
+        "url": "https://775180006.x.yupoo.com/albums/240705702?uid=1",
+        "image": "https://photo.yupoo.com/775180006/2f890f49d1/small.jpeg"
+      },
+      {
+        "url": "https://775180006.x.yupoo.com/albums/240302538?uid=1",
+        "image": "https://photo.yupoo.com/775180006/d5efd764e8/small.jpeg"
+      },
+      {
+        "url": "https://775180006.x.yupoo.com/albums/239956593?uid=1",
+        "image": "https://photo.yupoo.com/775180006/376f9e8c12/small.jpeg"
+      },
+      {
+        "url": "https://775180006.x.yupoo.com/albums/239840453?uid=1",
+        "image": "https://photo.yupoo.com/775180006/bb752f4ffc/small.jpg"
+      },
+      {
+        "url": "https://775180006.x.yupoo.com/albums/239677490?uid=1",
+        "image": "https://photo.yupoo.com/775180006/d2123c4e89/small.jpeg"
+      },
+      {
+        "url": "https://775180006.x.yupoo.com/albums/239677195?uid=1",
+        "image": "https://photo.yupoo.com/775180006/4cc542a99d/small.jpeg"
+      }
+    ],
+    "cleaning_note": "Raw supplier titles/category names intentionally redacted here; use cleaned products.json for publishable copy."
+  },
+  "fragrance": {
+    "source_url": "https://jmshop88.x.yupoo.com/categories/4594940",
+    "status_code": 200,
+    "page_title_redacted": "Yupoo supplier catalog page",
+    "visible_category_count": 75,
+    "visible_album_count": 40,
+    "access_notes": "Page exposed album/category metadata while also showing encrypted/password/login interface text.",
+    "sample_album_urls": [
+      {
+        "url": "https://jmshop88.x.yupoo.com/albums/232641102?uid=1&isSubCate=false&referrercate=4594940",
+        "image": "https://photo.yupoo.com/jmshop88/44d60b34/medium.jpg"
+      },
+      {
+        "url": "https://jmshop88.x.yupoo.com/albums/232641081?uid=1&isSubCate=false&referrercate=4594940",
+        "image": "https://photo.yupoo.com/jmshop88/6e480816/small.jpg"
+      },
+      {
+        "url": "https://jmshop88.x.yupoo.com/albums/218907803?uid=1&isSubCate=false&referrercate=4594940",
+        "image": "https://photo.yupoo.com/jmshop88/0c186a4c/small.jpg"
+      },
+      {
+        "url": "https://jmshop88.x.yupoo.com/albums/218907745?uid=1&isSubCate=false&referrercate=4594940",
+        "image": "https://photo.yupoo.com/jmshop88/90bd182b/small.jpg"
+      },
+      {
+        "url": "https://jmshop88.x.yupoo.com/albums/218907734?uid=1&isSubCate=false&referrercate=4594940",
+        "image": "https://photo.yupoo.com/jmshop88/91986925/small.jpg"
+      },
+      {
+        "url": "https://jmshop88.x.yupoo.com/albums/218907719?uid=1&isSubCate=false&referrercate=4594940",
+        "image": "https://photo.yupoo.com/jmshop88/b232e139/small.jpg"
+      },
+      {
+        "url": "https://jmshop88.x.yupoo.com/albums/218907697?uid=1&isSubCate=false&referrercate=4594940",
+        "image": "https://photo.yupoo.com/jmshop88/dcfe8167/small.jpg"
+      },
+      {
+        "url": "https://jmshop88.x.yupoo.com/albums/218907687?uid=1&isSubCate=false&referrercate=4594940",
+        "image": "https://photo.yupoo.com/jmshop88/fc736f8a/small.jpg"
+      },
+      {
+        "url": "https://jmshop88.x.yupoo.com/albums/218907675?uid=1&isSubCate=false&referrercate=4594940",
+        "image": "https://photo.yupoo.com/jmshop88/8016b62d/small.jpg"
+      },
+      {
+        "url": "https://jmshop88.x.yupoo.com/albums/218907429?uid=1&isSubCate=false&referrercate=4594940",
+        "image": "https://photo.yupoo.com/jmshop88/d9f85263/small.jpg"
+      },
+      {
+        "url": "https://jmshop88.x.yupoo.com/albums/218907406?uid=1&isSubCate=false&referrercate=4594940",
+        "image": "https://photo.yupoo.com/jmshop88/2bc3a336/small.jpg"
+      },
+      {
+        "url": "https://jmshop88.x.yupoo.com/albums/201308094?uid=1&isSubCate=false&referrercate=4594940",
+        "image": "https://photo.yupoo.com/jmshop88/f48636bd/small.jpg"
+      },
+      {
+        "url": "https://jmshop88.x.yupoo.com/albums/201307940?uid=1&isSubCate=false&referrercate=4594940",
+        "image": "https://photo.yupoo.com/jmshop88/d1c6f7d6/small.jpg"
+      },
+      {
+        "url": "https://jmshop88.x.yupoo.com/albums/201307909?uid=1&isSubCate=false&referrercate=4594940",
+        "image": "https://photo.yupoo.com/jmshop88/98eb7fec/small.jpg"
+      },
+      {
+        "url": "https://jmshop88.x.yupoo.com/albums/201307815?uid=1&isSubCate=false&referrercate=4594940",
+        "image": "https://photo.yupoo.com/jmshop88/6fa0ecf1/small.jpg"
+      }
+    ],
+    "cleaning_note": "Raw supplier titles/category names intentionally redacted here; use cleaned products.json for publishable copy."
+  },
+  "tech": {
+    "source_url": "https://xtd8288.x.yupoo.com/categories/654824",
+    "status_code": 200,
+    "page_title_redacted": "Yupoo supplier catalog page",
+    "visible_category_count": 26,
+    "visible_album_count": 16,
+    "access_notes": "Page exposed album/category metadata while also showing encrypted/password/login interface text.",
+    "sample_album_urls": [
+      {
+        "url": "https://xtd8288.x.yupoo.com/albums/209619992?uid=1&isSubCate=false&referrercate=654824",
+        "image": "https://photo.yupoo.com/xtd8288/1d31d6df/medium.png"
+      },
+      {
+        "url": "https://xtd8288.x.yupoo.com/albums/176302805?uid=1&isSubCate=false&referrercate=654824",
+        "image": "https://photo.yupoo.com/xtd8288/88e24f07/small.jpg"
+      },
+      {
+        "url": "https://xtd8288.x.yupoo.com/albums/147941574?uid=1&isSubCate=false&referrercate=654824",
+        "image": "https://photo.yupoo.com/xtd8288/d5c21818/small.png"
+      },
+      {
+        "url": "https://xtd8288.x.yupoo.com/albums/146554682?uid=1&isSubCate=false&referrercate=654824",
+        "image": "https://photo.yupoo.com/xtd8288/c14ab791/small.jpg"
+      },
+      {
+        "url": "https://xtd8288.x.yupoo.com/albums/124814961?uid=1&isSubCate=false&referrercate=654824",
+        "image": "https://photo.yupoo.com/xtd8288/c151ecd6/small.jpeg"
+      },
+      {
+        "url": "https://xtd8288.x.yupoo.com/albums/124449450?uid=1&isSubCate=false&referrercate=654824",
+        "image": "https://photo.yupoo.com/xtd8288/3884eff2/small.png"
+      },
+      {
+        "url": "https://xtd8288.x.yupoo.com/albums/124227616?uid=1&isSubCate=false&referrercate=654824",
+        "image": "https://photo.yupoo.com/xtd8288/1d12e318/small.png"
+      },
+      {
+        "url": "https://xtd8288.x.yupoo.com/albums/114411349?uid=1&isSubCate=false&referrercate=654824",
+        "image": "https://photo.yupoo.com/xtd8288/ea2c475d/small.png"
+      },
+      {
+        "url": "https://xtd8288.x.yupoo.com/albums/114392741?uid=1&isSubCate=false&referrercate=654824",
+        "image": "https://photo.yupoo.com/xtd8288/1acbdacc/small.png"
+      },
+      {
+        "url": "https://xtd8288.x.yupoo.com/albums/114379749?uid=1&isSubCate=false&referrercate=654824",
+        "image": "https://photo.yupoo.com/xtd8288/16ddffca/small.png"
+      },
+      {
+        "url": "https://xtd8288.x.yupoo.com/albums/114377362?uid=1&isSubCate=false&referrercate=654824",
+        "image": "https://photo.yupoo.com/xtd8288/06ac9809/small.png"
+      },
+      {
+        "url": "https://xtd8288.x.yupoo.com/albums/13915579?uid=1&isSubCate=false&referrercate=654824",
+        "image": "https://photo.yupoo.com/xtd8288/DDg56bI6/small.jpg"
+      },
+      {
+        "url": "https://xtd8288.x.yupoo.com/albums/13915574?uid=1&isSubCate=false&referrercate=654824",
+        "image": "https://photo.yupoo.com/xtd8288/BcmGVfwa/small.jpg"
+      },
+      {
+        "url": "https://xtd8288.x.yupoo.com/albums/13915576?uid=1&isSubCate=false&referrercate=654824",
+        "image": "https://photo.yupoo.com/xtd8288/B7h66Mkh/small.jpg"
+      },
+      {
+        "url": "https://xtd8288.x.yupoo.com/albums/13915578?uid=1&isSubCate=false&referrercate=654824",
+        "image": "https://photo.yupoo.com/xtd8288/B7hkkAjN/small.jpg"
+      }
+    ],
+    "cleaning_note": "Raw supplier titles/category names intentionally redacted here; use cleaned products.json for publishable copy."
+  }
+}

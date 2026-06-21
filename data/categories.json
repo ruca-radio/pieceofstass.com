@@ -1,0 +1,76 @@
+{
+  "categories": [
+    {
+      "slug": "footwear",
+      "title": "Footwear",
+      "hero_copy": "Label-free sneakers and sandals with street-ready shapes, clean colorways, and everyday comfort.",
+      "seo_title": "Footwear | Piece of Stass",
+      "seo_description": "Label-free sneakers and sandals with street-ready shapes, clean colorways, and everyday comfort.",
+      "sort_order": 1,
+      "parent": null
+    },
+    {
+      "slug": "watches",
+      "title": "Watches",
+      "hero_copy": "Statement timepieces with sport, dress, and automatic-inspired styling minus logo-led copy.",
+      "seo_title": "Watches | Piece of Stass",
+      "seo_description": "Statement timepieces with sport, dress, and automatic-inspired styling minus logo-led copy.",
+      "sort_order": 2,
+      "parent": null
+    },
+    {
+      "slug": "bags",
+      "title": "Bags",
+      "hero_copy": "Crossbodies, totes, and shoulder bags chosen for silhouette, texture, and outfit versatility.",
+      "seo_title": "Bags | Piece of Stass",
+      "seo_description": "Crossbodies, totes, and shoulder bags chosen for silhouette, texture, and outfit versatility.",
+      "sort_order": 3,
+      "parent": null
+    },
+    {
+      "slug": "men",
+      "title": "Men",
+      "hero_copy": "Relaxed menswear staples for quiet streetwear, layering, and casual daily uniforms.",
+      "seo_title": "Men | Piece of Stass",
+      "seo_description": "Relaxed menswear staples for quiet streetwear, layering, and casual daily uniforms.",
+      "sort_order": 4,
+      "parent": null
+    },
+    {
+      "slug": "women",
+      "title": "Women",
+      "hero_copy": "Feminine sets, dresses, and seasonal staples designed around shape, print, and movement.",
+      "seo_title": "Women | Piece of Stass",
+      "seo_description": "Feminine sets, dresses, and seasonal staples designed around shape, print, and movement.",
+      "sort_order": 5,
+      "parent": null
+    },
+    {
+      "slug": "kids",
+      "title": "Kids",
+      "hero_copy": "Play-ready shoes and sandals with easy fits, soft cushioning, and practical size runs.",
+      "seo_title": "Kids | Piece of Stass",
+      "seo_description": "Play-ready shoes and sandals with easy fits, soft cushioning, and practical size runs.",
+      "sort_order": 6,
+      "parent": null
+    },
+    {
+      "slug": "fragrance",
+      "title": "Fragrance",
+      "hero_copy": "Clean fragrance profiles organized by mood, note family, and wear occasion.",
+      "seo_title": "Fragrance | Piece of Stass",
+      "seo_description": "Clean fragrance profiles organized by mood, note family, and wear occasion.",
+      "sort_order": 7,
+      "parent": null
+    },
+    {
+      "slug": "tech",
+      "title": "Tech",
+      "hero_copy": "Everyday tech accessories for charging, listening, travel, and device protection.",
+      "seo_title": "Tech | Piece of Stass",
+      "seo_description": "Everyday tech accessories for charging, listening, travel, and device protection.",
+      "sort_order": 8,
+      "parent": null
+    }
+  ]
+}

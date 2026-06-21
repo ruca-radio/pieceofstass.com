@@ -1,0 +1,63 @@
+---
+import '../styles/global.css';
+import SEO from '../components/SEO.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import AnnouncementBar from '../components/AnnouncementBar.astro';
+import CartDrawer from '../components/islands/CartDrawer';
+import SearchOverlay from '../components/islands/SearchOverlay';
+import ToastContainer from '../components/islands/ToastContainer';
+
+interface Props {
+  title: string;
+  description: string;
+  canonical?: string;
+  ogImage?: string;
+  ogType?: 'website' | 'product' | 'article';
+  jsonLd?: object | object[];
+  noindex?: boolean;
+  transparentHeader?: boolean;
+}
+
+const {
+  title,
+  description,
+  canonical,
+  ogImage,
+  ogType,
+  jsonLd,
+  noindex,
+  transparentHeader = false,
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0A0A0B" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <SEO
+      title={title}
+      description={description}
+      canonical={canonical}
+      ogImage={ogImage}
+      ogType={ogType}
+      jsonLd={jsonLd}
+      noindex={noindex}
+    />
+  </head>
+  <body>
+    <AnnouncementBar />
+    <Header transparent={transparentHeader} />
+    <main id="main-content">
+      <slot />
+    </main>
+    <Footer />
+    <CartDrawer client:load />
+    <SearchOverlay client:load />
+    <ToastContainer client:load />
+  </body>
+</html>

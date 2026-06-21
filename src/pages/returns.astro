@@ -1,0 +1,9 @@
+---
+import LegalLayout from '../layouts/LegalLayout.astro';
+import { marked } from '../lib/marked-stub';
+import raw from '../content/legal/returns.md?raw';
+const content = marked(raw);
+---
+<LegalLayout title="Returns & Refunds" description="Our return and refund policy for Piece of Stass orders." lastUpdated="June 21, 2026">
+  <div set:html={content} />
+</LegalLayout>

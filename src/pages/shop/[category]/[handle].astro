@@ -1,0 +1,201 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ProductGallery from '../../../components/islands/ProductGallery';
+import AddToCart from '../../../components/islands/AddToCart';
+import StickyATC from '../../../components/islands/StickyATC';
+import ProductCard from '../../../components/islands/ProductCard';
+import {
+  allProducts,
+  allCategories,
+  getProductByHandle,
+  getRelatedProducts,
+  getDiscountPercent,
+  formatPriceDollars,
+} from '../../../lib/products';
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return allProducts.map((product) => ({
+    params: { category: product.category, handle: product.handle },
+    props: { product },
+  }));
+}
+
+const { product } = Astro.props;
+const category = allCategories.find((c) => c.slug === product.category);
+const related = getRelatedProducts(product, 6);
+const discount = getDiscountPercent(product.price, product.compare_at_price);
+
+const productJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Product',
+  name: product.title,
+  description: product.description,
+  image: product.images,
+  brand: { '@type': 'Brand', name: 'Piece of Stass' },
+  offers: {
+    '@type': 'Offer',
+    priceCurrency: 'USD',
+    price: product.price,
+    availability: 'https://schema.org/InStock',
+    url: `https://pieceofstass.com/shop/${product.category}/${product.handle}`,
+  },
+};
+
+const breadcrumbJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://pieceofstass.com' },
+    { '@type': 'ListItem', position: 2, name: 'Shop', item: 'https://pieceofstass.com/shop' },
+    { '@type': 'ListItem', position: 3, name: category?.title || product.category, item: `https://pieceofstass.com/shop/${product.category}` },
+    { '@type': 'ListItem', position: 4, name: product.title, item: `https://pieceofstass.com/shop/${product.category}/${product.handle}` },
+  ],
+};
+---
+
+<BaseLayout
+  title={`${product.title} — Piece of Stass`}
+  description={product.description}
+  ogImage={product.images[0]}
+  ogType="product"
+  jsonLd={[productJsonLd, breadcrumbJsonLd]}
+>
+  <div style="max-width: 1280px; margin: 0 auto; padding: 24px 16px 120px;">
+    <!-- Breadcrumb -->
+    <nav aria-label="Breadcrumb" style="margin-bottom: 24px;">
+      <ol style="list-style: none; padding: 0; margin: 0; display: flex; gap: 8px; font-size: 12px; color: var(--color-muted); font-family: var(--font-family-mono); flex-wrap: wrap;">
+        <li><a href="/" style="color: var(--color-muted); text-decoration: none;">Home</a></li>
+        <li aria-hidden="true" style="color: var(--color-slate);">/</li>
+        <li><a href="/shop" style="color: var(--color-muted); text-decoration: none;">Shop</a></li>
+        <li aria-hidden="true" style="color: var(--color-slate);">/</li>
+        <li><a href={`/shop/${product.category}`} style="color: var(--color-muted); text-decoration: none; text-transform: capitalize;">{category?.title || product.category}</a></li>
+        <li aria-hidden="true" style="color: var(--color-slate);">/</li>
+        <li aria-current="page" style="color: var(--color-paper); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 200px;">{product.title}</li>
+      </ol>
+    </nav>
+
+    <!-- PDP grid -->
+    <div style="display: grid; grid-template-columns: 1fr; gap: 40px;" class="pdp-grid">
+      <!-- Gallery -->
+      <div>
+        <ProductGallery images={product.images} title={product.title} client:load />
+      </div>
+
+      <!-- Info + ATC -->
+      <div>
+        <!-- Title + pricing -->
+        <div style="margin-bottom: 20px;">
+          {discount && (
+            <span style="background: var(--color-pink); color: var(--color-paper); font-size: 11px; font-weight: 700; font-family: var(--font-family-mono); padding: '3px 10px'; border-radius: 999px; letter-spacing: 0.04em; margin-bottom: 8px; display: inline-block;">
+              {discount}% off
+            </span>
+          )}
+          <h1 style="font-family: var(--font-family-display); font-weight: 700; font-size: clamp(22px, 4vw, 30px); letter-spacing: -0.02em; margin: 8px 0 12px; color: var(--color-paper); line-height: 1.2;">
+            {product.title}
+          </h1>
+
+          <!-- Stars placeholder -->
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+            <div style="display: flex; gap: 2px;" aria-label="4.8 out of 5 stars">
+              {[1,2,3,4,5].map((i) => (
+                <svg width="14" height="14" viewBox="0 0 24 24" fill={i <= 4 ? 'var(--color-lime)' : 'var(--color-slate)'} aria-hidden="true">
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                </svg>
+              ))}
+            </div>
+            <span style="font-size: 12px; color: var(--color-muted); font-family: var(--font-family-mono);">(124 reviews)</span>
+          </div>
+
+          <div style="display: flex; align-items: baseline; gap: 10px;">
+            <span style="font-family: var(--font-family-display); font-weight: 700; font-size: 28px; color: var(--color-paper);">{formatPriceDollars(product.price)}</span>
+            {product.compare_at_price && product.compare_at_price > product.price && (
+              <span style="font-family: var(--font-family-mono); font-size: 16px; color: var(--color-muted); text-decoration: line-through;">{formatPriceDollars(product.compare_at_price)}</span>
+            )}
+          </div>
+          <p style="font-size: 12px; color: var(--color-muted); margin: 6px 0 0; font-family: var(--font-family-mono);">Pay in 4 with Klarna. No interest.</p>
+        </div>
+
+        <!-- Social proof microcopy -->
+        <div style="background: rgba(198,255,58,0.06); border: 1px solid rgba(198,255,58,0.15); border-radius: var(--radius-md); padding: 10px 14px; margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 14px;">👀</span>
+          <span style="font-size: 12px; color: var(--color-lime); font-family: var(--font-family-mono);">Trending — viewed 42 times today</span>
+        </div>
+
+        <!-- ATC island -->
+        <AddToCart product={product} client:load />
+
+        <!-- Shipping info -->
+        <div style="margin-top: 20px; padding: 16px; background: var(--color-charcoal); border-radius: var(--radius-md); border: 1px solid var(--color-slate);">
+          <div style="display: flex; align-items: flex-start; gap: 10px; margin-bottom: 10px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-lime)" stroke-width="2" style="flex-shrink: 0; margin-top: 2px;"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 5v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+            <div>
+              <p style="font-size: 13px; font-weight: 600; color: var(--color-paper); margin: 0 0 2px;">Shipped direct (10–20 days)</p>
+              <p style="font-size: 12px; color: var(--color-muted); margin: 0; line-height: 1.5;">Sourced globally to keep prices low. We'll send tracking as soon as it ships.</p>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-lime)" stroke-width="2" style="flex-shrink: 0;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <p style="font-size: 12px; color: var(--color-muted); margin: 0;">Free returns within 30 days. <a href="/returns" style="color: var(--color-lime); text-decoration: none;">Learn more</a></p>
+          </div>
+        </div>
+
+        <!-- Description accordions -->
+        <div style="margin-top: 20px; border-top: 1px solid var(--color-slate);">
+          {[
+            { title: 'Description', content: product.description },
+            { title: 'Shipping & returns', content: 'Ships from our global warehouse partners in 10–20 business days. Free standard shipping on orders over $50. Free returns within 30 days of delivery. See our full shipping policy for details.' },
+            { title: 'Materials & care', content: 'Crafted with care. Specific materials vary by product — refer to item label. Machine wash cold where applicable; air dry recommended to maintain shape and finish.' },
+          ].map((item) => (
+            <details style="border-bottom: 1px solid var(--color-slate); padding: 16px 0;">
+              <summary style="font-size: 14px; font-weight: 600; color: var(--color-paper); cursor: pointer; display: flex; justify-content: space-between; align-items: center; list-style: none; user-select: none;">
+                {item.title}
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+              </summary>
+              <p style="font-size: 14px; color: var(--color-muted); margin: 12px 0 0; line-height: 1.7;">{item.content}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <!-- Related products -->
+    {related.length > 0 && (
+      <section style="margin-top: 80px;">
+        <div style="display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 32px;">
+          <h2 style="font-family: var(--font-family-display); font-weight: 700; font-size: 24px; letter-spacing: -0.02em; margin: 0; color: var(--color-paper);">You might also like</h2>
+          <a href={`/shop/${product.category}`} style="font-size: 13px; font-weight: 600; color: var(--color-lime); text-decoration: none;">View all {category?.title} →</a>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;" class="related-grid">
+          {related.map((p) => (
+            <ProductCard product={p} client:visible />
+          ))}
+        </div>
+      </section>
+    )}
+  </div>
+
+  <!-- Sticky mobile ATC -->
+  <StickyATC product={product} client:load />
+</BaseLayout>
+
+<style>
+  @media (min-width: 768px) {
+    .pdp-grid {
+      grid-template-columns: 1fr 1fr !important;
+    }
+    .related-grid {
+      grid-template-columns: repeat(3, 1fr) !important;
+    }
+  }
+  @media (min-width: 1024px) {
+    .pdp-grid {
+      grid-template-columns: 1.1fr 0.9fr !important;
+      gap: 64px !important;
+    }
+    .related-grid {
+      grid-template-columns: repeat(6, 1fr) !important;
+    }
+  }
+</style>

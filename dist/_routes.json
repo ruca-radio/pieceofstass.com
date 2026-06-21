@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "include": [
+    "/*"
+  ],
+  "exclude": [
+    "/_astro/*",
+    "/favicon.svg",
+    "/og-default.png",
+    "/robots.txt",
+    "/shop/footwear/*",
+    "/shop/watches/*",
+    "/shop/bags/*",
+    "/shop/men/*",
+    "/shop/women/*",
+    "/shop/kids/*",
+    "/shop/fragrance/*",
+    "/shop/tech/*"
+  ]
+}

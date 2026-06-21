@@ -1,0 +1,35 @@
+{
+  "name": "pieceofstass-medusa",
+  "version": "1.0.0",
+  "description": "Medusa.js v2 commerce backend for Piece of Stass",
+  "scripts": {
+    "build": "medusa build",
+    "start": "medusa start",
+    "dev": "medusa develop",
+    "seed": "medusa exec ./src/scripts/seed.ts",
+    "db:migrate": "medusa db:migrate",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@medusajs/medusa": "2.x",
+    "@medusajs/framework": "2.x",
+    "@medusajs/core-flows": "2.x",
+    "@medusajs/medusa-cli": "2.x",
+    "@medusajs/payment-stripe": "^0.1.2",
+    "@medusajs/file-local": "^1.0.2",
+    "@medusajs/notification-sendgrid": "^1.0.1",
+    "nodemailer": "^6.9.9",
+    "pg": "^8.11.3",
+    "ioredis": "^5.3.2",
+    "csv-writer": "^1.6.0",
+    "zod": "^3.23.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.5",
+    "@types/nodemailer": "^6.4.14",
+    "typescript": "^5.4.5"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

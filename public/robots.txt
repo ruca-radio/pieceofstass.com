@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://pieceofstass.com/sitemap-index.xml
+
+# Disallow private/utility paths
+Disallow: /api/
+Disallow: /checkout/
+Disallow: /cart

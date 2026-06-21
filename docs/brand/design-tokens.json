@@ -1,0 +1,225 @@
+{
+  "$schema": "https://design-tokens.org/schema.json",
+  "name": "Piece of Stass Design Tokens",
+  "version": "1.0.0",
+  "description": "Production design tokens for pieceofstass.com. Consumed directly by the frontend Tailwind config. Signature color is Stass Lime (#C6FF3A) on a near-black Ink canvas. Mobile-first, WCAG AA. Text on Stass Lime must ALWAYS be Ink (#0A0A0B), never white.",
+  "meta": {
+    "baseFontSizePx": 16,
+    "gridUnitPx": 8,
+    "wcagTarget": "AA",
+    "fontStrategy": "Google Fonts only, self-hosted woff2, font-display: swap"
+  },
+  "color": {
+    "brand": {
+      "lime": { "value": "#C6FF3A", "description": "Stass Lime — signature. Primary CTA fill, wordmark, save/stash icon, 'new' flags. Text on top must be ink. Contrast vs ink = 16.74:1." },
+      "ink": { "value": "#0A0A0B", "description": "Stass Ink — primary dark canvas and primary text on light. Contrast vs paper = 18.92:1." },
+      "paper": { "value": "#FAFAF7", "description": "Stash Paper — primary light surface and text on dark." }
+    },
+    "secondary": {
+      "violet": { "value": "#7B5CFF", "description": "Hype Violet — secondary CTA, links, gradient partner. Large text/UI on paper (4.17:1); body OK on ink (4.54:1)." },
+      "pink": { "value": "#FF4D8D", "description": "Sass Pink — tertiary accent, sale flags. Graphic/large only on paper (3.0:1); text use on ink (6.31:1). Never primary." }
+    },
+    "neutral": {
+      "ink": { "value": "#0A0A0B" },
+      "charcoal": { "value": "#1C1C1F", "description": "Dark surface / cards on dark" },
+      "slate": { "value": "#3A3A3E", "description": "Secondary dark surface, borders on dark" },
+      "muted": { "value": "#6B6B6E", "description": "Secondary text on paper. Contrast vs paper = 5.08:1 (AA body pass)." },
+      "line": { "value": "#E4E4DE", "description": "Borders, dividers, hairlines on light" },
+      "surface": { "value": "#F2F1EC", "description": "Cards, inputs on light" },
+      "paper": { "value": "#FAFAF7" }
+    },
+    "semantic": {
+      "success": { "value": "#2FA866", "description": "Order confirmed, in stock" },
+      "error": { "value": "#E5484D", "description": "Form errors, sold out" },
+      "warning": { "value": "#E8A33D", "description": "Low stock, caution" },
+      "info": { "value": "#7B5CFF", "description": "Reuses Hype Violet" }
+    },
+    "gradient": {
+      "hype": {
+        "value": "linear-gradient(135deg, #C6FF3A 0%, #7B5CFF 100%)",
+        "stops": ["#C6FF3A", "#7B5CFF"],
+        "angle": 135,
+        "description": "The one sanctioned gradient — hero washes, drop reveals, app splash. Backgrounds only, never on the wordmark or text."
+      }
+    }
+  },
+  "typography": {
+    "fontFamily": {
+      "display": { "value": ["Space Grotesk", "Inter", "system-ui", "sans-serif"], "weights": [600, 700], "description": "Wordmark, hero headlines, product titles, price flexes. Min 18px." },
+      "body": { "value": ["Inter", "system-ui", "-apple-system", "sans-serif"], "weights": [400, 500, 600], "description": "Body, nav, buttons, captions. 16px mobile floor." },
+      "accent": { "value": ["Space Mono", "ui-monospace", "monospace"], "weights": [400], "description": "Receipts, prices/compare-at, drop numbers, timestamp labels. Tiny doses." }
+    },
+    "fontWeight": {
+      "regular": 400,
+      "medium": 500,
+      "semibold": 600,
+      "bold": 700
+    },
+    "letterSpacing": {
+      "tight": "-0.02em",
+      "normal": "0em",
+      "wide": "0.04em",
+      "wider": "0.08em"
+    },
+    "lineHeight": {
+      "none": 1,
+      "tight": 1.05,
+      "snug": 1.15,
+      "normal": 1.5,
+      "relaxed": 1.6
+    },
+    "scale": {
+      "description": "12-step type scale. Mobile-first px values. Pair size with the role; same role = same size everywhere.",
+      "2xs": { "size": "11px", "lineHeight": 1.4, "use": "legal microcopy (above 12px floor only for non-essential labels; avoid for body)" },
+      "xs": { "size": "12px", "lineHeight": 1.4, "use": "captions, tags, helper text — absolute floor" },
+      "sm": { "size": "14px", "lineHeight": 1.5, "use": "secondary text, badges, nav links" },
+      "base": { "size": "16px", "lineHeight": 1.5, "use": "body default (mobile floor for paragraphs)" },
+      "md": { "size": "18px", "lineHeight": 1.5, "use": "lead body, PDP description, buttons" },
+      "lg": { "size": "20px", "lineHeight": 1.4, "use": "small headings, product titles" },
+      "xl": { "size": "24px", "lineHeight": 1.25, "use": "section headings (display floor)" },
+      "2xl": { "size": "30px", "lineHeight": 1.2, "use": "subsection / card hero" },
+      "3xl": { "size": "38px", "lineHeight": 1.15, "use": "page titles" },
+      "4xl": { "size": "48px", "lineHeight": 1.1, "use": "hero headline (mobile)" },
+      "5xl": { "size": "64px", "lineHeight": 1.05, "use": "hero headline (tablet+)" },
+      "6xl": { "size": "84px", "lineHeight": 1.0, "use": "display moments, wordmark hero (desktop)" }
+    }
+  },
+  "spacing": {
+    "description": "8pt grid. 4px half-step allowed for fine adjustments. All layout spacing uses these tokens.",
+    "0": "0px",
+    "0.5": "4px",
+    "1": "8px",
+    "1.5": "12px",
+    "2": "16px",
+    "3": "24px",
+    "4": "32px",
+    "5": "40px",
+    "6": "48px",
+    "8": "64px",
+    "10": "80px",
+    "12": "96px",
+    "16": "128px",
+    "20": "160px",
+    "24": "192px"
+  },
+  "radii": {
+    "none": "0px",
+    "sm": "6px",
+    "md": "10px",
+    "lg": "16px",
+    "xl": "24px",
+    "2xl": "32px",
+    "pill": "999px",
+    "description": "Default product cards use lg (16px). Buttons use pill. Inputs use md."
+  },
+  "shadow": {
+    "description": "Soft, warm, low-spread shadows. Dark canvas needs subtle elevation; avoid heavy drop shadows.",
+    "xs": { "value": "0 1px 2px rgba(10,10,11,0.06)" },
+    "sm": { "value": "0 2px 6px rgba(10,10,11,0.08)" },
+    "md": { "value": "0 6px 16px rgba(10,10,11,0.10)" },
+    "lg": { "value": "0 12px 32px rgba(10,10,11,0.14)" },
+    "xl": { "value": "0 24px 56px rgba(10,10,11,0.18)" },
+    "lime-glow": { "value": "0 0 24px rgba(198,255,58,0.45)", "description": "Signature focus/active glow for primary CTA and stash actions. Use sparingly." },
+    "focus-ring": { "value": "0 0 0 3px rgba(123,92,255,0.55)", "description": "Keyboard focus ring (Hype Violet) — accessibility." }
+  },
+  "motion": {
+    "duration": {
+      "instant": "100ms",
+      "fast": "150ms",
+      "base": "240ms",
+      "slow": "400ms",
+      "hero": "600ms",
+      "description": "Micro 120-180ms, standard 200-280ms, hero 400-600ms. Nothing user-blocking over 600ms."
+    },
+    "easing": {
+      "expo-out": { "value": "cubic-bezier(0.22, 1, 0.36, 1)", "description": "Default entrance — quick in, gentle settle." },
+      "spring": { "value": "cubic-bezier(0.34, 1.56, 0.64, 1)", "description": "Interactive overshoot — add-to-bag, stash save (1.15 scale pop)." },
+      "standard": { "value": "cubic-bezier(0.4, 0.0, 0.2, 1)", "description": "Neutral in-out for layout transitions." },
+      "ease-out": { "value": "cubic-bezier(0.0, 0.0, 0.2, 1)", "description": "Exits / fades." }
+    },
+    "transform": {
+      "hoverScale": 1.02,
+      "pressScale": 0.98,
+      "popScale": 1.15,
+      "description": "Hover up, press down (web, 150ms). Pop for save/stash confirmation (spring)."
+    },
+    "reducedMotion": {
+      "fallback": "opacity fade, max 120ms, no transforms",
+      "description": "Honor prefers-reduced-motion — replace springs/parallax with simple opacity fades."
+    }
+  },
+  "breakpoints": {
+    "description": "Mobile-first. 90%+ of traffic is social/mobile — design at sm, enhance up.",
+    "sm": "390px",
+    "md": "768px",
+    "lg": "1024px",
+    "xl": "1280px"
+  },
+  "tailwind": {
+    "description": "Suggested mapping for tailwind.config.js theme.extend. Keys mirror the tokens above.",
+    "colors": {
+      "lime": "#C6FF3A",
+      "ink": "#0A0A0B",
+      "paper": "#FAFAF7",
+      "violet": "#7B5CFF",
+      "pink": "#FF4D8D",
+      "charcoal": "#1C1C1F",
+      "slate": "#3A3A3E",
+      "muted": "#6B6B6E",
+      "line": "#E4E4DE",
+      "surface": "#F2F1EC",
+      "success": "#2FA866",
+      "error": "#E5484D",
+      "warning": "#E8A33D"
+    },
+    "fontFamily": {
+      "display": ["Space Grotesk", "Inter", "system-ui", "sans-serif"],
+      "sans": ["Inter", "system-ui", "-apple-system", "sans-serif"],
+      "mono": ["Space Mono", "ui-monospace", "monospace"]
+    },
+    "fontSize": {
+      "2xs": ["11px", { "lineHeight": "1.4" }],
+      "xs": ["12px", { "lineHeight": "1.4" }],
+      "sm": ["14px", { "lineHeight": "1.5" }],
+      "base": ["16px", { "lineHeight": "1.5" }],
+      "md": ["18px", { "lineHeight": "1.5" }],
+      "lg": ["20px", { "lineHeight": "1.4" }],
+      "xl": ["24px", { "lineHeight": "1.25" }],
+      "2xl": ["30px", { "lineHeight": "1.2" }],
+      "3xl": ["38px", { "lineHeight": "1.15" }],
+      "4xl": ["48px", { "lineHeight": "1.1" }],
+      "5xl": ["64px", { "lineHeight": "1.05" }],
+      "6xl": ["84px", { "lineHeight": "1.0" }]
+    },
+    "spacing": {
+      "0.5": "4px", "1": "8px", "1.5": "12px", "2": "16px", "3": "24px",
+      "4": "32px", "5": "40px", "6": "48px", "8": "64px", "10": "80px",
+      "12": "96px", "16": "128px", "20": "160px", "24": "192px"
+    },
+    "borderRadius": {
+      "sm": "6px", "md": "10px", "lg": "16px", "xl": "24px", "2xl": "32px", "pill": "999px"
+    },
+    "boxShadow": {
+      "xs": "0 1px 2px rgba(10,10,11,0.06)",
+      "sm": "0 2px 6px rgba(10,10,11,0.08)",
+      "md": "0 6px 16px rgba(10,10,11,0.10)",
+      "lg": "0 12px 32px rgba(10,10,11,0.14)",
+      "xl": "0 24px 56px rgba(10,10,11,0.18)",
+      "lime-glow": "0 0 24px rgba(198,255,58,0.45)"
+    },
+    "transitionTimingFunction": {
+      "expo-out": "cubic-bezier(0.22, 1, 0.36, 1)",
+      "spring": "cubic-bezier(0.34, 1.56, 0.64, 1)",
+      "standard": "cubic-bezier(0.4, 0.0, 0.2, 1)"
+    },
+    "transitionDuration": {
+      "instant": "100ms", "fast": "150ms", "base": "240ms", "slow": "400ms", "hero": "600ms"
+    },
+    "screens": {
+      "sm": "390px", "md": "768px", "lg": "1024px", "xl": "1280px"
+    },
+    "backgroundImage": {
+      "hype-gradient": "linear-gradient(135deg, #C6FF3A 0%, #7B5CFF 100%)"
+    }
+  }
+}

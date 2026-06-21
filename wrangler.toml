@@ -1,0 +1,12 @@
+name = "pieceofstass"
+compatibility_date = "2024-12-30"
+compatibility_flags = ["nodejs_compat"]
+
+main = "./dist/_worker.js"
+
+[site]
+bucket = "./dist"
+
+[vars]
+CHECKOUT_URL = ""
+PUBLIC_SITE_URL = "https://pieceofstass.com"

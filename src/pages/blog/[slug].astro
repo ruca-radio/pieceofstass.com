@@ -1,0 +1,23 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+// Blog content is not yet populated — route exists, ready for CMS integration
+export const prerender = true;
+
+export function getStaticPaths() {
+  return [];
+}
+
+const { slug } = Astro.params;
+---
+
+<BaseLayout
+  title="Post not found — Piece of Stass"
+  description="This blog post doesn't exist yet."
+  noindex={true}
+>
+  <div style="max-width: 640px; margin: 0 auto; padding: 80px 16px; text-align: center;">
+    <h1 style="font-family: var(--font-family-display); font-weight: 700; font-size: 30px; color: var(--color-paper);">Post not found</h1>
+    <a href="/blog" style="color: var(--color-lime); text-decoration: none; font-size: 14px; font-weight: 600;">← Back to The Edit</a>
+  </div>
+</BaseLayout>

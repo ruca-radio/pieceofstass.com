@@ -1,0 +1,14 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CartPageIsland from '../components/islands/CartPage';
+---
+
+<BaseLayout
+  title="Your bag — Piece of Stass"
+  description="Review your items and proceed to checkout."
+  noindex={true}
+>
+  <div style="max-width: 1280px; margin: 0 auto; padding: 40px 16px;">
+    <CartPageIsland client:load />
+  </div>
+</BaseLayout>

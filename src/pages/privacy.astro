@@ -1,0 +1,9 @@
+---
+import LegalLayout from '../layouts/LegalLayout.astro';
+import { marked } from '../lib/marked-stub';
+import raw from '../content/legal/privacy.md?raw';
+const content = marked(raw);
+---
+<LegalLayout title="Privacy Policy" description="How Piece of Stass collects, uses, and protects your personal information." lastUpdated="June 21, 2026">
+  <div set:html={content} />
+</LegalLayout>

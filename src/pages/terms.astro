@@ -1,0 +1,9 @@
+---
+import LegalLayout from '../layouts/LegalLayout.astro';
+import { marked } from '../lib/marked-stub';
+import termsRaw from '../content/legal/terms.md?raw';
+const content = marked(termsRaw);
+---
+<LegalLayout title="Terms of Service" description="The terms governing your use of Piece of Stass." lastUpdated="June 21, 2026">
+  <div set:html={content} />
+</LegalLayout>

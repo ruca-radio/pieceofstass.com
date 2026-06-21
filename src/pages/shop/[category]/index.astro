@@ -1,0 +1,88 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import PLPFilters from '../../../components/islands/PLPFilters';
+import { allCategories, getProductsByCategory } from '../../../lib/products';
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return allCategories.map((cat) => ({
+    params: { category: cat.slug },
+    props: { category: cat },
+  }));
+}
+
+const { category } = Astro.props;
+const products = getProductsByCategory(category.slug);
+
+const breadcrumbJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://pieceofstass.com' },
+    { '@type': 'ListItem', position: 2, name: 'Shop', item: 'https://pieceofstass.com/shop' },
+    { '@type': 'ListItem', position: 3, name: category.title, item: `https://pieceofstass.com/shop/${category.slug}` },
+  ],
+};
+
+const itemListJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: `${category.title} products`,
+  numberOfItems: products.length,
+  itemListElement: products.map((p, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    url: `https://pieceofstass.com/shop/${p.category}/${p.handle}`,
+  })),
+};
+---
+
+<BaseLayout
+  title={category.seo_title}
+  description={category.seo_description}
+  jsonLd={[breadcrumbJsonLd, itemListJsonLd]}
+>
+  <div style="max-width: 1280px; margin: 0 auto; padding: 32px 16px;">
+    <!-- Breadcrumb -->
+    <nav aria-label="Breadcrumb" style="margin-bottom: 24px;">
+      <ol style="list-style: none; padding: 0; margin: 0; display: flex; gap: 8px; font-size: 12px; color: var(--color-muted); font-family: var(--font-family-mono);">
+        <li><a href="/" style="color: var(--color-muted); text-decoration: none;">Home</a></li>
+        <li aria-hidden="true" style="color: var(--color-slate);">/</li>
+        <li><a href="/shop" style="color: var(--color-muted); text-decoration: none;">Shop</a></li>
+        <li aria-hidden="true" style="color: var(--color-slate);">/</li>
+        <li aria-current="page" style="color: var(--color-paper);">{category.title}</li>
+      </ol>
+    </nav>
+
+    <!-- Category hero -->
+    <div style="margin-bottom: 40px; padding: 32px; background: var(--color-charcoal); border-radius: var(--radius-xl); border: 1px solid var(--color-slate); position: relative; overflow: hidden;">
+      <div style="position: absolute; top: 0; right: 0; width: 200px; height: 200px; background: radial-gradient(circle, rgba(198,255,58,0.08) 0%, transparent 70%); pointer-events: none;"/>
+      <p style="font-family: var(--font-family-mono); font-size: 11px; letter-spacing: 0.08em; color: var(--color-lime); text-transform: uppercase; margin: 0 0 8px;">{products.length} items</p>
+      <h1 style="font-family: var(--font-family-display); font-weight: 700; font-size: clamp(30px, 5vw, 48px); letter-spacing: -0.02em; margin: 0 0 12px; color: var(--color-paper);">{category.title}</h1>
+      <p style="color: var(--color-muted); font-size: 15px; margin: 0; max-width: 600px; line-height: 1.6;">{category.hero_copy}</p>
+    </div>
+
+    <!-- Category quick-nav -->
+    <div style="display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 24px; scrollbar-width: none;">
+      <a href="/shop" style="flex-shrink: 0; padding: 8px 16px; background: var(--color-charcoal); border: 1px solid var(--color-slate); color: var(--color-paper); border-radius: 999px; font-size: 13px; font-weight: 500; text-decoration: none;">All</a>
+      {allCategories.map((cat) => (
+        <a
+          href={`/shop/${cat.slug}`}
+          style={`flex-shrink: 0; padding: 8px 16px; background: ${cat.slug === category.slug ? 'var(--color-lime)' : 'var(--color-charcoal)'}; border: 1px solid ${cat.slug === category.slug ? 'var(--color-lime)' : 'var(--color-slate)'}; color: ${cat.slug === category.slug ? 'var(--color-ink)' : 'var(--color-paper)'}; border-radius: 999px; font-size: 13px; font-weight: ${cat.slug === category.slug ? '700' : '500'}; text-decoration: none; white-space: nowrap;`}
+        >
+          {cat.title}
+        </a>
+      ))}
+    </div>
+
+    {products.length === 0 ? (
+      <div style="text-align: center; padding: 80px 0; color: var(--color-muted);">
+        <p style="font-family: var(--font-family-display); font-size: 20px; font-weight: 600;">Nothing in this category yet.</p>
+        <a href="/shop" style="color: var(--color-lime); text-decoration: none; font-size: 14px; font-weight: 600;">Browse all products →</a>
+      </div>
+    ) : (
+      <PLPFilters products={products} categoryTitle={category.title} client:load />
+    )}
+  </div>
+</BaseLayout>

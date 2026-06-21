@@ -1,0 +1,243 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProductCard from '../components/islands/ProductCard';
+import EmailSignup from '../components/islands/EmailSignup';
+import { allProducts, allCategories, getTrendingProducts, formatPriceDollars } from '../lib/products';
+
+const trending = getTrendingProducts(8);
+const categories = allCategories.sort((a, b) => a.sort_order - b.sort_order);
+const newArrivals = allProducts.slice(0, 8);
+
+const orgJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'Piece of Stass',
+  url: 'https://pieceofstass.com',
+  logo: 'https://pieceofstass.com/og-default.png',
+  sameAs: [
+    'https://instagram.com/pieceofstass',
+    'https://tiktok.com/@pieceofstass',
+  ],
+};
+
+const itemListJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'Trending products',
+  numberOfItems: trending.length,
+  itemListElement: trending.map((p, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    url: `https://pieceofstass.com/shop/${p.category}/${p.handle}`,
+    name: p.title,
+  })),
+};
+---
+
+<BaseLayout
+  title="Piece of Stass — Raid the Stash. The look for less."
+  description="Curated trend-driven lifestyle finds across footwear, bags, watches, fragrance, tech, and fits. Dropped daily. Priced for impulse."
+  jsonLd={[orgJsonLd, itemListJsonLd]}
+>
+  <!-- Hero -->
+  <section style="position: relative; min-height: 90vh; display: flex; align-items: center; overflow: hidden; background: var(--color-ink);">
+    <!-- Background gradient accent -->
+    <div style="position: absolute; inset: 0; background: radial-gradient(ellipse 60% 80% at 80% 50%, rgba(198,255,58,0.06) 0%, transparent 70%); pointer-events: none;"/>
+    <div style="position: absolute; inset: 0; background: radial-gradient(ellipse 40% 60% at 20% 80%, rgba(123,92,255,0.04) 0%, transparent 70%); pointer-events: none;"/>
+
+    <div style="max-width: 1280px; margin: 0 auto; padding: 64px 16px; display: grid; grid-template-columns: 1fr; gap: 48px; align-items: center; width: 100%;" class="hero-grid">
+      <!-- Copy -->
+      <div>
+        <p style="font-family: var(--font-family-mono); font-size: 11px; letter-spacing: 0.12em; color: var(--color-lime); text-transform: uppercase; margin: 0 0 16px;">The summer drop is live</p>
+        <h1 style="font-family: var(--font-family-display); font-weight: 700; font-size: clamp(48px, 8vw, 84px); line-height: 1.0; letter-spacing: -0.03em; color: var(--color-paper); margin: 0 0 24px;">
+          Raid<br/>
+          <span style="color: var(--color-lime);">the stash.</span>
+        </h1>
+        <p style="font-size: 18px; color: var(--color-muted); margin: 0 0 32px; max-width: 480px; line-height: 1.6;">
+          The look for less, dropped daily. Trend-driven finds across 8 categories — picked by someone with taste.
+        </p>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+          <a
+            href="/shop"
+            style="background: var(--color-lime); color: var(--color-ink); border-radius: 999px; padding: 16px 32px; font-family: var(--font-family-display); font-weight: 700; font-size: 16px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: box-shadow 200ms; letter-spacing: -0.01em;"
+            onmouseover="this.style.boxShadow='var(--shadow-lime-glow)'"
+            onmouseout="this.style.boxShadow='none'"
+          >
+            Shop now
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
+          </a>
+          <a
+            href="/shop/footwear"
+            style="background: transparent; color: var(--color-paper); border: 1.5px solid var(--color-slate); border-radius: 999px; padding: 16px 32px; font-family: var(--font-family-display); font-weight: 600; font-size: 16px; text-decoration: none; transition: border-color 150ms, color 150ms;"
+            onmouseover="this.style.borderColor='var(--color-paper)'"
+            onmouseout="this.style.borderColor='var(--color-slate)'"
+          >
+            Footwear
+          </a>
+        </div>
+        <p style="font-family: var(--font-family-mono); font-size: 11px; letter-spacing: 0.08em; color: var(--color-muted); margin: 20px 0 0;">#RAIDTHESTASH</p>
+      </div>
+
+      <!-- Hero product images -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;" class="hero-images">
+        {trending.slice(0, 4).map((product, i) => (
+          <a
+            href={`/shop/${product.category}/${product.handle}`}
+            style={`text-decoration: none; border-radius: var(--radius-lg); overflow: hidden; aspect-ratio: 3/4; display: block; background: var(--color-charcoal); ${i === 1 ? 'margin-top: 24px;' : ''} ${i === 3 ? 'margin-top: -24px;' : ''}`}
+          >
+            <img
+              src={product.images[0]}
+              alt={product.title}
+              loading={i < 2 ? 'eager' : 'lazy'}
+              width={300}
+              height={400}
+              style="width: 100%; height: 100%; object-fit: cover; transition: transform 400ms var(--ease-expo-out);"
+              onmouseover="this.style.transform='scale(1.04)'"
+              onmouseout="this.style.transform='scale(1)'"
+            />
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Category pills -->
+  <section style="padding: 48px 0; border-top: 1px solid var(--color-charcoal);">
+    <div style="max-width: 1280px; margin: 0 auto; padding: 0 16px;">
+      <div style="display: flex; gap: 12px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none;">
+        {categories.map((cat) => (
+          <a
+            href={`/shop/${cat.slug}`}
+            style="flex-shrink: 0; display: flex; flex-direction: column; align-items: center; gap: 8px; text-decoration: none; padding: 16px 20px; background: var(--color-charcoal); border-radius: var(--radius-xl); border: 1px solid var(--color-slate); min-width: 100px; text-align: center; transition: border-color 150ms, background 150ms; cursor: pointer;"
+            onmouseover="this.style.borderColor='var(--color-lime)'; this.style.background='rgba(198,255,58,0.06)'"
+            onmouseout="this.style.borderColor='var(--color-slate)'; this.style.background='var(--color-charcoal)'"
+          >
+            <span style="font-size: 22px;" aria-hidden="true">
+              {cat.slug === 'footwear' ? '👟' : cat.slug === 'watches' ? '⌚' : cat.slug === 'bags' ? '👜' : cat.slug === 'men' ? '🧥' : cat.slug === 'women' ? '👗' : cat.slug === 'kids' ? '🎒' : cat.slug === 'fragrance' ? '🌸' : '🎧'}
+            </span>
+            <span style="font-size: 12px; font-weight: 600; color: var(--color-paper); font-family: var(--font-family-display);">{cat.title}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Trending grid -->
+  <section style="padding: 64px 0;">
+    <div style="max-width: 1280px; margin: 0 auto; padding: 0 16px;">
+      <div style="display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 32px; gap: 16px;">
+        <div>
+          <p style="font-family: var(--font-family-mono); font-size: 11px; letter-spacing: 0.08em; color: var(--color-lime); text-transform: uppercase; margin: 0 0 6px;">Stashed before it's trending</p>
+          <h2 style="font-family: var(--font-family-display); font-weight: 700; font-size: 30px; letter-spacing: -0.02em; margin: 0; color: var(--color-paper);">Trending now</h2>
+        </div>
+        <a href="/shop" style="font-size: 13px; font-weight: 600; color: var(--color-lime); text-decoration: none; white-space: nowrap; font-family: var(--font-family-display);">View all →</a>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;" class="trending-grid">
+        {trending.map((product, i) => (
+          <ProductCard product={product} eager={i < 4} client:visible />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Social proof strip -->
+  <section style="padding: 64px 0; background: var(--color-charcoal); border-top: 1px solid var(--color-slate); border-bottom: 1px solid var(--color-slate);">
+    <div style="max-width: 1280px; margin: 0 auto; padding: 0 16px;">
+      <div style="text-align: center; margin-bottom: 40px;">
+        <p style="font-family: var(--font-family-mono); font-size: 11px; letter-spacing: 0.08em; color: var(--color-muted); text-transform: uppercase; margin: 0 0 8px;">As seen on</p>
+        <h2 style="font-family: var(--font-family-display); font-weight: 700; font-size: 24px; letter-spacing: -0.02em; margin: 0; color: var(--color-paper);">All over your FYP</h2>
+      </div>
+      <!-- UGC grid -->
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;" class="ugc-grid">
+        {allProducts.slice(10, 19).map((product) => (
+          <a
+            href={`/shop/${product.category}/${product.handle}`}
+            style="aspect-ratio: 1; display: block; overflow: hidden; border-radius: var(--radius-md); position: relative; background: var(--color-slate);"
+          >
+            <img
+              src={product.images[0]}
+              alt={product.title}
+              loading="lazy"
+              width={300}
+              height={300}
+              style="width: 100%; height: 100%; object-fit: cover; transition: transform 400ms var(--ease-expo-out);"
+              onmouseover="this.style.transform='scale(1.06)'"
+              onmouseout="this.style.transform='scale(1)'"
+            />
+            <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(10,10,11,0.6) 0%, transparent 60%); display: flex; align-items: flex-end; padding: 10px;">
+              <span style="font-size: 11px; color: var(--color-paper); font-weight: 600; font-family: var(--font-family-display);">{formatPriceDollars(product.price)}</span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Anna intro -->
+  <section style="padding: 80px 0;">
+    <div style="max-width: 1280px; margin: 0 auto; padding: 0 16px; display: grid; grid-template-columns: 1fr; gap: 48px; align-items: center;" class="anna-grid">
+      <div style="background: var(--color-charcoal); border: 1px solid var(--color-slate); border-radius: var(--radius-2xl); aspect-ratio: 4/5; overflow: hidden; max-width: 480px; margin: 0 auto; width: 100%;">
+        <!-- Placeholder: deploy agent will swap for real photo -->
+        <div style="width: 100%; height: 100%; background: linear-gradient(135deg, var(--color-charcoal) 0%, var(--color-slate) 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;">
+          <span style="font-size: 48px;">🤌</span>
+          <span style="font-family: var(--font-family-mono); font-size: 11px; letter-spacing: 0.08em; color: var(--color-muted);">Anna L. — Founder</span>
+        </div>
+      </div>
+      <div>
+        <p style="font-family: var(--font-family-mono); font-size: 11px; letter-spacing: 0.08em; color: var(--color-lime); text-transform: uppercase; margin: 0 0 16px;">Founder's note</p>
+        <h2 style="font-family: var(--font-family-display); font-weight: 700; font-size: clamp(24px, 4vw, 38px); letter-spacing: -0.02em; margin: 0 0 20px; color: var(--color-paper); line-height: 1.15;">
+          We don't sell everything.<br/>We sell the edit.
+        </h2>
+        <p style="font-size: 16px; color: var(--color-muted); line-height: 1.7; margin: 0 0 16px;">Taste, not the price tag. I started Piece of Stass because good style shouldn't be gatekept behind a logo. I scrolled so you don't have to. Every single pick in this stash has passed my personal taste test.</p>
+        <p style="font-size: 16px; color: var(--color-muted); line-height: 1.7; margin: 0 0 24px;">Quiet-luxury energy, loud-value price. That's the whole point.</p>
+        <a href="/about-anna" style="font-size: 14px; font-weight: 700; color: var(--color-lime); text-decoration: none; font-family: var(--font-family-display); display: inline-flex; align-items: center; gap: 6px;">
+          Read Anna's story
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- New arrivals -->
+  <section style="padding: 64px 0; background: var(--color-charcoal); border-top: 1px solid var(--color-slate);">
+    <div style="max-width: 1280px; margin: 0 auto; padding: 0 16px;">
+      <div style="display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 32px;">
+        <div>
+          <p style="font-family: var(--font-family-mono); font-size: 11px; letter-spacing: 0.08em; color: var(--color-lime); text-transform: uppercase; margin: 0 0 6px;">Just dropped</p>
+          <h2 style="font-family: var(--font-family-display); font-weight: 700; font-size: 30px; letter-spacing: -0.02em; margin: 0; color: var(--color-paper);">New arrivals</h2>
+        </div>
+        <a href="/shop" style="font-size: 13px; font-weight: 600; color: var(--color-lime); text-decoration: none; font-family: var(--font-family-display);">Shop all →</a>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;" class="arrivals-grid">
+        {newArrivals.map((product, i) => (
+          <ProductCard product={product} eager={false} client:visible />
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  @media (min-width: 768px) {
+    .hero-grid {
+      grid-template-columns: 1fr 1fr !important;
+    }
+    .trending-grid {
+      grid-template-columns: repeat(4, 1fr) !important;
+    }
+    .arrivals-grid {
+      grid-template-columns: repeat(4, 1fr) !important;
+    }
+    .ugc-grid {
+      grid-template-columns: repeat(6, 1fr) !important;
+    }
+    .anna-grid {
+      grid-template-columns: 1fr 1.2fr !important;
+    }
+  }
+  @media (min-width: 1024px) {
+    .hero-images {
+      gap: 16px !important;
+    }
+  }
+</style>

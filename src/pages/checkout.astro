@@ -1,0 +1,35 @@
+---
+import CheckoutIsland from '../components/islands/CheckoutPage';
+import SEO from '../components/SEO.astro';
+import '../styles/global.css';
+
+const checkoutUrl = import.meta.env.CHECKOUT_URL || '';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <SEO title="Checkout — Piece of Stass" description="Complete your order." noindex={true} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body>
+    <!-- Minimal header for checkout -->
+    <header style="border-bottom: 1px solid var(--color-charcoal); padding: 16px; text-align: center;">
+      <a href="/" style="display: inline-flex; align-items: center; gap: 8px; text-decoration: none;">
+        <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
+          <rect width="32" height="32" rx="6" fill="var(--color-lime)" />
+          <path d="M9 7h8c2.761 0 5 2.239 5 5s-2.239 5-5 5H9V7z" fill="var(--color-ink)" />
+          <path d="M9 17v8" stroke="var(--color-ink)" stroke-width="3" stroke-linecap="round" />
+        </svg>
+        <span style="font-family: var(--font-family-display); font-weight: 700; font-size: 18px; color: var(--color-paper);">STASS</span>
+      </a>
+      <p style="font-family: var(--font-family-mono); font-size: 10px; letter-spacing: 0.08em; color: var(--color-muted); margin: 6px 0 0; text-transform: uppercase;">Secure checkout</p>
+    </header>
+
+    <main>
+      <CheckoutIsland checkoutUrl={checkoutUrl} client:load />
+    </main>
+  </body>
+</html>

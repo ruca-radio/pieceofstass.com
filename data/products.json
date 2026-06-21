@@ -1,0 +1,6244 @@
+{
+  "products": [
+    {
+      "id": "pos-footwear-001-white-cement-high-top-court-sneaker",
+      "title": "White cement high-top court sneaker",
+      "handle": "white-cement-high-top-court-sneaker",
+      "description": "Structured retro court sneaker with paneled uppers, padded collars, and a bold speckled midsole. Built for everyday outfits that need a crisp athletic finish without loud labels.",
+      "category": "footwear",
+      "tags": [
+        "court",
+        "high-top",
+        "retro",
+        "streetwear",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 149,
+      "currency_code": "usd",
+      "compare_at_price": 216,
+      "images": [
+        "https://photo.yupoo.com/chenyico/52ac704f/medium.jpeg"
+      ],
+      "variants": [
+        {
+          "title": "White/Grey / EU 36",
+          "sku": "POS-FOO-001-01",
+          "options": {
+            "Color": "White/Grey",
+            "Size": "EU 36"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 14900
+            }
+          ]
+        },
+        {
+          "title": "White/Grey / EU 38",
+          "sku": "POS-FOO-001-02",
+          "options": {
+            "Color": "White/Grey",
+            "Size": "EU 38"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 14900
+            }
+          ]
+        },
+        {
+          "title": "White/Grey / EU 40",
+          "sku": "POS-FOO-001-03",
+          "options": {
+            "Color": "White/Grey",
+            "Size": "EU 40"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 14900
+            }
+          ]
+        },
+        {
+          "title": "White/Grey / EU 42",
+          "sku": "POS-FOO-001-04",
+          "options": {
+            "Color": "White/Grey",
+            "Size": "EU 42"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 14900
+            }
+          ]
+        },
+        {
+          "title": "White/Grey / EU 44",
+          "sku": "POS-FOO-001-05",
+          "options": {
+            "Color": "White/Grey",
+            "Size": "EU 44"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 14900
+            }
+          ]
+        },
+        {
+          "title": "White/Grey / EU 46",
+          "sku": "POS-FOO-001-06",
+          "options": {
+            "Color": "White/Grey",
+            "Size": "EU 46"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 14900
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://chenyico.x.yupoo.com/albums/207427779?uid=1",
+      "supplier_id": "footwear",
+      "shipping_class": "standard-shoes",
+      "source_sampling_status": "real_album_sample_cleaned"
+    },
+    {
+      "id": "pos-footwear-002-black-nubuck-high-top-court-sneaker",
+      "title": "Black nubuck high-top court sneaker",
+      "handle": "black-nubuck-high-top-court-sneaker",
+      "description": "Soft-look black upper, sculpted side panels, and a stable cushioned sole make this pair a low-key daily statement. Style it with denim, cargos, or relaxed tailoring.",
+      "category": "footwear",
+      "tags": [
+        "court",
+        "high-top",
+        "minimal",
+        "streetwear",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 159,
+      "currency_code": "usd",
+      "compare_at_price": 231,
+      "images": [
+        "https://photo.yupoo.com/chenyico/65ccd5d0/small.jpeg"
+      ],
+      "variants": [
+        {
+          "title": "Black / EU 36",
+          "sku": "POS-FOO-002-01",
+          "options": {
+            "Color": "Black",
+            "Size": "EU 36"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 15900
+            }
+          ]
+        },
+        {
+          "title": "Black / EU 38",
+          "sku": "POS-FOO-002-02",
+          "options": {
+            "Color": "Black",
+            "Size": "EU 38"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 15900
+            }
+          ]
+        },
+        {
+          "title": "Black / EU 40",
+          "sku": "POS-FOO-002-03",
+          "options": {
+            "Color": "Black",
+            "Size": "EU 40"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 15900
+            }
+          ]
+        },
+        {
+          "title": "Black / EU 42",
+          "sku": "POS-FOO-002-04",
+          "options": {
+            "Color": "Black",
+            "Size": "EU 42"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 15900
+            }
+          ]
+        },
+        {
+          "title": "Black / EU 44",
+          "sku": "POS-FOO-002-05",
+          "options": {
+            "Color": "Black",
+            "Size": "EU 44"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 15900
+            }
+          ]
+        },
+        {
+          "title": "Black / EU 46",
+          "sku": "POS-FOO-002-06",
+          "options": {
+            "Color": "Black",
+            "Size": "EU 46"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 15900
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://chenyico.x.yupoo.com/albums/207427755?uid=1",
+      "supplier_id": "footwear",
+      "shipping_class": "standard-shoes",
+      "source_sampling_status": "real_album_sample_cleaned"
+    },
+    {
+      "id": "pos-footwear-003-red-flame-high-top-court-sneaker",
+      "title": "Red flame high-top court sneaker",
+      "handle": "red-flame-high-top-court-sneaker",
+      "description": "A high-energy colorway with smooth overlays, a padded tongue, and a supportive high-cut profile. The look nods to classic basketball shapes while staying fully label-free.",
+      "category": "footwear",
+      "tags": [
+        "court",
+        "high-top",
+        "red",
+        "basketball-inspired",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 169,
+      "currency_code": "usd",
+      "compare_at_price": 245,
+      "images": [
+        "https://photo.yupoo.com/chenyico/f6618311/small.jpeg"
+      ],
+      "variants": [
+        {
+          "title": "Red/Black / EU 36",
+          "sku": "POS-FOO-003-01",
+          "options": {
+            "Color": "Red/Black",
+            "Size": "EU 36"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 16900
+            }
+          ]
+        },
+        {
+          "title": "Red/Black / EU 38",
+          "sku": "POS-FOO-003-02",
+          "options": {
+            "Color": "Red/Black",
+            "Size": "EU 38"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 16900
+            }
+          ]
+        },
+        {
+          "title": "Red/Black / EU 40",
+          "sku": "POS-FOO-003-03",
+          "options": {
+            "Color": "Red/Black",
+            "Size": "EU 40"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 16900
+            }
+          ]
+        },
+        {
+          "title": "Red/Black / EU 42",
+          "sku": "POS-FOO-003-04",
+          "options": {
+            "Color": "Red/Black",
+            "Size": "EU 42"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 16900
+            }
+          ]
+        },
+        {
+          "title": "Red/Black / EU 44",
+          "sku": "POS-FOO-003-05",
+          "options": {
+            "Color": "Red/Black",
+            "Size": "EU 44"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 16900
+            }
+          ]
+        },
+        {
+          "title": "Red/Black / EU 46",
+          "sku": "POS-FOO-003-06",
+          "options": {
+            "Color": "Red/Black",
+            "Size": "EU 46"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 16900
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://chenyico.x.yupoo.com/albums/207427736?uid=1",
+      "supplier_id": "footwear",
+      "shipping_class": "standard-shoes",
+      "source_sampling_status": "real_album_sample_cleaned"
+    },
+    {
+      "id": "pos-footwear-004-blue-racing-high-top-court-sneaker",
+      "title": "Blue racing high-top court sneaker",
+      "handle": "blue-racing-high-top-court-sneaker",
+      "description": "Color-blocked panels and a sturdy cupsole give this sneaker a fast, sporty profile. It is an easy anchor for weekend fits and oversized layers.",
+      "category": "footwear",
+      "tags": [
+        "court",
+        "high-top",
+        "blue",
+        "sport",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 179,
+      "currency_code": "usd",
+      "compare_at_price": 260,
+      "images": [
+        "https://photo.yupoo.com/chenyico/43a49b31/small.jpeg"
+      ],
+      "variants": [
+        {
+          "title": "Blue/White / EU 36",
+          "sku": "POS-FOO-004-01",
+          "options": {
+            "Color": "Blue/White",
+            "Size": "EU 36"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 17900
+            }
+          ]
+        },
+        {
+          "title": "Blue/White / EU 38",
+          "sku": "POS-FOO-004-02",
+          "options": {
+            "Color": "Blue/White",
+            "Size": "EU 38"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 17900
+            }
+          ]
+        },
+        {
+          "title": "Blue/White / EU 40",
+          "sku": "POS-FOO-004-03",
+          "options": {
+            "Color": "Blue/White",
+            "Size": "EU 40"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 17900
+            }
+          ]
+        },
+        {
+          "title": "Blue/White / EU 42",
+          "sku": "POS-FOO-004-04",
+          "options": {
+            "Color": "Blue/White",
+            "Size": "EU 42"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 17900
+            }
+          ]
+        },
+        {
+          "title": "Blue/White / EU 44",
+          "sku": "POS-FOO-004-05",
+          "options": {
+            "Color": "Blue/White",
+            "Size": "EU 44"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 17900
+            }
+          ]
+        },
+        {
+          "title": "Blue/White / EU 46",
+          "sku": "POS-FOO-004-06",
+          "options": {
+            "Color": "Blue/White",
+            "Size": "EU 46"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 17900
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://chenyico.x.yupoo.com/albums/207427711?uid=1",
+      "supplier_id": "footwear",
+      "shipping_class": "standard-shoes",
+      "source_sampling_status": "real_album_sample_cleaned"
+    },
+    {
+      "id": "pos-footwear-005-grey-cement-high-top-court-sneaker",
+      "title": "Grey cement high-top court sneaker",
+      "handle": "grey-cement-high-top-court-sneaker",
+      "description": "A tonal grey upper with contrast accents and a clean street silhouette. The padded build keeps it comfortable for long city days.",
+      "category": "footwear",
+      "tags": [
+        "court",
+        "high-top",
+        "grey",
+        "streetwear",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 149,
+      "currency_code": "usd",
+      "compare_at_price": 216,
+      "images": [
+        "https://photo.yupoo.com/chenyico/7704aba6/small.jpeg"
+      ],
+      "variants": [
+        {
+          "title": "Grey/Red / EU 36",
+          "sku": "POS-FOO-005-01",
+          "options": {
+            "Color": "Grey/Red",
+            "Size": "EU 36"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 14900
+            }
+          ]
+        },
+        {
+          "title": "Grey/Red / EU 38",
+          "sku": "POS-FOO-005-02",
+          "options": {
+            "Color": "Grey/Red",
+            "Size": "EU 38"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 14900
+            }
+          ]
+        },
+        {
+          "title": "Grey/Red / EU 40",
+          "sku": "POS-FOO-005-03",
+          "options": {
+            "Color": "Grey/Red",
+            "Size": "EU 40"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 14900
+            }
+          ]
+        },
+        {
+          "title": "Grey/Red / EU 42",
+          "sku": "POS-FOO-005-04",
+          "options": {
+            "Color": "Grey/Red",
+            "Size": "EU 42"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 14900
+            }
+          ]
+        },
+        {
+          "title": "Grey/Red / EU 44",
+          "sku": "POS-FOO-005-05",
+          "options": {
+            "Color": "Grey/Red",
+            "Size": "EU 44"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 14900
+            }
+          ]
+        },
+        {
+          "title": "Grey/Red / EU 46",
+          "sku": "POS-FOO-005-06",
+          "options": {
+            "Color": "Grey/Red",
+            "Size": "EU 46"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 14900
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://chenyico.x.yupoo.com/albums/207427692?uid=1",
+      "supplier_id": "footwear",
+      "shipping_class": "standard-shoes",
+      "source_sampling_status": "real_album_sample_cleaned"
+    },
+    {
+      "id": "pos-footwear-006-orange-accent-high-top-court-sneaker",
+      "title": "Orange accent high-top court sneaker",
+      "handle": "orange-accent-high-top-court-sneaker",
+      "description": "Dark panels meet bright orange hits for a sharp, collectible-style look. The outsole grip and cushioned collar make it practical beyond the photo.",
+      "category": "footwear",
+      "tags": [
+        "court",
+        "high-top",
+        "orange",
+        "streetwear",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 159,
+      "currency_code": "usd",
+      "compare_at_price": 231,
+      "images": [
+        "https://photo.yupoo.com/chenyico/509284cc/small.jpeg"
+      ],
+      "variants": [
+        {
+          "title": "Black/Orange / EU 36",
+          "sku": "POS-FOO-006-01",
+          "options": {
+            "Color": "Black/Orange",
+            "Size": "EU 36"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 15900
+            }
+          ]
+        },
+        {
+          "title": "Black/Orange / EU 38",
+          "sku": "POS-FOO-006-02",
+          "options": {
+            "Color": "Black/Orange",
+            "Size": "EU 38"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 15900
+            }
+          ]
+        },
+        {
+          "title": "Black/Orange / EU 40",
+          "sku": "POS-FOO-006-03",
+          "options": {
+            "Color": "Black/Orange",
+            "Size": "EU 40"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 15900
+            }
+          ]
+        },
+        {
+          "title": "Black/Orange / EU 42",
+          "sku": "POS-FOO-006-04",
+          "options": {
+            "Color": "Black/Orange",
+            "Size": "EU 42"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 15900
+            }
+          ]
+        },
+        {
+          "title": "Black/Orange / EU 44",
+          "sku": "POS-FOO-006-05",
+          "options": {
+            "Color": "Black/Orange",
+            "Size": "EU 44"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 15900
+            }
+          ]
+        },
+        {
+          "title": "Black/Orange / EU 46",
+          "sku": "POS-FOO-006-06",
+          "options": {
+            "Color": "Black/Orange",
+            "Size": "EU 46"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 15900
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://chenyico.x.yupoo.com/albums/207427682?uid=1",
+      "supplier_id": "footwear",
+      "shipping_class": "standard-shoes",
+      "source_sampling_status": "real_album_sample_cleaned"
+    },
+    {
+      "id": "pos-footwear-007-yellow-lightning-high-top-court-sneaker",
+      "title": "Yellow lightning high-top court sneaker",
+      "handle": "yellow-lightning-high-top-court-sneaker",
+      "description": "Vivid yellow details brighten a structured court profile with a confident stance. Best for customers who want standout footwear with generic styling.",
+      "category": "footwear",
+      "tags": [
+        "court",
+        "high-top",
+        "yellow",
+        "statement",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 169,
+      "currency_code": "usd",
+      "compare_at_price": 245,
+      "images": [
+        "https://photo.yupoo.com/chenyico/05df0719/small.jpeg"
+      ],
+      "variants": [
+        {
+          "title": "Yellow/Black / EU 36",
+          "sku": "POS-FOO-007-01",
+          "options": {
+            "Color": "Yellow/Black",
+            "Size": "EU 36"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 16900
+            }
+          ]
+        },
+        {
+          "title": "Yellow/Black / EU 38",
+          "sku": "POS-FOO-007-02",
+          "options": {
+            "Color": "Yellow/Black",
+            "Size": "EU 38"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 16900
+            }
+          ]
+        },
+        {
+          "title": "Yellow/Black / EU 40",
+          "sku": "POS-FOO-007-03",
+          "options": {
+            "Color": "Yellow/Black",
+            "Size": "EU 40"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 16900
+            }
+          ]
+        },
+        {
+          "title": "Yellow/Black / EU 42",
+          "sku": "POS-FOO-007-04",
+          "options": {
+            "Color": "Yellow/Black",
+            "Size": "EU 42"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 16900
+            }
+          ]
+        },
+        {
+          "title": "Yellow/Black / EU 44",
+          "sku": "POS-FOO-007-05",
+          "options": {
+            "Color": "Yellow/Black",
+            "Size": "EU 44"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 16900
+            }
+          ]
+        },
+        {
+          "title": "Yellow/Black / EU 46",
+          "sku": "POS-FOO-007-06",
+          "options": {
+            "Color": "Yellow/Black",
+            "Size": "EU 46"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 16900
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://chenyico.x.yupoo.com/albums/207427660?uid=1",
+      "supplier_id": "footwear",
+      "shipping_class": "standard-shoes",
+      "source_sampling_status": "real_album_sample_cleaned"
+    },
+    {
+      "id": "pos-footwear-008-white-blue-panel-court-sneaker",
+      "title": "White blue panel court sneaker",
+      "handle": "white-blue-panel-court-sneaker",
+      "description": "Clean white panels, cool blue accents, and a timeless high-cut shape make this an easy wardrobe staple. Wear it with joggers, denim, or shorts.",
+      "category": "footwear",
+      "tags": [
+        "court",
+        "high-top",
+        "blue",
+        "clean",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 179,
+      "currency_code": "usd",
+      "compare_at_price": 260,
+      "images": [
+        "https://photo.yupoo.com/chenyico/9d8beb42/small.jpeg"
+      ],
+      "variants": [
+        {
+          "title": "White/Blue / EU 36",
+          "sku": "POS-FOO-008-01",
+          "options": {
+            "Color": "White/Blue",
+            "Size": "EU 36"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 17900
+            }
+          ]
+        },
+        {
+          "title": "White/Blue / EU 38",
+          "sku": "POS-FOO-008-02",
+          "options": {
+            "Color": "White/Blue",
+            "Size": "EU 38"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 17900
+            }
+          ]
+        },
+        {
+          "title": "White/Blue / EU 40",
+          "sku": "POS-FOO-008-03",
+          "options": {
+            "Color": "White/Blue",
+            "Size": "EU 40"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 17900
+            }
+          ]
+        },
+        {
+          "title": "White/Blue / EU 42",
+          "sku": "POS-FOO-008-04",
+          "options": {
+            "Color": "White/Blue",
+            "Size": "EU 42"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 17900
+            }
+          ]
+        },
+        {
+          "title": "White/Blue / EU 44",
+          "sku": "POS-FOO-008-05",
+          "options": {
+            "Color": "White/Blue",
+            "Size": "EU 44"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 17900
+            }
+          ]
+        },
+        {
+          "title": "White/Blue / EU 46",
+          "sku": "POS-FOO-008-06",
+          "options": {
+            "Color": "White/Blue",
+            "Size": "EU 46"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 17900
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://chenyico.x.yupoo.com/albums/207427644?uid=1",
+      "supplier_id": "footwear",
+      "shipping_class": "standard-shoes",
+      "source_sampling_status": "real_album_sample_cleaned"
+    },
+    {
+      "id": "pos-footwear-009-red-infrared-runner-sneaker",
+      "title": "Red infrared runner sneaker",
+      "handle": "red-infrared-runner-sneaker",
+      "description": "A low-profile runner with breathable panels, red accents, and a lightweight street-sport feel. Designed for trend-forward everyday rotation.",
+      "category": "footwear",
+      "tags": [
+        "runner",
+        "low-top",
+        "red",
+        "athletic",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 149,
+      "currency_code": "usd",
+      "compare_at_price": 216,
+      "images": [
+        "https://photo.yupoo.com/chenyico/16b0d8d3/small.jpeg"
+      ],
+      "variants": [
+        {
+          "title": "Black/Red / EU 36",
+          "sku": "POS-FOO-009-01",
+          "options": {
+            "Color": "Black/Red",
+            "Size": "EU 36"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 14900
+            }
+          ]
+        },
+        {
+          "title": "Black/Red / EU 38",
+          "sku": "POS-FOO-009-02",
+          "options": {
+            "Color": "Black/Red",
+            "Size": "EU 38"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 14900
+            }
+          ]
+        },
+        {
+          "title": "Black/Red / EU 40",
+          "sku": "POS-FOO-009-03",
+          "options": {
+            "Color": "Black/Red",
+            "Size": "EU 40"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 14900
+            }
+          ]
+        },
+        {
+          "title": "Black/Red / EU 42",
+          "sku": "POS-FOO-009-04",
+          "options": {
+            "Color": "Black/Red",
+            "Size": "EU 42"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 14900
+            }
+          ]
+        },
+        {
+          "title": "Black/Red / EU 44",
+          "sku": "POS-FOO-009-05",
+          "options": {
+            "Color": "Black/Red",
+            "Size": "EU 44"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 14900
+            }
+          ]
+        },
+        {
+          "title": "Black/Red / EU 46",
+          "sku": "POS-FOO-009-06",
+          "options": {
+            "Color": "Black/Red",
+            "Size": "EU 46"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 14900
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://chenyico.x.yupoo.com/albums/207427623?uid=1",
+      "supplier_id": "footwear",
+      "shipping_class": "standard-shoes",
+      "source_sampling_status": "real_album_sample_cleaned"
+    },
+    {
+      "id": "pos-footwear-010-chunky-white-dad-runner-sneaker",
+      "title": "Chunky white dad runner sneaker",
+      "handle": "chunky-white-dad-runner-sneaker",
+      "description": "A layered oversized sole and mixed-panel upper create a chunky retro runner look. The neutral palette keeps it versatile while the shape adds impact.",
+      "category": "footwear",
+      "tags": [
+        "runner",
+        "chunky",
+        "neutral",
+        "streetwear",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 159,
+      "currency_code": "usd",
+      "compare_at_price": 231,
+      "images": [
+        "https://photo.yupoo.com/chenyico/94071ad4/small.png"
+      ],
+      "variants": [
+        {
+          "title": "White/Grey / EU 36",
+          "sku": "POS-FOO-010-01",
+          "options": {
+            "Color": "White/Grey",
+            "Size": "EU 36"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 15900
+            }
+          ]
+        },
+        {
+          "title": "White/Grey / EU 38",
+          "sku": "POS-FOO-010-02",
+          "options": {
+            "Color": "White/Grey",
+            "Size": "EU 38"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 15900
+            }
+          ]
+        },
+        {
+          "title": "White/Grey / EU 40",
+          "sku": "POS-FOO-010-03",
+          "options": {
+            "Color": "White/Grey",
+            "Size": "EU 40"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 15900
+            }
+          ]
+        },
+        {
+          "title": "White/Grey / EU 42",
+          "sku": "POS-FOO-010-04",
+          "options": {
+            "Color": "White/Grey",
+            "Size": "EU 42"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 15900
+            }
+          ]
+        },
+        {
+          "title": "White/Grey / EU 44",
+          "sku": "POS-FOO-010-05",
+          "options": {
+            "Color": "White/Grey",
+            "Size": "EU 44"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 15900
+            }
+          ]
+        },
+        {
+          "title": "White/Grey / EU 46",
+          "sku": "POS-FOO-010-06",
+          "options": {
+            "Color": "White/Grey",
+            "Size": "EU 46"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 15900
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://chenyico.x.yupoo.com/albums/207427606?uid=1",
+      "supplier_id": "footwear",
+      "shipping_class": "standard-shoes",
+      "source_sampling_status": "real_album_sample_cleaned"
+    },
+    {
+      "id": "pos-watches-001-stainless-diver-automatic-watch",
+      "title": "Stainless diver automatic watch",
+      "handle": "stainless-diver-automatic-watch",
+      "description": "A polished steel sport watch with a rotating-style bezel, luminous markers, and a bracelet strap. It brings a crisp dress-sport look for day-to-night wear.",
+      "category": "watches",
+      "tags": [
+        "automatic",
+        "diver-style",
+        "steel",
+        "bracelet",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 249,
+      "currency_code": "usd",
+      "compare_at_price": 386,
+      "images": [
+        "https://photo.yupoo.com/117034687/73d261f9/medium.jpg"
+      ],
+      "variants": [
+        {
+          "title": "Silver/Black / One size",
+          "sku": "POS-WAT-001-01",
+          "options": {
+            "Color": "Silver/Black",
+            "Size": "One size"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 24900
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://117034687.x.yupoo.com/albums/226700942?uid=1",
+      "supplier_id": "watches",
+      "shipping_class": "insured-small-parcel",
+      "source_sampling_status": "real_album_sample_cleaned"
+    },
+    {
+      "id": "pos-watches-002-two-tone-bracelet-automatic-watch",
+      "title": "Two-tone bracelet automatic watch",
+      "handle": "two-tone-bracelet-automatic-watch",
+      "description": "Warm two-tone links meet a clean round case for a refined everyday timepiece. The dial layout is classic, readable, and intentionally unbranded.",
+      "category": "watches",
+      "tags": [
+        "automatic",
+        "two-tone",
+        "bracelet",
+        "dress-sport",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 259,
+      "currency_code": "usd",
+      "compare_at_price": 401,
+      "images": [
+        "https://photo.yupoo.com/117034687/41f134c6/small.jpg"
+      ],
+      "variants": [
+        {
+          "title": "Steel/Gold / One size",
+          "sku": "POS-WAT-002-01",
+          "options": {
+            "Color": "Steel/Gold",
+            "Size": "One size"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 25900
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://117034687.x.yupoo.com/albums/226700933?uid=1",
+      "supplier_id": "watches",
+      "shipping_class": "insured-small-parcel",
+      "source_sampling_status": "real_album_sample_cleaned"
+    },
+    {
+      "id": "pos-watches-003-green-bezel-sport-automatic-watch",
+      "title": "Green bezel sport automatic watch",
+      "handle": "green-bezel-sport-automatic-watch",
+      "description": "A bright green bezel frames a balanced sport dial on a stainless bracelet. It is made for customers who like color without oversized branding.",
+      "category": "watches",
+      "tags": [
+        "automatic",
+        "green",
+        "sport",
+        "bracelet",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 269,
+      "currency_code": "usd",
+      "compare_at_price": 417,
+      "images": [
+        "https://photo.yupoo.com/117034687/8c843303/small.jpg"
+      ],
+      "variants": [
+        {
+          "title": "Silver/Green / One size",
+          "sku": "POS-WAT-003-01",
+          "options": {
+            "Color": "Silver/Green",
+            "Size": "One size"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 26900
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://117034687.x.yupoo.com/albums/226700922?uid=1",
+      "supplier_id": "watches",
+      "shipping_class": "insured-small-parcel",
+      "source_sampling_status": "real_album_sample_cleaned"
+    },
+    {
+      "id": "pos-watches-004-blue-dial-stainless-automatic-watch",
+      "title": "Blue dial stainless automatic watch",
+      "handle": "blue-dial-stainless-automatic-watch",
+      "description": "Deep blue dial, polished indices, and a weighty bracelet create a sharp nautical feel. The silhouette works with tees, knits, and button-downs.",
+      "category": "watches",
+      "tags": [
+        "automatic",
+        "blue-dial",
+        "steel",
+        "dress-sport",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 279,
+      "currency_code": "usd",
+      "compare_at_price": 432,
+      "images": [
+        "https://photo.yupoo.com/117034687/e1dd890a/small.jpg"
+      ],
+      "variants": [
+        {
+          "title": "Silver/Blue / One size",
+          "sku": "POS-WAT-004-01",
+          "options": {
+            "Color": "Silver/Blue",
+            "Size": "One size"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 27900
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://117034687.x.yupoo.com/albums/226700912?uid=1",
+      "supplier_id": "watches",
+      "shipping_class": "insured-small-parcel",
+      "source_sampling_status": "real_album_sample_cleaned"
+    },
+    {
+      "id": "pos-watches-005-black-ceramic-look-sport-watch",
+      "title": "Black ceramic-look sport watch",
+      "handle": "black-ceramic-look-sport-watch",
+      "description": "A stealthy all-black case and bracelet deliver a modern low-glare profile. The clean marker set keeps the design versatile and easy to style.",
+      "category": "watches",
+      "tags": [
+        "sport",
+        "black",
+        "ceramic-look",
+        "minimal",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 249,
+      "currency_code": "usd",
+      "compare_at_price": 386,
+      "images": [
+        "https://photo.yupoo.com/117034687/4965b498/small.jpg"
+      ],
+      "variants": [
+        {
+          "title": "Black / One size",
+          "sku": "POS-WAT-005-01",
+          "options": {
+            "Color": "Black",
+            "Size": "One size"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 24900
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://117034687.x.yupoo.com/albums/226700900?uid=1",
+      "supplier_id": "watches",
+      "shipping_class": "insured-small-parcel",
+      "source_sampling_status": "real_album_sample_cleaned"
+    },
+    {
+      "id": "pos-watches-006-skeleton-dial-automatic-watch",
+      "title": "Skeleton dial automatic watch",
+      "handle": "skeleton-dial-automatic-watch",
+      "description": "An open-work dial shows mechanical-style movement detail through a polished round case. It is a conversation piece with no logo-led messaging.",
+      "category": "watches",
+      "tags": [
+        "automatic",
+        "skeleton",
+        "statement",
+        "steel",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 259,
+      "currency_code": "usd",
+      "compare_at_price": 401,
+      "images": [
+        "https://photo.yupoo.com/117034687/3c96117d/small.jpg"
+      ],
+      "variants": [
+        {
+          "title": "Silver / One size",
+          "sku": "POS-WAT-006-01",
+          "options": {
+            "Color": "Silver",
+            "Size": "One size"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 25900
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://117034687.x.yupoo.com/albums/226700892?uid=1",
+      "supplier_id": "watches",
+      "shipping_class": "insured-small-parcel",
+      "source_sampling_status": "real_album_sample_cleaned"
+    },
+    {
+      "id": "pos-watches-007-rose-tone-dress-automatic-watch",
+      "title": "Rose tone dress automatic watch",
+      "handle": "rose-tone-dress-automatic-watch",
+      "description": "Rose-tone accents soften a classic dress-sport silhouette. The bracelet and slim dial make it suitable for evenings and elevated daily wear.",
+      "category": "watches",
+      "tags": [
+        "automatic",
+        "rose-tone",
+        "dress",
+        "bracelet",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 269,
+      "currency_code": "usd",
+      "compare_at_price": 417,
+      "images": [
+        "https://photo.yupoo.com/117034687/fd9fa880/small.jpg"
+      ],
+      "variants": [
+        {
+          "title": "Rose/Silver / One size",
+          "sku": "POS-WAT-007-01",
+          "options": {
+            "Color": "Rose/Silver",
+            "Size": "One size"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 26900
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://117034687.x.yupoo.com/albums/226700887?uid=1",
+      "supplier_id": "watches",
+      "shipping_class": "insured-small-parcel",
+      "source_sampling_status": "real_album_sample_cleaned"
+    },
+    {
+      "id": "pos-watches-008-rubber-strap-sport-chronograph-watch",
+      "title": "Rubber strap sport chronograph watch",
+      "handle": "rubber-strap-sport-chronograph-watch",
+      "description": "A bold chronograph-style dial sits on a comfortable rubber strap for a utility-driven look. Great for casual fits and travel kits.",
+      "category": "watches",
+      "tags": [
+        "chronograph-style",
+        "rubber-strap",
+        "sport",
+        "black",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 279,
+      "currency_code": "usd",
+      "compare_at_price": 432,
+      "images": [
+        "https://photo.yupoo.com/117034687/8b14ebe8/small.jpg"
+      ],
+      "variants": [
+        {
+          "title": "Black / One size",
+          "sku": "POS-WAT-008-01",
+          "options": {
+            "Color": "Black",
+            "Size": "One size"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 27900
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://117034687.x.yupoo.com/albums/226700875?uid=1",
+      "supplier_id": "watches",
+      "shipping_class": "insured-small-parcel",
+      "source_sampling_status": "real_album_sample_cleaned"
+    },
+    {
+      "id": "pos-watches-009-white-dial-bracelet-watch",
+      "title": "White dial bracelet watch",
+      "handle": "white-dial-bracelet-watch",
+      "description": "A bright white dial and polished bracelet give this watch a clean, understated finish. It reads classic without depending on brand cues.",
+      "category": "watches",
+      "tags": [
+        "white-dial",
+        "bracelet",
+        "classic",
+        "minimal",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 249,
+      "currency_code": "usd",
+      "compare_at_price": 386,
+      "images": [
+        "https://photo.yupoo.com/117034687/19f9a38a/small.jpg"
+      ],
+      "variants": [
+        {
+          "title": "Silver/White / One size",
+          "sku": "POS-WAT-009-01",
+          "options": {
+            "Color": "Silver/White",
+            "Size": "One size"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 24900
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://117034687.x.yupoo.com/albums/226700864?uid=1",
+      "supplier_id": "watches",
+      "shipping_class": "insured-small-parcel",
+      "source_sampling_status": "real_album_sample_cleaned"
+    },
+    {
+      "id": "pos-watches-010-ice-blue-dial-automatic-watch",
+      "title": "Ice blue dial automatic watch",
+      "handle": "ice-blue-dial-automatic-watch",
+      "description": "A pale blue dial adds a fresh twist to a stainless steel dress-sport profile. The balanced case size makes it easy for daily rotation.",
+      "category": "watches",
+      "tags": [
+        "automatic",
+        "ice-blue",
+        "steel",
+        "dress-sport",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 259,
+      "currency_code": "usd",
+      "compare_at_price": 401,
+      "images": [
+        "https://photo.yupoo.com/117034687/5e8538cb/small.jpg"
+      ],
+      "variants": [
+        {
+          "title": "Silver/Ice Blue / One size",
+          "sku": "POS-WAT-010-01",
+          "options": {
+            "Color": "Silver/Ice Blue",
+            "Size": "One size"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 25900
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://117034687.x.yupoo.com/albums/226700858?uid=1",
+      "supplier_id": "watches",
+      "shipping_class": "insured-small-parcel",
+      "source_sampling_status": "real_album_sample_cleaned"
+    },
+    {
+      "id": "pos-bags-001-mini-monogram-pattern-crossbody-bag",
+      "title": "Mini monogram-pattern crossbody bag",
+      "handle": "mini-monogram-pattern-crossbody-bag",
+      "description": "A compact crossbody with all-over geometric patterning and a structured mini silhouette. It carries the essentials while keeping the look polished and logo-free.",
+      "category": "bags",
+      "tags": [
+        "crossbody",
+        "mini",
+        "monogram-pattern",
+        "structured",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 189,
+      "currency_code": "usd",
+      "compare_at_price": 284,
+      "images": [
+        "https://photo.yupoo.com/3293950449/bc7b59debc/medium.jpg"
+      ],
+      "variants": [
+        {
+          "title": "Brown / One size",
+          "sku": "POS-BAG-001-01",
+          "options": {
+            "Color": "Brown",
+            "Size": "One size"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 18900
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://3293950449.x.yupoo.com/albums/241018249?uid=1",
+      "supplier_id": "bags",
+      "shipping_class": "standard-bags",
+      "source_sampling_status": "real_album_sample_cleaned"
+    },
+    {
+      "id": "pos-bags-002-soft-autumn-shoulder-bag",
+      "title": "Soft autumn shoulder bag",
+      "handle": "soft-autumn-shoulder-bag",
+      "description": "A supple shoulder bag with an easy drape, curved body, and refined seasonal texture. It is roomy enough for daily carry without feeling bulky.",
+      "category": "bags",
+      "tags": [
+        "shoulder-bag",
+        "soft",
+        "taupe",
+        "daily",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 199,
+      "currency_code": "usd",
+      "compare_at_price": 298,
+      "images": [
+        "https://photo.yupoo.com/3293950449/8c66753b6b/small.jpg"
+      ],
+      "variants": [
+        {
+          "title": "Taupe / One size",
+          "sku": "POS-BAG-002-01",
+          "options": {
+            "Color": "Taupe",
+            "Size": "One size"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 19900
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://3293950449.x.yupoo.com/albums/241018208?uid=1",
+      "supplier_id": "bags",
+      "shipping_class": "standard-bags",
+      "source_sampling_status": "real_album_sample_cleaned"
+    },
+    {
+      "id": "pos-bags-003-vintage-baguette-shoulder-bag",
+      "title": "Vintage baguette shoulder bag",
+      "handle": "vintage-baguette-shoulder-bag",
+      "description": "A slim under-arm baguette shape with vintage-inspired proportions and a smooth finish. The silhouette pairs well with dresses, coats, and denim.",
+      "category": "bags",
+      "tags": [
+        "baguette",
+        "shoulder-bag",
+        "vintage-inspired",
+        "compact",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 209,
+      "currency_code": "usd",
+      "compare_at_price": 314,
+      "images": [
+        "https://photo.yupoo.com/3293950449/e62b6ac024/small.jpg"
+      ],
+      "variants": [
+        {
+          "title": "Chocolate / One size",
+          "sku": "POS-BAG-003-01",
+          "options": {
+            "Color": "Chocolate",
+            "Size": "One size"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 20900
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://3293950449.x.yupoo.com/albums/241018176?uid=1",
+      "supplier_id": "bags",
+      "shipping_class": "standard-bags",
+      "source_sampling_status": "real_album_sample_cleaned"
+    },
+    {
+      "id": "pos-bags-004-quilted-flap-crossbody-bag",
+      "title": "Quilted flap crossbody bag",
+      "handle": "quilted-flap-crossbody-bag",
+      "description": "Quilted panels, a flap closure, and a compact chain-strap shape create a timeless evening-to-day bag. The design stays polished without logo references.",
+      "category": "bags",
+      "tags": [
+        "quilted",
+        "crossbody",
+        "flap",
+        "black",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 219,
+      "currency_code": "usd",
+      "compare_at_price": 328,
+      "images": [
+        "https://photo.yupoo.com/3293950449/d6e302210a/small.jpg"
+      ],
+      "variants": [
+        {
+          "title": "Black / One size",
+          "sku": "POS-BAG-004-01",
+          "options": {
+            "Color": "Black",
+            "Size": "One size"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 21900
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://3293950449.x.yupoo.com/albums/241018147?uid=1",
+      "supplier_id": "bags",
+      "shipping_class": "standard-bags",
+      "source_sampling_status": "real_album_sample_cleaned"
+    },
+    {
+      "id": "pos-bags-005-woven-texture-bucket-bag",
+      "title": "Woven texture bucket bag",
+      "handle": "woven-texture-bucket-bag",
+      "description": "A relaxed bucket silhouette with woven texture and a cinched opening for easy daily use. The warm neutral color fits summer and resort looks.",
+      "category": "bags",
+      "tags": [
+        "bucket-bag",
+        "woven",
+        "tan",
+        "resort",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 189,
+      "currency_code": "usd",
+      "compare_at_price": 284,
+      "images": [
+        "https://photo.yupoo.com/3293950449/c23379fe2d/small.jpg"
+      ],
+      "variants": [
+        {
+          "title": "Tan / One size",
+          "sku": "POS-BAG-005-01",
+          "options": {
+            "Color": "Tan",
+            "Size": "One size"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 18900
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://3293950449.x.yupoo.com/albums/241018098?uid=1",
+      "supplier_id": "bags",
+      "shipping_class": "standard-bags",
+      "source_sampling_status": "real_album_sample_cleaned"
+    },
+    {
+      "id": "pos-bags-006-structured-top-handle-satchel",
+      "title": "Structured top-handle satchel",
+      "handle": "structured-top-handle-satchel",
+      "description": "A clean top-handle shape with structured sides and a smooth cream finish. Carry by hand or style with the strap for weekday polish.",
+      "category": "bags",
+      "tags": [
+        "satchel",
+        "top-handle",
+        "cream",
+        "structured",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 199,
+      "currency_code": "usd",
+      "compare_at_price": 298,
+      "images": [
+        "https://photo.yupoo.com/3293950449/beeccd0025/small.jpg"
+      ],
+      "variants": [
+        {
+          "title": "Cream / One size",
+          "sku": "POS-BAG-006-01",
+          "options": {
+            "Color": "Cream",
+            "Size": "One size"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 19900
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://3293950449.x.yupoo.com/albums/241018049?uid=1",
+      "supplier_id": "bags",
+      "shipping_class": "standard-bags",
+      "source_sampling_status": "real_album_sample_cleaned"
+    },
+    {
+      "id": "pos-bags-007-glossy-crescent-shoulder-bag",
+      "title": "Glossy crescent shoulder bag",
+      "handle": "glossy-crescent-shoulder-bag",
+      "description": "A sleek crescent profile with glossy finish and compact shoulder carry. It adds a sharp accent to night looks and monochrome outfits.",
+      "category": "bags",
+      "tags": [
+        "crescent",
+        "shoulder-bag",
+        "glossy",
+        "night-out",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 209,
+      "currency_code": "usd",
+      "compare_at_price": 314,
+      "images": [
+        "https://photo.yupoo.com/3293950449/a88dcb3ff0/small.jpg"
+      ],
+      "variants": [
+        {
+          "title": "Black / One size",
+          "sku": "POS-BAG-007-01",
+          "options": {
+            "Color": "Black",
+            "Size": "One size"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 20900
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://3293950449.x.yupoo.com/albums/241018009?uid=1",
+      "supplier_id": "bags",
+      "shipping_class": "standard-bags",
+      "source_sampling_status": "real_album_sample_cleaned"
+    },
+    {
+      "id": "pos-bags-008-soft-hobo-shoulder-bag",
+      "title": "Soft hobo shoulder bag",
+      "handle": "soft-hobo-shoulder-bag",
+      "description": "A slouchy hobo body with a comfortable strap and warm caramel finish. It gives casual outfits an elevated, easygoing feel.",
+      "category": "bags",
+      "tags": [
+        "hobo",
+        "shoulder-bag",
+        "caramel",
+        "soft",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 219,
+      "currency_code": "usd",
+      "compare_at_price": 328,
+      "images": [
+        "https://photo.yupoo.com/3293950449/fdeee72aa2/small.jpg"
+      ],
+      "variants": [
+        {
+          "title": "Caramel / One size",
+          "sku": "POS-BAG-008-01",
+          "options": {
+            "Color": "Caramel",
+            "Size": "One size"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 21900
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://3293950449.x.yupoo.com/albums/241017967?uid=1",
+      "supplier_id": "bags",
+      "shipping_class": "standard-bags",
+      "source_sampling_status": "real_album_sample_cleaned"
+    },
+    {
+      "id": "pos-bags-009-mini-box-crossbody-bag",
+      "title": "Mini box crossbody bag",
+      "handle": "mini-box-crossbody-bag",
+      "description": "A structured mini box shape with crisp edges and a light ivory finish. It is made for phone, cardholder, keys, and a clean outfit finish.",
+      "category": "bags",
+      "tags": [
+        "crossbody",
+        "mini",
+        "box",
+        "ivory",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 189,
+      "currency_code": "usd",
+      "compare_at_price": 284,
+      "images": [
+        "https://photo.yupoo.com/3293950449/3325f1752a/small.jpg"
+      ],
+      "variants": [
+        {
+          "title": "Ivory / One size",
+          "sku": "POS-BAG-009-01",
+          "options": {
+            "Color": "Ivory",
+            "Size": "One size"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 18900
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://3293950449.x.yupoo.com/albums/241017934?uid=1",
+      "supplier_id": "bags",
+      "shipping_class": "standard-bags",
+      "source_sampling_status": "real_album_sample_cleaned"
+    },
+    {
+      "id": "pos-bags-010-oversized-travel-tote-bag",
+      "title": "Oversized travel tote bag",
+      "handle": "oversized-travel-tote-bag",
+      "description": "A roomy tote with soft sides, long handles, and an understated utility shape. Use it for errands, overnight trips, or workday carry.",
+      "category": "bags",
+      "tags": [
+        "tote",
+        "travel",
+        "oversized",
+        "black",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 199,
+      "currency_code": "usd",
+      "compare_at_price": 298,
+      "images": [
+        "https://photo.yupoo.com/3293950449/42fa487655/small.jpg"
+      ],
+      "variants": [
+        {
+          "title": "Black / One size",
+          "sku": "POS-BAG-010-01",
+          "options": {
+            "Color": "Black",
+            "Size": "One size"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 19900
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://3293950449.x.yupoo.com/albums/241017897?uid=1",
+      "supplier_id": "bags",
+      "shipping_class": "standard-bags",
+      "source_sampling_status": "real_album_sample_cleaned"
+    },
+    {
+      "id": "pos-men-001-minimal-long-sleeve-knit-top",
+      "title": "Minimal long-sleeve knit top",
+      "handle": "minimal-long-sleeve-knit-top",
+      "description": "A clean long-sleeve knit with a relaxed fit and soft drape. It is an easy layering piece for quiet streetwear and weekend uniforms.",
+      "category": "men",
+      "tags": [
+        "long-sleeve",
+        "knit",
+        "minimal",
+        "menswear",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 98,
+      "currency_code": "usd",
+      "compare_at_price": 137,
+      "images": [
+        "https://alfred-internal-1365252509.cos.ap-shanghai.myqcloud.com/yupoo/album/im_photo_album.png"
+      ],
+      "variants": [
+        {
+          "title": "Black / S",
+          "sku": "POS-MEN-001-01",
+          "options": {
+            "Color": "Black",
+            "Size": "S"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 9800
+            }
+          ]
+        },
+        {
+          "title": "Black / M",
+          "sku": "POS-MEN-001-02",
+          "options": {
+            "Color": "Black",
+            "Size": "M"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 9800
+            }
+          ]
+        },
+        {
+          "title": "Black / L",
+          "sku": "POS-MEN-001-03",
+          "options": {
+            "Color": "Black",
+            "Size": "L"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 9800
+            }
+          ]
+        },
+        {
+          "title": "Black / XL",
+          "sku": "POS-MEN-001-04",
+          "options": {
+            "Color": "Black",
+            "Size": "XL"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 9800
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://miao2017.x.yupoo.com/albums/242829386?uid=1",
+      "supplier_id": "men",
+      "shipping_class": "standard-apparel",
+      "source_sampling_status": "real_album_sample_cleaned"
+    },
+    {
+      "id": "pos-men-002-relaxed-pullover-hoodie",
+      "title": "Relaxed pullover hoodie",
+      "handle": "relaxed-pullover-hoodie",
+      "description": "A midweight hoodie with rib trims, dropped shoulders, and a comfortable everyday cut. The blank styling keeps it flexible across outfits.",
+      "category": "men",
+      "tags": [
+        "hoodie",
+        "pullover",
+        "streetwear",
+        "menswear",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 108,
+      "currency_code": "usd",
+      "compare_at_price": 151,
+      "images": [
+        "https://alfred-internal-1365252509.cos.ap-shanghai.myqcloud.com/yupoo/album/im_photo_album.png"
+      ],
+      "variants": [
+        {
+          "title": "Heather Grey / S",
+          "sku": "POS-MEN-002-01",
+          "options": {
+            "Color": "Heather Grey",
+            "Size": "S"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 10800
+            }
+          ]
+        },
+        {
+          "title": "Heather Grey / M",
+          "sku": "POS-MEN-002-02",
+          "options": {
+            "Color": "Heather Grey",
+            "Size": "M"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 10800
+            }
+          ]
+        },
+        {
+          "title": "Heather Grey / L",
+          "sku": "POS-MEN-002-03",
+          "options": {
+            "Color": "Heather Grey",
+            "Size": "L"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 10800
+            }
+          ]
+        },
+        {
+          "title": "Heather Grey / XL",
+          "sku": "POS-MEN-002-04",
+          "options": {
+            "Color": "Heather Grey",
+            "Size": "XL"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 10800
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://miao2017.x.yupoo.com/albums/242829337?uid=1",
+      "supplier_id": "men",
+      "shipping_class": "standard-apparel",
+      "source_sampling_status": "real_album_sample_cleaned"
+    },
+    {
+      "id": "pos-men-003-boxy-short-sleeve-tee",
+      "title": "Boxy short-sleeve tee",
+      "handle": "boxy-short-sleeve-tee",
+      "description": "A boxy crewneck tee with a smooth handfeel and slightly oversized profile. Wear it solo or under overshirts and jackets.",
+      "category": "men",
+      "tags": [
+        "tee",
+        "short-sleeve",
+        "boxy",
+        "menswear",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 118,
+      "currency_code": "usd",
+      "compare_at_price": 165,
+      "images": [
+        "https://alfred-internal-1365252509.cos.ap-shanghai.myqcloud.com/yupoo/album/im_photo_album.png"
+      ],
+      "variants": [
+        {
+          "title": "White / S",
+          "sku": "POS-MEN-003-01",
+          "options": {
+            "Color": "White",
+            "Size": "S"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 11800
+            }
+          ]
+        },
+        {
+          "title": "White / M",
+          "sku": "POS-MEN-003-02",
+          "options": {
+            "Color": "White",
+            "Size": "M"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 11800
+            }
+          ]
+        },
+        {
+          "title": "White / L",
+          "sku": "POS-MEN-003-03",
+          "options": {
+            "Color": "White",
+            "Size": "L"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 11800
+            }
+          ]
+        },
+        {
+          "title": "White / XL",
+          "sku": "POS-MEN-003-04",
+          "options": {
+            "Color": "White",
+            "Size": "XL"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 11800
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://miao2017.x.yupoo.com/albums/242829292?uid=1",
+      "supplier_id": "men",
+      "shipping_class": "standard-apparel",
+      "source_sampling_status": "real_album_sample_cleaned"
+    },
+    {
+      "id": "pos-men-004-lightweight-zip-jacket",
+      "title": "Lightweight zip jacket",
+      "handle": "lightweight-zip-jacket",
+      "description": "A lightweight jacket with clean lines, easy layering, and utility-minded pockets. It works as a transitional piece for spring and fall.",
+      "category": "men",
+      "tags": [
+        "jacket",
+        "lightweight",
+        "utility",
+        "menswear",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 128,
+      "currency_code": "usd",
+      "compare_at_price": 179,
+      "images": [
+        "https://photo.yupoo.com/miao2017/8c1c435ea7/small.jpeg"
+      ],
+      "variants": [
+        {
+          "title": "Khaki / S",
+          "sku": "POS-MEN-004-01",
+          "options": {
+            "Color": "Khaki",
+            "Size": "S"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 12800
+            }
+          ]
+        },
+        {
+          "title": "Khaki / M",
+          "sku": "POS-MEN-004-02",
+          "options": {
+            "Color": "Khaki",
+            "Size": "M"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 12800
+            }
+          ]
+        },
+        {
+          "title": "Khaki / L",
+          "sku": "POS-MEN-004-03",
+          "options": {
+            "Color": "Khaki",
+            "Size": "L"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 12800
+            }
+          ]
+        },
+        {
+          "title": "Khaki / XL",
+          "sku": "POS-MEN-004-04",
+          "options": {
+            "Color": "Khaki",
+            "Size": "XL"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 12800
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://miao2017.x.yupoo.com/albums/242829087?uid=1",
+      "supplier_id": "men",
+      "shipping_class": "standard-apparel",
+      "source_sampling_status": "real_album_sample_cleaned"
+    },
+    {
+      "id": "pos-men-005-oversized-graphic-free-tee",
+      "title": "Oversized graphic-free tee",
+      "handle": "oversized-graphic-free-tee",
+      "description": "A relaxed short-sleeve tee cut for a modern streetwear fit. The plain front leaves room for styling without trademark-heavy graphics.",
+      "category": "men",
+      "tags": [
+        "tee",
+        "oversized",
+        "minimal",
+        "streetwear",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 98,
+      "currency_code": "usd",
+      "compare_at_price": 137,
+      "images": [
+        "https://photo.yupoo.com/miao2017/5b588059e1/small.png"
+      ],
+      "variants": [
+        {
+          "title": "Black / S",
+          "sku": "POS-MEN-005-01",
+          "options": {
+            "Color": "Black",
+            "Size": "S"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 9800
+            }
+          ]
+        },
+        {
+          "title": "Black / M",
+          "sku": "POS-MEN-005-02",
+          "options": {
+            "Color": "Black",
+            "Size": "M"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 9800
+            }
+          ]
+        },
+        {
+          "title": "Black / L",
+          "sku": "POS-MEN-005-03",
+          "options": {
+            "Color": "Black",
+            "Size": "L"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 9800
+            }
+          ]
+        },
+        {
+          "title": "Black / XL",
+          "sku": "POS-MEN-005-04",
+          "options": {
+            "Color": "Black",
+            "Size": "XL"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 9800
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://miao2017.x.yupoo.com/albums/242829050?uid=1",
+      "supplier_id": "men",
+      "shipping_class": "standard-apparel",
+      "source_sampling_status": "real_album_sample_cleaned"
+    },
+    {
+      "id": "pos-men-006-tailored-casual-overshirt",
+      "title": "Tailored casual overshirt",
+      "handle": "tailored-casual-overshirt",
+      "description": "A structured overshirt with a neat collar and versatile button-front shape. Layer it over tees for a pulled-together off-duty look.",
+      "category": "men",
+      "tags": [
+        "overshirt",
+        "button-front",
+        "navy",
+        "menswear",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 108,
+      "currency_code": "usd",
+      "compare_at_price": 151,
+      "images": [
+        "https://photo.yupoo.com/miao2017/266ff71d60/small.jpeg"
+      ],
+      "variants": [
+        {
+          "title": "Navy / S",
+          "sku": "POS-MEN-006-01",
+          "options": {
+            "Color": "Navy",
+            "Size": "S"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 10800
+            }
+          ]
+        },
+        {
+          "title": "Navy / M",
+          "sku": "POS-MEN-006-02",
+          "options": {
+            "Color": "Navy",
+            "Size": "M"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 10800
+            }
+          ]
+        },
+        {
+          "title": "Navy / L",
+          "sku": "POS-MEN-006-03",
+          "options": {
+            "Color": "Navy",
+            "Size": "L"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 10800
+            }
+          ]
+        },
+        {
+          "title": "Navy / XL",
+          "sku": "POS-MEN-006-04",
+          "options": {
+            "Color": "Navy",
+            "Size": "XL"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 10800
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://miao2017.x.yupoo.com/albums/242828813?uid=1",
+      "supplier_id": "men",
+      "shipping_class": "standard-apparel",
+      "source_sampling_status": "real_album_sample_cleaned"
+    },
+    {
+      "id": "pos-men-007-soft-crewneck-sweatshirt",
+      "title": "Soft crewneck sweatshirt",
+      "handle": "soft-crewneck-sweatshirt",
+      "description": "A clean crewneck sweatshirt with ribbed hems and an easy regular fit. The neutral cream shade is made for tonal layering.",
+      "category": "men",
+      "tags": [
+        "sweatshirt",
+        "crewneck",
+        "cream",
+        "casual",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 118,
+      "currency_code": "usd",
+      "compare_at_price": 165,
+      "images": [
+        "https://photo.yupoo.com/miao2017/485fb99b78/small.jpeg"
+      ],
+      "variants": [
+        {
+          "title": "Cream / S",
+          "sku": "POS-MEN-007-01",
+          "options": {
+            "Color": "Cream",
+            "Size": "S"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 11800
+            }
+          ]
+        },
+        {
+          "title": "Cream / M",
+          "sku": "POS-MEN-007-02",
+          "options": {
+            "Color": "Cream",
+            "Size": "M"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 11800
+            }
+          ]
+        },
+        {
+          "title": "Cream / L",
+          "sku": "POS-MEN-007-03",
+          "options": {
+            "Color": "Cream",
+            "Size": "L"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 11800
+            }
+          ]
+        },
+        {
+          "title": "Cream / XL",
+          "sku": "POS-MEN-007-04",
+          "options": {
+            "Color": "Cream",
+            "Size": "XL"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 11800
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://miao2017.x.yupoo.com/albums/242828764?uid=1",
+      "supplier_id": "men",
+      "shipping_class": "standard-apparel",
+      "source_sampling_status": "real_album_sample_cleaned"
+    },
+    {
+      "id": "pos-men-008-short-sleeve-resort-shirt",
+      "title": "Short-sleeve resort shirt",
+      "handle": "short-sleeve-resort-shirt",
+      "description": "A breezy short-sleeve shirt with an open-collar vacation feel. The sage tone keeps it fresh while staying subtle.",
+      "category": "men",
+      "tags": [
+        "shirt",
+        "resort",
+        "short-sleeve",
+        "sage",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 128,
+      "currency_code": "usd",
+      "compare_at_price": 179,
+      "images": [
+        "https://photo.yupoo.com/miao2017/66eaedaee4/small.jpeg"
+      ],
+      "variants": [
+        {
+          "title": "Sage / S",
+          "sku": "POS-MEN-008-01",
+          "options": {
+            "Color": "Sage",
+            "Size": "S"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 12800
+            }
+          ]
+        },
+        {
+          "title": "Sage / M",
+          "sku": "POS-MEN-008-02",
+          "options": {
+            "Color": "Sage",
+            "Size": "M"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 12800
+            }
+          ]
+        },
+        {
+          "title": "Sage / L",
+          "sku": "POS-MEN-008-03",
+          "options": {
+            "Color": "Sage",
+            "Size": "L"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 12800
+            }
+          ]
+        },
+        {
+          "title": "Sage / XL",
+          "sku": "POS-MEN-008-04",
+          "options": {
+            "Color": "Sage",
+            "Size": "XL"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 12800
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://miao2017.x.yupoo.com/albums/242828684?uid=1",
+      "supplier_id": "men",
+      "shipping_class": "standard-apparel",
+      "source_sampling_status": "real_album_sample_cleaned"
+    },
+    {
+      "id": "pos-men-009-relaxed-track-jacket",
+      "title": "Relaxed track jacket",
+      "handle": "relaxed-track-jacket",
+      "description": "A simple track-inspired jacket with a zip front and comfortable rib trims. It adds movement-friendly polish to casual outfits.",
+      "category": "men",
+      "tags": [
+        "track-jacket",
+        "zip",
+        "charcoal",
+        "streetwear",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 98,
+      "currency_code": "usd",
+      "compare_at_price": 137,
+      "images": [
+        "https://photo.yupoo.com/miao2017/9085080a5b/small.jpeg"
+      ],
+      "variants": [
+        {
+          "title": "Charcoal / S",
+          "sku": "POS-MEN-009-01",
+          "options": {
+            "Color": "Charcoal",
+            "Size": "S"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 9800
+            }
+          ]
+        },
+        {
+          "title": "Charcoal / M",
+          "sku": "POS-MEN-009-02",
+          "options": {
+            "Color": "Charcoal",
+            "Size": "M"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 9800
+            }
+          ]
+        },
+        {
+          "title": "Charcoal / L",
+          "sku": "POS-MEN-009-03",
+          "options": {
+            "Color": "Charcoal",
+            "Size": "L"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 9800
+            }
+          ]
+        },
+        {
+          "title": "Charcoal / XL",
+          "sku": "POS-MEN-009-04",
+          "options": {
+            "Color": "Charcoal",
+            "Size": "XL"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 9800
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://miao2017.x.yupoo.com/albums/242828637?uid=1",
+      "supplier_id": "men",
+      "shipping_class": "standard-apparel",
+      "source_sampling_status": "real_album_sample_cleaned"
+    },
+    {
+      "id": "pos-men-010-clean-drawstring-short",
+      "title": "Clean drawstring short",
+      "handle": "clean-drawstring-short",
+      "description": "A relaxed drawstring short with easy pockets and a comfortable above-knee cut. Pair with tees, hoodies, or summer shirting.",
+      "category": "men",
+      "tags": [
+        "shorts",
+        "drawstring",
+        "black",
+        "casual",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 108,
+      "currency_code": "usd",
+      "compare_at_price": 151,
+      "images": [
+        "https://photo.yupoo.com/miao2017/d644448acb/small.jpeg"
+      ],
+      "variants": [
+        {
+          "title": "Black / S",
+          "sku": "POS-MEN-010-01",
+          "options": {
+            "Color": "Black",
+            "Size": "S"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 10800
+            }
+          ]
+        },
+        {
+          "title": "Black / M",
+          "sku": "POS-MEN-010-02",
+          "options": {
+            "Color": "Black",
+            "Size": "M"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 10800
+            }
+          ]
+        },
+        {
+          "title": "Black / L",
+          "sku": "POS-MEN-010-03",
+          "options": {
+            "Color": "Black",
+            "Size": "L"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 10800
+            }
+          ]
+        },
+        {
+          "title": "Black / XL",
+          "sku": "POS-MEN-010-04",
+          "options": {
+            "Color": "Black",
+            "Size": "XL"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 10800
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://miao2017.x.yupoo.com/albums/242828444?uid=1",
+      "supplier_id": "men",
+      "shipping_class": "standard-apparel",
+      "source_sampling_status": "real_album_sample_cleaned"
+    },
+    {
+      "id": "pos-women-001-linen-map-print-shirt-and-short-set",
+      "title": "Linen map-print shirt and short set",
+      "handle": "linen-map-print-shirt-and-short-set",
+      "description": "A breezy two-piece set with a short-sleeve shirt, tailored shorts, and soft map-inspired print. It is made for warm-weather plans and vacation packing.",
+      "category": "women",
+      "tags": [
+        "set",
+        "linen",
+        "print",
+        "resort",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 138,
+      "currency_code": "usd",
+      "compare_at_price": 200,
+      "images": [
+        "https://photo.yupoo.com/ypd2023/947d263689/medium.jpeg"
+      ],
+      "variants": [
+        {
+          "title": "Apricot / S",
+          "sku": "POS-WOM-001-01",
+          "options": {
+            "Color": "Apricot",
+            "Size": "S"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 13800
+            }
+          ]
+        },
+        {
+          "title": "Apricot / M",
+          "sku": "POS-WOM-001-02",
+          "options": {
+            "Color": "Apricot",
+            "Size": "M"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 13800
+            }
+          ]
+        },
+        {
+          "title": "Apricot / L",
+          "sku": "POS-WOM-001-03",
+          "options": {
+            "Color": "Apricot",
+            "Size": "L"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 13800
+            }
+          ]
+        },
+        {
+          "title": "Apricot / XL",
+          "sku": "POS-WOM-001-04",
+          "options": {
+            "Color": "Apricot",
+            "Size": "XL"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 13800
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://ypd2023.x.yupoo.com/albums/242792675?uid=1",
+      "supplier_id": "women",
+      "shipping_class": "standard-apparel",
+      "source_sampling_status": "real_album_sample_cleaned"
+    },
+    {
+      "id": "pos-women-002-clean-letter-print-baby-tee",
+      "title": "Clean letter-print baby tee",
+      "handle": "clean-letter-print-baby-tee",
+      "description": "A fitted short-sleeve tee with simple typographic artwork and a soft everyday feel. The cropped profile pairs easily with denim and skirts.",
+      "category": "women",
+      "tags": [
+        "tee",
+        "fitted",
+        "white",
+        "typographic",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 148,
+      "currency_code": "usd",
+      "compare_at_price": 215,
+      "images": [
+        "https://photo.yupoo.com/ypd2023/71b572c6b0/small.jpeg"
+      ],
+      "variants": [
+        {
+          "title": "White / S",
+          "sku": "POS-WOM-002-01",
+          "options": {
+            "Color": "White",
+            "Size": "S"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 14800
+            }
+          ]
+        },
+        {
+          "title": "White / M",
+          "sku": "POS-WOM-002-02",
+          "options": {
+            "Color": "White",
+            "Size": "M"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 14800
+            }
+          ]
+        },
+        {
+          "title": "White / L",
+          "sku": "POS-WOM-002-03",
+          "options": {
+            "Color": "White",
+            "Size": "L"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 14800
+            }
+          ]
+        },
+        {
+          "title": "White / XL",
+          "sku": "POS-WOM-002-04",
+          "options": {
+            "Color": "White",
+            "Size": "XL"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 14800
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://ypd2023.x.yupoo.com/albums/242792651?uid=1",
+      "supplier_id": "women",
+      "shipping_class": "standard-apparel",
+      "source_sampling_status": "real_album_sample_cleaned"
+    },
+    {
+      "id": "pos-women-003-green-floral-strappy-maxi-dress",
+      "title": "Green floral strappy maxi dress",
+      "handle": "green-floral-strappy-maxi-dress",
+      "description": "A flowing maxi dress with slim straps, fresh floral print, and an easy summer drape. It brings romantic shape without relying on logo graphics.",
+      "category": "women",
+      "tags": [
+        "dress",
+        "maxi",
+        "floral",
+        "green",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 158,
+      "currency_code": "usd",
+      "compare_at_price": 229,
+      "images": [
+        "https://photo.yupoo.com/ypd2023/12ab83de0d/small.jpeg"
+      ],
+      "variants": [
+        {
+          "title": "Green / S",
+          "sku": "POS-WOM-003-01",
+          "options": {
+            "Color": "Green",
+            "Size": "S"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 15800
+            }
+          ]
+        },
+        {
+          "title": "Green / M",
+          "sku": "POS-WOM-003-02",
+          "options": {
+            "Color": "Green",
+            "Size": "M"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 15800
+            }
+          ]
+        },
+        {
+          "title": "Green / L",
+          "sku": "POS-WOM-003-03",
+          "options": {
+            "Color": "Green",
+            "Size": "L"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 15800
+            }
+          ]
+        },
+        {
+          "title": "Green / XL",
+          "sku": "POS-WOM-003-04",
+          "options": {
+            "Color": "Green",
+            "Size": "XL"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 15800
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://ypd2023.x.yupoo.com/albums/242792616?uid=1",
+      "supplier_id": "women",
+      "shipping_class": "standard-apparel",
+      "source_sampling_status": "real_album_sample_cleaned"
+    },
+    {
+      "id": "pos-women-004-yellow-ruffle-v-neck-maxi-dress",
+      "title": "Yellow ruffle V-neck maxi dress",
+      "handle": "yellow-ruffle-v-neck-maxi-dress",
+      "description": "A V-neck maxi dress with ruffle edges, gathered waist, and sunny floral print. The silhouette feels polished for brunch, travel, and events.",
+      "category": "women",
+      "tags": [
+        "dress",
+        "maxi",
+        "ruffle",
+        "yellow",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 168,
+      "currency_code": "usd",
+      "compare_at_price": 244,
+      "images": [
+        "https://photo.yupoo.com/ypd2023/6b36ad1a9f/small.jpeg"
+      ],
+      "variants": [
+        {
+          "title": "Yellow / S",
+          "sku": "POS-WOM-004-01",
+          "options": {
+            "Color": "Yellow",
+            "Size": "S"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 16800
+            }
+          ]
+        },
+        {
+          "title": "Yellow / M",
+          "sku": "POS-WOM-004-02",
+          "options": {
+            "Color": "Yellow",
+            "Size": "M"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 16800
+            }
+          ]
+        },
+        {
+          "title": "Yellow / L",
+          "sku": "POS-WOM-004-03",
+          "options": {
+            "Color": "Yellow",
+            "Size": "L"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 16800
+            }
+          ]
+        },
+        {
+          "title": "Yellow / XL",
+          "sku": "POS-WOM-004-04",
+          "options": {
+            "Color": "Yellow",
+            "Size": "XL"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 16800
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://ypd2023.x.yupoo.com/albums/242792557?uid=1",
+      "supplier_id": "women",
+      "shipping_class": "standard-apparel",
+      "source_sampling_status": "real_album_sample_cleaned"
+    },
+    {
+      "id": "pos-women-005-ivory-floral-bandeau-maxi-dress",
+      "title": "Ivory floral bandeau maxi dress",
+      "handle": "ivory-floral-bandeau-maxi-dress",
+      "description": "A strapless-inspired maxi with sculpted floral texture and a soft ivory finish. It is a standout warm-weather piece with feminine detail.",
+      "category": "women",
+      "tags": [
+        "dress",
+        "maxi",
+        "ivory",
+        "floral",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 138,
+      "currency_code": "usd",
+      "compare_at_price": 200,
+      "images": [
+        "https://photo.yupoo.com/ypd2023/e43ab93dc6/small.jpeg"
+      ],
+      "variants": [
+        {
+          "title": "Ivory / S",
+          "sku": "POS-WOM-005-01",
+          "options": {
+            "Color": "Ivory",
+            "Size": "S"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 13800
+            }
+          ]
+        },
+        {
+          "title": "Ivory / M",
+          "sku": "POS-WOM-005-02",
+          "options": {
+            "Color": "Ivory",
+            "Size": "M"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 13800
+            }
+          ]
+        },
+        {
+          "title": "Ivory / L",
+          "sku": "POS-WOM-005-03",
+          "options": {
+            "Color": "Ivory",
+            "Size": "L"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 13800
+            }
+          ]
+        },
+        {
+          "title": "Ivory / XL",
+          "sku": "POS-WOM-005-04",
+          "options": {
+            "Color": "Ivory",
+            "Size": "XL"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 13800
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://ypd2023.x.yupoo.com/albums/242792519?uid=1",
+      "supplier_id": "women",
+      "shipping_class": "standard-apparel",
+      "source_sampling_status": "real_album_sample_cleaned"
+    },
+    {
+      "id": "pos-women-006-pastel-floral-shirt-and-short-set",
+      "title": "Pastel floral shirt and short set",
+      "handle": "pastel-floral-shirt-and-short-set",
+      "description": "A long-sleeve blouse and short set with gentle floral print and a removable belt. Wear together or split for more outfit mileage.",
+      "category": "women",
+      "tags": [
+        "set",
+        "floral",
+        "pastel",
+        "resort",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 148,
+      "currency_code": "usd",
+      "compare_at_price": 215,
+      "images": [
+        "https://photo.yupoo.com/ypd2023/277eb3887f/small.jpeg"
+      ],
+      "variants": [
+        {
+          "title": "Light Green / S",
+          "sku": "POS-WOM-006-01",
+          "options": {
+            "Color": "Light Green",
+            "Size": "S"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 14800
+            }
+          ]
+        },
+        {
+          "title": "Light Green / M",
+          "sku": "POS-WOM-006-02",
+          "options": {
+            "Color": "Light Green",
+            "Size": "M"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 14800
+            }
+          ]
+        },
+        {
+          "title": "Light Green / L",
+          "sku": "POS-WOM-006-03",
+          "options": {
+            "Color": "Light Green",
+            "Size": "L"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 14800
+            }
+          ]
+        },
+        {
+          "title": "Light Green / XL",
+          "sku": "POS-WOM-006-04",
+          "options": {
+            "Color": "Light Green",
+            "Size": "XL"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 14800
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://ypd2023.x.yupoo.com/albums/242792487?uid=1",
+      "supplier_id": "women",
+      "shipping_class": "standard-apparel",
+      "source_sampling_status": "real_album_sample_cleaned"
+    },
+    {
+      "id": "pos-women-007-mermaid-print-party-maxi-dress",
+      "title": "Mermaid-print party maxi dress",
+      "handle": "mermaid-print-party-maxi-dress",
+      "description": "A statement maxi dress with oceanic artwork, fitted bodice, and full skirt movement. It is built for vacation dinners and special photos.",
+      "category": "women",
+      "tags": [
+        "dress",
+        "maxi",
+        "print",
+        "party",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 158,
+      "currency_code": "usd",
+      "compare_at_price": 229,
+      "images": [
+        "https://photo.yupoo.com/ypd2023/411f2f9098/small.jpeg"
+      ],
+      "variants": [
+        {
+          "title": "Blue / S",
+          "sku": "POS-WOM-007-01",
+          "options": {
+            "Color": "Blue",
+            "Size": "S"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 15800
+            }
+          ]
+        },
+        {
+          "title": "Blue / M",
+          "sku": "POS-WOM-007-02",
+          "options": {
+            "Color": "Blue",
+            "Size": "M"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 15800
+            }
+          ]
+        },
+        {
+          "title": "Blue / L",
+          "sku": "POS-WOM-007-03",
+          "options": {
+            "Color": "Blue",
+            "Size": "L"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 15800
+            }
+          ]
+        },
+        {
+          "title": "Blue / XL",
+          "sku": "POS-WOM-007-04",
+          "options": {
+            "Color": "Blue",
+            "Size": "XL"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 15800
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://ypd2023.x.yupoo.com/albums/242792400?uid=1",
+      "supplier_id": "women",
+      "shipping_class": "standard-apparel",
+      "source_sampling_status": "real_album_sample_cleaned"
+    },
+    {
+      "id": "pos-women-008-rosette-trim-strappy-dress",
+      "title": "Rosette trim strappy dress",
+      "handle": "rosette-trim-strappy-dress",
+      "description": "A blush strappy dress with floral trim, waist definition, and a romantic event-ready line. It feels elevated while staying clean of trademark cues.",
+      "category": "women",
+      "tags": [
+        "dress",
+        "strappy",
+        "blush",
+        "event",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 168,
+      "currency_code": "usd",
+      "compare_at_price": 244,
+      "images": [
+        "https://photo.yupoo.com/ypd2023/b40606d69c/small.jpeg"
+      ],
+      "variants": [
+        {
+          "title": "Blush / S",
+          "sku": "POS-WOM-008-01",
+          "options": {
+            "Color": "Blush",
+            "Size": "S"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 16800
+            }
+          ]
+        },
+        {
+          "title": "Blush / M",
+          "sku": "POS-WOM-008-02",
+          "options": {
+            "Color": "Blush",
+            "Size": "M"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 16800
+            }
+          ]
+        },
+        {
+          "title": "Blush / L",
+          "sku": "POS-WOM-008-03",
+          "options": {
+            "Color": "Blush",
+            "Size": "L"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 16800
+            }
+          ]
+        },
+        {
+          "title": "Blush / XL",
+          "sku": "POS-WOM-008-04",
+          "options": {
+            "Color": "Blush",
+            "Size": "XL"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 16800
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://ypd2023.x.yupoo.com/albums/242792355?uid=1",
+      "supplier_id": "women",
+      "shipping_class": "standard-apparel",
+      "source_sampling_status": "real_album_sample_cleaned"
+    },
+    {
+      "id": "pos-women-009-french-print-bustier-mini-dress",
+      "title": "French print bustier mini dress",
+      "handle": "french-print-bustier-mini-dress",
+      "description": "A playful mini dress with a bustier-style top and soft vintage-inspired print. It works with sandals, heels, or layered knitwear.",
+      "category": "women",
+      "tags": [
+        "dress",
+        "mini",
+        "pink",
+        "vintage-inspired",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 138,
+      "currency_code": "usd",
+      "compare_at_price": 200,
+      "images": [
+        "https://photo.yupoo.com/ypd2023/20d0a629c3/small.jpeg"
+      ],
+      "variants": [
+        {
+          "title": "Pink / S",
+          "sku": "POS-WOM-009-01",
+          "options": {
+            "Color": "Pink",
+            "Size": "S"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 13800
+            }
+          ]
+        },
+        {
+          "title": "Pink / M",
+          "sku": "POS-WOM-009-02",
+          "options": {
+            "Color": "Pink",
+            "Size": "M"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 13800
+            }
+          ]
+        },
+        {
+          "title": "Pink / L",
+          "sku": "POS-WOM-009-03",
+          "options": {
+            "Color": "Pink",
+            "Size": "L"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 13800
+            }
+          ]
+        },
+        {
+          "title": "Pink / XL",
+          "sku": "POS-WOM-009-04",
+          "options": {
+            "Color": "Pink",
+            "Size": "XL"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 13800
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://ypd2023.x.yupoo.com/albums/242792336?uid=1",
+      "supplier_id": "women",
+      "shipping_class": "standard-apparel",
+      "source_sampling_status": "real_album_sample_cleaned"
+    },
+    {
+      "id": "pos-women-010-bird-and-floral-tie-waist-dress",
+      "title": "Bird and floral tie-waist dress",
+      "handle": "bird-and-floral-tie-waist-dress",
+      "description": "A colorful tie-waist dress with bird-and-floral artwork and a light, feminine drape. It is an easy hero piece for spring and summer edits.",
+      "category": "women",
+      "tags": [
+        "dress",
+        "tie-waist",
+        "print",
+        "spring",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 148,
+      "currency_code": "usd",
+      "compare_at_price": 215,
+      "images": [
+        "https://photo.yupoo.com/ypd2023/2fb0710f2d/small.jpeg"
+      ],
+      "variants": [
+        {
+          "title": "Blue/Pink / S",
+          "sku": "POS-WOM-010-01",
+          "options": {
+            "Color": "Blue/Pink",
+            "Size": "S"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 14800
+            }
+          ]
+        },
+        {
+          "title": "Blue/Pink / M",
+          "sku": "POS-WOM-010-02",
+          "options": {
+            "Color": "Blue/Pink",
+            "Size": "M"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 14800
+            }
+          ]
+        },
+        {
+          "title": "Blue/Pink / L",
+          "sku": "POS-WOM-010-03",
+          "options": {
+            "Color": "Blue/Pink",
+            "Size": "L"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 14800
+            }
+          ]
+        },
+        {
+          "title": "Blue/Pink / XL",
+          "sku": "POS-WOM-010-04",
+          "options": {
+            "Color": "Blue/Pink",
+            "Size": "XL"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 14800
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://ypd2023.x.yupoo.com/albums/242792308?uid=1",
+      "supplier_id": "women",
+      "shipping_class": "standard-apparel",
+      "source_sampling_status": "real_album_sample_cleaned"
+    },
+    {
+      "id": "pos-kids-001-kids-cork-footbed-slide-sandal",
+      "title": "Kids cork-footbed slide sandal",
+      "handle": "kids-cork-footbed-slide-sandal",
+      "description": "A comfy slide sandal with a cork-look footbed and adjustable-style upper. It is easy for beach days, errands, and backyard play.",
+      "category": "kids",
+      "tags": [
+        "kids",
+        "sandal",
+        "slide",
+        "tan",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 72,
+      "currency_code": "usd",
+      "compare_at_price": 97,
+      "images": [
+        "https://photo.yupoo.com/775180006/7f768efba6/medium.jpeg"
+      ],
+      "variants": [
+        {
+          "title": "Tan / EU 22",
+          "sku": "POS-KID-001-01",
+          "options": {
+            "Color": "Tan",
+            "Size": "EU 22"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 7200
+            }
+          ]
+        },
+        {
+          "title": "Tan / EU 25",
+          "sku": "POS-KID-001-02",
+          "options": {
+            "Color": "Tan",
+            "Size": "EU 25"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 7200
+            }
+          ]
+        },
+        {
+          "title": "Tan / EU 28",
+          "sku": "POS-KID-001-03",
+          "options": {
+            "Color": "Tan",
+            "Size": "EU 28"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 7200
+            }
+          ]
+        },
+        {
+          "title": "Tan / EU 31",
+          "sku": "POS-KID-001-04",
+          "options": {
+            "Color": "Tan",
+            "Size": "EU 31"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 7200
+            }
+          ]
+        },
+        {
+          "title": "Tan / EU 34",
+          "sku": "POS-KID-001-05",
+          "options": {
+            "Color": "Tan",
+            "Size": "EU 34"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 7200
+            }
+          ]
+        },
+        {
+          "title": "Tan / EU 37",
+          "sku": "POS-KID-001-06",
+          "options": {
+            "Color": "Tan",
+            "Size": "EU 37"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 7200
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://775180006.x.yupoo.com/albums/242220373?uid=1",
+      "supplier_id": "kids",
+      "shipping_class": "standard-kids",
+      "source_sampling_status": "real_album_sample_cleaned"
+    },
+    {
+      "id": "pos-kids-002-kids-hook-loop-sport-sandal",
+      "title": "Kids hook-loop sport sandal",
+      "handle": "kids-hook-loop-sport-sandal",
+      "description": "A lightweight sport sandal with secure hook-loop straps and grippy outsole. Designed for playgrounds, trips, and warm-weather movement.",
+      "category": "kids",
+      "tags": [
+        "kids",
+        "sandal",
+        "sport",
+        "grey",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 82,
+      "currency_code": "usd",
+      "compare_at_price": 111,
+      "images": [
+        "https://photo.yupoo.com/775180006/1b9c33d3b8/small.jpeg"
+      ],
+      "variants": [
+        {
+          "title": "Grey / EU 22",
+          "sku": "POS-KID-002-01",
+          "options": {
+            "Color": "Grey",
+            "Size": "EU 22"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 8200
+            }
+          ]
+        },
+        {
+          "title": "Grey / EU 25",
+          "sku": "POS-KID-002-02",
+          "options": {
+            "Color": "Grey",
+            "Size": "EU 25"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 8200
+            }
+          ]
+        },
+        {
+          "title": "Grey / EU 28",
+          "sku": "POS-KID-002-03",
+          "options": {
+            "Color": "Grey",
+            "Size": "EU 28"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 8200
+            }
+          ]
+        },
+        {
+          "title": "Grey / EU 31",
+          "sku": "POS-KID-002-04",
+          "options": {
+            "Color": "Grey",
+            "Size": "EU 31"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 8200
+            }
+          ]
+        },
+        {
+          "title": "Grey / EU 34",
+          "sku": "POS-KID-002-05",
+          "options": {
+            "Color": "Grey",
+            "Size": "EU 34"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 8200
+            }
+          ]
+        },
+        {
+          "title": "Grey / EU 37",
+          "sku": "POS-KID-002-06",
+          "options": {
+            "Color": "Grey",
+            "Size": "EU 37"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 8200
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://775180006.x.yupoo.com/albums/242027720?uid=1",
+      "supplier_id": "kids",
+      "shipping_class": "standard-kids",
+      "source_sampling_status": "real_album_sample_cleaned"
+    },
+    {
+      "id": "pos-kids-003-kids-air-cushion-runner-shoe",
+      "title": "Kids air-cushion runner shoe",
+      "handle": "kids-air-cushion-runner-shoe",
+      "description": "A sporty kids runner with a cushioned sole, breathable upper, and bright accent panels. The profile is active without visible brand naming.",
+      "category": "kids",
+      "tags": [
+        "kids",
+        "runner",
+        "cushioned",
+        "sport",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 92,
+      "currency_code": "usd",
+      "compare_at_price": 124,
+      "images": [
+        "https://photo.yupoo.com/775180006/10f928a197/small.jpeg"
+      ],
+      "variants": [
+        {
+          "title": "White/Red / EU 22",
+          "sku": "POS-KID-003-01",
+          "options": {
+            "Color": "White/Red",
+            "Size": "EU 22"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 9200
+            }
+          ]
+        },
+        {
+          "title": "White/Red / EU 25",
+          "sku": "POS-KID-003-02",
+          "options": {
+            "Color": "White/Red",
+            "Size": "EU 25"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 9200
+            }
+          ]
+        },
+        {
+          "title": "White/Red / EU 28",
+          "sku": "POS-KID-003-03",
+          "options": {
+            "Color": "White/Red",
+            "Size": "EU 28"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 9200
+            }
+          ]
+        },
+        {
+          "title": "White/Red / EU 31",
+          "sku": "POS-KID-003-04",
+          "options": {
+            "Color": "White/Red",
+            "Size": "EU 31"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 9200
+            }
+          ]
+        },
+        {
+          "title": "White/Red / EU 34",
+          "sku": "POS-KID-003-05",
+          "options": {
+            "Color": "White/Red",
+            "Size": "EU 34"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 9200
+            }
+          ]
+        },
+        {
+          "title": "White/Red / EU 37",
+          "sku": "POS-KID-003-06",
+          "options": {
+            "Color": "White/Red",
+            "Size": "EU 37"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 9200
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://775180006.x.yupoo.com/albums/242027014?uid=1",
+      "supplier_id": "kids",
+      "shipping_class": "standard-kids",
+      "source_sampling_status": "real_album_sample_cleaned"
+    },
+    {
+      "id": "pos-kids-004-kids-mesh-slip-on-runner",
+      "title": "Kids mesh slip-on runner",
+      "handle": "kids-mesh-slip-on-runner",
+      "description": "A flexible slip-on runner with mesh panels and a snug collar. It is easy for school mornings and everyday play.",
+      "category": "kids",
+      "tags": [
+        "kids",
+        "runner",
+        "slip-on",
+        "blue",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 102,
+      "currency_code": "usd",
+      "compare_at_price": 138,
+      "images": [
+        "https://photo.yupoo.com/775180006/7455c399b3/small.jpeg"
+      ],
+      "variants": [
+        {
+          "title": "Blue / EU 22",
+          "sku": "POS-KID-004-01",
+          "options": {
+            "Color": "Blue",
+            "Size": "EU 22"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 10200
+            }
+          ]
+        },
+        {
+          "title": "Blue / EU 25",
+          "sku": "POS-KID-004-02",
+          "options": {
+            "Color": "Blue",
+            "Size": "EU 25"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 10200
+            }
+          ]
+        },
+        {
+          "title": "Blue / EU 28",
+          "sku": "POS-KID-004-03",
+          "options": {
+            "Color": "Blue",
+            "Size": "EU 28"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 10200
+            }
+          ]
+        },
+        {
+          "title": "Blue / EU 31",
+          "sku": "POS-KID-004-04",
+          "options": {
+            "Color": "Blue",
+            "Size": "EU 31"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 10200
+            }
+          ]
+        },
+        {
+          "title": "Blue / EU 34",
+          "sku": "POS-KID-004-05",
+          "options": {
+            "Color": "Blue",
+            "Size": "EU 34"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 10200
+            }
+          ]
+        },
+        {
+          "title": "Blue / EU 37",
+          "sku": "POS-KID-004-06",
+          "options": {
+            "Color": "Blue",
+            "Size": "EU 37"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 10200
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://775180006.x.yupoo.com/albums/241798206?uid=1",
+      "supplier_id": "kids",
+      "shipping_class": "standard-kids",
+      "source_sampling_status": "real_album_sample_cleaned"
+    },
+    {
+      "id": "pos-kids-005-kids-ballet-flat-sneaker",
+      "title": "Kids ballet flat sneaker",
+      "handle": "kids-ballet-flat-sneaker",
+      "description": "A ballet-inspired sneaker with a light profile and easy-on fit. The soft pink finish is playful while still practical for daily wear.",
+      "category": "kids",
+      "tags": [
+        "kids",
+        "flat",
+        "pink",
+        "ballet-inspired",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 72,
+      "currency_code": "usd",
+      "compare_at_price": 97,
+      "images": [
+        "https://photo.yupoo.com/775180006/95266c9f68/small.jpeg"
+      ],
+      "variants": [
+        {
+          "title": "Pink / EU 22",
+          "sku": "POS-KID-005-01",
+          "options": {
+            "Color": "Pink",
+            "Size": "EU 22"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 7200
+            }
+          ]
+        },
+        {
+          "title": "Pink / EU 25",
+          "sku": "POS-KID-005-02",
+          "options": {
+            "Color": "Pink",
+            "Size": "EU 25"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 7200
+            }
+          ]
+        },
+        {
+          "title": "Pink / EU 28",
+          "sku": "POS-KID-005-03",
+          "options": {
+            "Color": "Pink",
+            "Size": "EU 28"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 7200
+            }
+          ]
+        },
+        {
+          "title": "Pink / EU 31",
+          "sku": "POS-KID-005-04",
+          "options": {
+            "Color": "Pink",
+            "Size": "EU 31"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 7200
+            }
+          ]
+        },
+        {
+          "title": "Pink / EU 34",
+          "sku": "POS-KID-005-05",
+          "options": {
+            "Color": "Pink",
+            "Size": "EU 34"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 7200
+            }
+          ]
+        },
+        {
+          "title": "Pink / EU 37",
+          "sku": "POS-KID-005-06",
+          "options": {
+            "Color": "Pink",
+            "Size": "EU 37"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 7200
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://775180006.x.yupoo.com/albums/241798035?uid=1",
+      "supplier_id": "kids",
+      "shipping_class": "standard-kids",
+      "source_sampling_status": "real_album_sample_cleaned"
+    },
+    {
+      "id": "pos-kids-006-kids-low-top-court-sneaker",
+      "title": "Kids low-top court sneaker",
+      "handle": "kids-low-top-court-sneaker",
+      "description": "A low-top court sneaker with contrast panels and a padded collar. It gives little outfits a bold streetwear finish.",
+      "category": "kids",
+      "tags": [
+        "kids",
+        "court",
+        "low-top",
+        "streetwear",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 82,
+      "currency_code": "usd",
+      "compare_at_price": 111,
+      "images": [
+        "https://photo.yupoo.com/775180006/5813eb3ce5/small.jpeg"
+      ],
+      "variants": [
+        {
+          "title": "Brown/White / EU 22",
+          "sku": "POS-KID-006-01",
+          "options": {
+            "Color": "Brown/White",
+            "Size": "EU 22"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 8200
+            }
+          ]
+        },
+        {
+          "title": "Brown/White / EU 25",
+          "sku": "POS-KID-006-02",
+          "options": {
+            "Color": "Brown/White",
+            "Size": "EU 25"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 8200
+            }
+          ]
+        },
+        {
+          "title": "Brown/White / EU 28",
+          "sku": "POS-KID-006-03",
+          "options": {
+            "Color": "Brown/White",
+            "Size": "EU 28"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 8200
+            }
+          ]
+        },
+        {
+          "title": "Brown/White / EU 31",
+          "sku": "POS-KID-006-04",
+          "options": {
+            "Color": "Brown/White",
+            "Size": "EU 31"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 8200
+            }
+          ]
+        },
+        {
+          "title": "Brown/White / EU 34",
+          "sku": "POS-KID-006-05",
+          "options": {
+            "Color": "Brown/White",
+            "Size": "EU 34"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 8200
+            }
+          ]
+        },
+        {
+          "title": "Brown/White / EU 37",
+          "sku": "POS-KID-006-06",
+          "options": {
+            "Color": "Brown/White",
+            "Size": "EU 37"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 8200
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://775180006.x.yupoo.com/albums/241797782?uid=1",
+      "supplier_id": "kids",
+      "shipping_class": "standard-kids",
+      "source_sampling_status": "real_album_sample_cleaned"
+    },
+    {
+      "id": "pos-kids-007-kids-cloud-sole-running-shoe",
+      "title": "Kids cloud-sole running shoe",
+      "handle": "kids-cloud-sole-running-shoe",
+      "description": "A modern runner with a sculpted cloud-like sole and breathable upper. The lightweight build keeps active days comfortable.",
+      "category": "kids",
+      "tags": [
+        "kids",
+        "runner",
+        "lightweight",
+        "black-white",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 92,
+      "currency_code": "usd",
+      "compare_at_price": 124,
+      "images": [
+        "https://photo.yupoo.com/775180006/1955949b06/small.jpeg"
+      ],
+      "variants": [
+        {
+          "title": "Black/White / EU 22",
+          "sku": "POS-KID-007-01",
+          "options": {
+            "Color": "Black/White",
+            "Size": "EU 22"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 9200
+            }
+          ]
+        },
+        {
+          "title": "Black/White / EU 25",
+          "sku": "POS-KID-007-02",
+          "options": {
+            "Color": "Black/White",
+            "Size": "EU 25"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 9200
+            }
+          ]
+        },
+        {
+          "title": "Black/White / EU 28",
+          "sku": "POS-KID-007-03",
+          "options": {
+            "Color": "Black/White",
+            "Size": "EU 28"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 9200
+            }
+          ]
+        },
+        {
+          "title": "Black/White / EU 31",
+          "sku": "POS-KID-007-04",
+          "options": {
+            "Color": "Black/White",
+            "Size": "EU 31"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 9200
+            }
+          ]
+        },
+        {
+          "title": "Black/White / EU 34",
+          "sku": "POS-KID-007-05",
+          "options": {
+            "Color": "Black/White",
+            "Size": "EU 34"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 9200
+            }
+          ]
+        },
+        {
+          "title": "Black/White / EU 37",
+          "sku": "POS-KID-007-06",
+          "options": {
+            "Color": "Black/White",
+            "Size": "EU 37"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 9200
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://775180006.x.yupoo.com/albums/241631803?uid=1",
+      "supplier_id": "kids",
+      "shipping_class": "standard-kids",
+      "source_sampling_status": "real_album_sample_cleaned"
+    },
+    {
+      "id": "pos-kids-008-kids-closed-toe-outdoor-sandal",
+      "title": "Kids closed-toe outdoor sandal",
+      "handle": "kids-closed-toe-outdoor-sandal",
+      "description": "A protective closed-toe sandal with cutout panels and a secure strap fit. It is suited for summer walks, splash days, and camp.",
+      "category": "kids",
+      "tags": [
+        "kids",
+        "sandal",
+        "outdoor",
+        "olive",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 102,
+      "currency_code": "usd",
+      "compare_at_price": 138,
+      "images": [
+        "https://photo.yupoo.com/775180006/ba33258798/small.jpeg"
+      ],
+      "variants": [
+        {
+          "title": "Olive / EU 22",
+          "sku": "POS-KID-008-01",
+          "options": {
+            "Color": "Olive",
+            "Size": "EU 22"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 10200
+            }
+          ]
+        },
+        {
+          "title": "Olive / EU 25",
+          "sku": "POS-KID-008-02",
+          "options": {
+            "Color": "Olive",
+            "Size": "EU 25"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 10200
+            }
+          ]
+        },
+        {
+          "title": "Olive / EU 28",
+          "sku": "POS-KID-008-03",
+          "options": {
+            "Color": "Olive",
+            "Size": "EU 28"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 10200
+            }
+          ]
+        },
+        {
+          "title": "Olive / EU 31",
+          "sku": "POS-KID-008-04",
+          "options": {
+            "Color": "Olive",
+            "Size": "EU 31"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 10200
+            }
+          ]
+        },
+        {
+          "title": "Olive / EU 34",
+          "sku": "POS-KID-008-05",
+          "options": {
+            "Color": "Olive",
+            "Size": "EU 34"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 10200
+            }
+          ]
+        },
+        {
+          "title": "Olive / EU 37",
+          "sku": "POS-KID-008-06",
+          "options": {
+            "Color": "Olive",
+            "Size": "EU 37"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 10200
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://775180006.x.yupoo.com/albums/241520840?uid=1",
+      "supplier_id": "kids",
+      "shipping_class": "standard-kids",
+      "source_sampling_status": "real_album_sample_cleaned"
+    },
+    {
+      "id": "pos-kids-009-kids-retro-slip-on-loafer-sneaker",
+      "title": "Kids retro slip-on loafer sneaker",
+      "handle": "kids-retro-slip-on-loafer-sneaker",
+      "description": "A retro-inspired slip-on with loafer lines, cushioned insole, and flexible sole. It dresses up school outfits without sacrificing comfort.",
+      "category": "kids",
+      "tags": [
+        "kids",
+        "slip-on",
+        "retro",
+        "cream",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 72,
+      "currency_code": "usd",
+      "compare_at_price": 97,
+      "images": [
+        "https://photo.yupoo.com/775180006/4a4300b433/small.jpeg"
+      ],
+      "variants": [
+        {
+          "title": "Cream / EU 22",
+          "sku": "POS-KID-009-01",
+          "options": {
+            "Color": "Cream",
+            "Size": "EU 22"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 7200
+            }
+          ]
+        },
+        {
+          "title": "Cream / EU 25",
+          "sku": "POS-KID-009-02",
+          "options": {
+            "Color": "Cream",
+            "Size": "EU 25"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 7200
+            }
+          ]
+        },
+        {
+          "title": "Cream / EU 28",
+          "sku": "POS-KID-009-03",
+          "options": {
+            "Color": "Cream",
+            "Size": "EU 28"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 7200
+            }
+          ]
+        },
+        {
+          "title": "Cream / EU 31",
+          "sku": "POS-KID-009-04",
+          "options": {
+            "Color": "Cream",
+            "Size": "EU 31"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 7200
+            }
+          ]
+        },
+        {
+          "title": "Cream / EU 34",
+          "sku": "POS-KID-009-05",
+          "options": {
+            "Color": "Cream",
+            "Size": "EU 34"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 7200
+            }
+          ]
+        },
+        {
+          "title": "Cream / EU 37",
+          "sku": "POS-KID-009-06",
+          "options": {
+            "Color": "Cream",
+            "Size": "EU 37"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 7200
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://775180006.x.yupoo.com/albums/241132127?uid=1",
+      "supplier_id": "kids",
+      "shipping_class": "standard-kids",
+      "source_sampling_status": "real_album_sample_cleaned"
+    },
+    {
+      "id": "pos-kids-010-kids-mesh-lace-toggle-sneaker",
+      "title": "Kids mesh lace-toggle sneaker",
+      "handle": "kids-mesh-lace-toggle-sneaker",
+      "description": "A breathable mesh sneaker with toggle-style lacing and a cushioned sole. It is built for quick changes and everyday action.",
+      "category": "kids",
+      "tags": [
+        "kids",
+        "sneaker",
+        "mesh",
+        "lace-toggle",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 82,
+      "currency_code": "usd",
+      "compare_at_price": 111,
+      "images": [
+        "https://photo.yupoo.com/775180006/2f890f49d1/small.jpeg"
+      ],
+      "variants": [
+        {
+          "title": "White/Grey / EU 22",
+          "sku": "POS-KID-010-01",
+          "options": {
+            "Color": "White/Grey",
+            "Size": "EU 22"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 8200
+            }
+          ]
+        },
+        {
+          "title": "White/Grey / EU 25",
+          "sku": "POS-KID-010-02",
+          "options": {
+            "Color": "White/Grey",
+            "Size": "EU 25"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 8200
+            }
+          ]
+        },
+        {
+          "title": "White/Grey / EU 28",
+          "sku": "POS-KID-010-03",
+          "options": {
+            "Color": "White/Grey",
+            "Size": "EU 28"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 8200
+            }
+          ]
+        },
+        {
+          "title": "White/Grey / EU 31",
+          "sku": "POS-KID-010-04",
+          "options": {
+            "Color": "White/Grey",
+            "Size": "EU 31"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 8200
+            }
+          ]
+        },
+        {
+          "title": "White/Grey / EU 34",
+          "sku": "POS-KID-010-05",
+          "options": {
+            "Color": "White/Grey",
+            "Size": "EU 34"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 8200
+            }
+          ]
+        },
+        {
+          "title": "White/Grey / EU 37",
+          "sku": "POS-KID-010-06",
+          "options": {
+            "Color": "White/Grey",
+            "Size": "EU 37"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 8200
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://775180006.x.yupoo.com/albums/240705702?uid=1",
+      "supplier_id": "kids",
+      "shipping_class": "standard-kids",
+      "source_sampling_status": "real_album_sample_cleaned"
+    },
+    {
+      "id": "pos-fragrance-001-fresh-citrus-eau-de-parfum",
+      "title": "Fresh citrus eau de parfum",
+      "handle": "fresh-citrus-eau-de-parfum",
+      "description": "A bright scent profile built around sparkling citrus, clean musk, and a light woody base. It wears fresh, modern, and easy for daytime.",
+      "category": "fragrance",
+      "tags": [
+        "fragrance",
+        "citrus",
+        "fresh",
+        "eau-de-parfum",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 68,
+      "currency_code": "usd",
+      "compare_at_price": 95,
+      "images": [
+        "https://photo.yupoo.com/jmshop88/44d60b34/medium.jpg"
+      ],
+      "variants": [
+        {
+          "title": "Citrus / 50 ml",
+          "sku": "POS-FRA-001-01",
+          "options": {
+            "Scent": "Citrus",
+            "Size": "50 ml"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 6800
+            }
+          ]
+        },
+        {
+          "title": "Citrus / 100 ml",
+          "sku": "POS-FRA-001-02",
+          "options": {
+            "Scent": "Citrus",
+            "Size": "100 ml"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 6800
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://jmshop88.x.yupoo.com/albums/232641102?uid=1&isSubCate=false&referrercate=4594940",
+      "supplier_id": "fragrance",
+      "shipping_class": "ground-fragrance",
+      "source_sampling_status": "real_album_url_with_synthesized_generic_merchandising"
+    },
+    {
+      "id": "pos-fragrance-002-amber-vanilla-eau-de-parfum",
+      "title": "Amber vanilla eau de parfum",
+      "handle": "amber-vanilla-eau-de-parfum",
+      "description": "A warm blend of amber, soft vanilla, and smooth woods for a cozy evening feel. The profile is sweet without becoming heavy.",
+      "category": "fragrance",
+      "tags": [
+        "fragrance",
+        "amber",
+        "vanilla",
+        "warm",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 78,
+      "currency_code": "usd",
+      "compare_at_price": 109,
+      "images": [
+        "https://photo.yupoo.com/jmshop88/6e480816/small.jpg"
+      ],
+      "variants": [
+        {
+          "title": "Amber Vanilla / 50 ml",
+          "sku": "POS-FRA-002-01",
+          "options": {
+            "Scent": "Amber Vanilla",
+            "Size": "50 ml"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 7800
+            }
+          ]
+        },
+        {
+          "title": "Amber Vanilla / 100 ml",
+          "sku": "POS-FRA-002-02",
+          "options": {
+            "Scent": "Amber Vanilla",
+            "Size": "100 ml"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 7800
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://jmshop88.x.yupoo.com/albums/232641081?uid=1&isSubCate=false&referrercate=4594940",
+      "supplier_id": "fragrance",
+      "shipping_class": "ground-fragrance",
+      "source_sampling_status": "real_album_url_with_synthesized_generic_merchandising"
+    },
+    {
+      "id": "pos-fragrance-003-rose-musk-eau-de-parfum",
+      "title": "Rose musk eau de parfum",
+      "handle": "rose-musk-eau-de-parfum",
+      "description": "Soft rose petals meet clean musk and a hint of powder for a polished floral finish. It is romantic, wearable, and intentionally label-free.",
+      "category": "fragrance",
+      "tags": [
+        "fragrance",
+        "rose",
+        "musk",
+        "floral",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 88,
+      "currency_code": "usd",
+      "compare_at_price": 123,
+      "images": [
+        "https://photo.yupoo.com/jmshop88/0c186a4c/small.jpg"
+      ],
+      "variants": [
+        {
+          "title": "Rose Musk / 50 ml",
+          "sku": "POS-FRA-003-01",
+          "options": {
+            "Scent": "Rose Musk",
+            "Size": "50 ml"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 8800
+            }
+          ]
+        },
+        {
+          "title": "Rose Musk / 100 ml",
+          "sku": "POS-FRA-003-02",
+          "options": {
+            "Scent": "Rose Musk",
+            "Size": "100 ml"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 8800
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://jmshop88.x.yupoo.com/albums/218907803?uid=1&isSubCate=false&referrercate=4594940",
+      "supplier_id": "fragrance",
+      "shipping_class": "ground-fragrance",
+      "source_sampling_status": "real_album_url_with_synthesized_generic_merchandising"
+    },
+    {
+      "id": "pos-fragrance-004-aquatic-mineral-eau-de-parfum",
+      "title": "Aquatic mineral eau de parfum",
+      "handle": "aquatic-mineral-eau-de-parfum",
+      "description": "A cool aquatic profile with mineral notes, fresh air, and subtle woods. It feels crisp after a shower and stays easy in warm weather.",
+      "category": "fragrance",
+      "tags": [
+        "fragrance",
+        "aquatic",
+        "fresh",
+        "mineral",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 98,
+      "currency_code": "usd",
+      "compare_at_price": 137,
+      "images": [
+        "https://photo.yupoo.com/jmshop88/90bd182b/small.jpg"
+      ],
+      "variants": [
+        {
+          "title": "Aquatic / 50 ml",
+          "sku": "POS-FRA-004-01",
+          "options": {
+            "Scent": "Aquatic",
+            "Size": "50 ml"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 9800
+            }
+          ]
+        },
+        {
+          "title": "Aquatic / 100 ml",
+          "sku": "POS-FRA-004-02",
+          "options": {
+            "Scent": "Aquatic",
+            "Size": "100 ml"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 9800
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://jmshop88.x.yupoo.com/albums/218907745?uid=1&isSubCate=false&referrercate=4594940",
+      "supplier_id": "fragrance",
+      "shipping_class": "ground-fragrance",
+      "source_sampling_status": "real_album_url_with_synthesized_generic_merchandising"
+    },
+    {
+      "id": "pos-fragrance-005-smoky-oud-eau-de-parfum",
+      "title": "Smoky oud eau de parfum",
+      "handle": "smoky-oud-eau-de-parfum",
+      "description": "A deeper scent built around smoky woods, resin, and a smooth amber base. It is best for evenings and customers who like bold profiles.",
+      "category": "fragrance",
+      "tags": [
+        "fragrance",
+        "oud",
+        "smoky",
+        "evening",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 68,
+      "currency_code": "usd",
+      "compare_at_price": 95,
+      "images": [
+        "https://photo.yupoo.com/jmshop88/91986925/small.jpg"
+      ],
+      "variants": [
+        {
+          "title": "Smoky Oud / 50 ml",
+          "sku": "POS-FRA-005-01",
+          "options": {
+            "Scent": "Smoky Oud",
+            "Size": "50 ml"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 6800
+            }
+          ]
+        },
+        {
+          "title": "Smoky Oud / 100 ml",
+          "sku": "POS-FRA-005-02",
+          "options": {
+            "Scent": "Smoky Oud",
+            "Size": "100 ml"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 6800
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://jmshop88.x.yupoo.com/albums/218907734?uid=1&isSubCate=false&referrercate=4594940",
+      "supplier_id": "fragrance",
+      "shipping_class": "ground-fragrance",
+      "source_sampling_status": "real_album_url_with_synthesized_generic_merchandising"
+    },
+    {
+      "id": "pos-fragrance-006-white-tea-eau-de-parfum",
+      "title": "White tea eau de parfum",
+      "handle": "white-tea-eau-de-parfum",
+      "description": "A clean white-tea profile with soft citrus lift and sheer musk. It is minimal, quiet, and great for office-friendly wear.",
+      "category": "fragrance",
+      "tags": [
+        "fragrance",
+        "tea",
+        "clean",
+        "minimal",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 78,
+      "currency_code": "usd",
+      "compare_at_price": 109,
+      "images": [
+        "https://photo.yupoo.com/jmshop88/b232e139/small.jpg"
+      ],
+      "variants": [
+        {
+          "title": "White Tea / 50 ml",
+          "sku": "POS-FRA-006-01",
+          "options": {
+            "Scent": "White Tea",
+            "Size": "50 ml"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 7800
+            }
+          ]
+        },
+        {
+          "title": "White Tea / 100 ml",
+          "sku": "POS-FRA-006-02",
+          "options": {
+            "Scent": "White Tea",
+            "Size": "100 ml"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 7800
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://jmshop88.x.yupoo.com/albums/218907719?uid=1&isSubCate=false&referrercate=4594940",
+      "supplier_id": "fragrance",
+      "shipping_class": "ground-fragrance",
+      "source_sampling_status": "real_album_url_with_synthesized_generic_merchandising"
+    },
+    {
+      "id": "pos-fragrance-007-coconut-solar-eau-de-parfum",
+      "title": "Coconut solar eau de parfum",
+      "handle": "coconut-solar-eau-de-parfum",
+      "description": "Creamy coconut, warm skin musk, and soft florals create a sunny vacation scent. The result is warm, beachy, and easygoing.",
+      "category": "fragrance",
+      "tags": [
+        "fragrance",
+        "coconut",
+        "solar",
+        "vacation",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 88,
+      "currency_code": "usd",
+      "compare_at_price": 123,
+      "images": [
+        "https://photo.yupoo.com/jmshop88/dcfe8167/small.jpg"
+      ],
+      "variants": [
+        {
+          "title": "Coconut Solar / 50 ml",
+          "sku": "POS-FRA-007-01",
+          "options": {
+            "Scent": "Coconut Solar",
+            "Size": "50 ml"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 8800
+            }
+          ]
+        },
+        {
+          "title": "Coconut Solar / 100 ml",
+          "sku": "POS-FRA-007-02",
+          "options": {
+            "Scent": "Coconut Solar",
+            "Size": "100 ml"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 8800
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://jmshop88.x.yupoo.com/albums/218907697?uid=1&isSubCate=false&referrercate=4594940",
+      "supplier_id": "fragrance",
+      "shipping_class": "ground-fragrance",
+      "source_sampling_status": "real_album_url_with_synthesized_generic_merchandising"
+    },
+    {
+      "id": "pos-fragrance-008-spiced-leather-eau-de-parfum",
+      "title": "Spiced leather eau de parfum",
+      "handle": "spiced-leather-eau-de-parfum",
+      "description": "Spice, suede-like leather, and woods give this fragrance a confident unisex profile. It adds warmth to fall and winter styling.",
+      "category": "fragrance",
+      "tags": [
+        "fragrance",
+        "leather",
+        "spice",
+        "unisex",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 98,
+      "currency_code": "usd",
+      "compare_at_price": 137,
+      "images": [
+        "https://photo.yupoo.com/jmshop88/fc736f8a/small.jpg"
+      ],
+      "variants": [
+        {
+          "title": "Spiced Leather / 50 ml",
+          "sku": "POS-FRA-008-01",
+          "options": {
+            "Scent": "Spiced Leather",
+            "Size": "50 ml"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 9800
+            }
+          ]
+        },
+        {
+          "title": "Spiced Leather / 100 ml",
+          "sku": "POS-FRA-008-02",
+          "options": {
+            "Scent": "Spiced Leather",
+            "Size": "100 ml"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 9800
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://jmshop88.x.yupoo.com/albums/218907687?uid=1&isSubCate=false&referrercate=4594940",
+      "supplier_id": "fragrance",
+      "shipping_class": "ground-fragrance",
+      "source_sampling_status": "real_album_url_with_synthesized_generic_merchandising"
+    },
+    {
+      "id": "pos-fragrance-009-peony-pear-eau-de-parfum",
+      "title": "Peony pear eau de parfum",
+      "handle": "peony-pear-eau-de-parfum",
+      "description": "Juicy pear and airy peony sit on a clean musky base for a playful floral-fruity blend. It is light enough for daily wear.",
+      "category": "fragrance",
+      "tags": [
+        "fragrance",
+        "peony",
+        "pear",
+        "floral-fruity",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 68,
+      "currency_code": "usd",
+      "compare_at_price": 95,
+      "images": [
+        "https://photo.yupoo.com/jmshop88/8016b62d/small.jpg"
+      ],
+      "variants": [
+        {
+          "title": "Peony Pear / 50 ml",
+          "sku": "POS-FRA-009-01",
+          "options": {
+            "Scent": "Peony Pear",
+            "Size": "50 ml"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 6800
+            }
+          ]
+        },
+        {
+          "title": "Peony Pear / 100 ml",
+          "sku": "POS-FRA-009-02",
+          "options": {
+            "Scent": "Peony Pear",
+            "Size": "100 ml"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 6800
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://jmshop88.x.yupoo.com/albums/218907675?uid=1&isSubCate=false&referrercate=4594940",
+      "supplier_id": "fragrance",
+      "shipping_class": "ground-fragrance",
+      "source_sampling_status": "real_album_url_with_synthesized_generic_merchandising"
+    },
+    {
+      "id": "pos-fragrance-010-black-cherry-eau-de-parfum",
+      "title": "Black cherry eau de parfum",
+      "handle": "black-cherry-eau-de-parfum",
+      "description": "Dark cherry, almond-like sweetness, and warm woods create a lush night-out fragrance. It is bold, smooth, and memorable.",
+      "category": "fragrance",
+      "tags": [
+        "fragrance",
+        "cherry",
+        "sweet",
+        "night-out",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 78,
+      "currency_code": "usd",
+      "compare_at_price": 109,
+      "images": [
+        "https://photo.yupoo.com/jmshop88/d9f85263/small.jpg"
+      ],
+      "variants": [
+        {
+          "title": "Black Cherry / 50 ml",
+          "sku": "POS-FRA-010-01",
+          "options": {
+            "Scent": "Black Cherry",
+            "Size": "50 ml"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 7800
+            }
+          ]
+        },
+        {
+          "title": "Black Cherry / 100 ml",
+          "sku": "POS-FRA-010-02",
+          "options": {
+            "Scent": "Black Cherry",
+            "Size": "100 ml"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 7800
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://jmshop88.x.yupoo.com/albums/218907429?uid=1&isSubCate=false&referrercate=4594940",
+      "supplier_id": "fragrance",
+      "shipping_class": "ground-fragrance",
+      "source_sampling_status": "real_album_url_with_synthesized_generic_merchandising"
+    },
+    {
+      "id": "pos-tech-001-wireless-over-ear-headphones",
+      "title": "Wireless over-ear headphones",
+      "handle": "wireless-over-ear-headphones",
+      "description": "Cushioned over-ear headphones with wireless pairing, fold-flat storage, and a clean matte finish. They are a simple add-on for travel, study, and commuting.",
+      "category": "tech",
+      "tags": [
+        "headphones",
+        "wireless",
+        "over-ear",
+        "tech",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 119,
+      "currency_code": "usd",
+      "compare_at_price": 161,
+      "images": [
+        "https://photo.yupoo.com/xtd8288/1d31d6df/medium.png"
+      ],
+      "variants": [
+        {
+          "title": "Black / Standard",
+          "sku": "POS-TEC-001-01",
+          "options": {
+            "Color": "Black",
+            "Size": "Standard"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 11900
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://xtd8288.x.yupoo.com/albums/209619992?uid=1&isSubCate=false&referrercate=654824",
+      "supplier_id": "tech",
+      "shipping_class": "insured-tech",
+      "source_sampling_status": "real_album_url_with_synthesized_generic_merchandising"
+    },
+    {
+      "id": "pos-tech-002-compact-wireless-earbuds",
+      "title": "Compact wireless earbuds",
+      "handle": "compact-wireless-earbuds",
+      "description": "Pocket-size earbuds with a clean charging case and everyday audio profile. The neutral design keeps them compatible with any device ecosystem.",
+      "category": "tech",
+      "tags": [
+        "earbuds",
+        "wireless",
+        "compact",
+        "tech",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 129,
+      "currency_code": "usd",
+      "compare_at_price": 174,
+      "images": [
+        "https://photo.yupoo.com/xtd8288/88e24f07/small.jpg"
+      ],
+      "variants": [
+        {
+          "title": "White / Standard",
+          "sku": "POS-TEC-002-01",
+          "options": {
+            "Color": "White",
+            "Size": "Standard"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 12900
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://xtd8288.x.yupoo.com/albums/176302805?uid=1&isSubCate=false&referrercate=654824",
+      "supplier_id": "tech",
+      "shipping_class": "insured-tech",
+      "source_sampling_status": "real_album_url_with_synthesized_generic_merchandising"
+    },
+    {
+      "id": "pos-tech-003-magnetic-portable-power-bank",
+      "title": "Magnetic portable power bank",
+      "handle": "magnetic-portable-power-bank",
+      "description": "A slim portable power bank with magnetic-style alignment and cable-free convenience for compatible phones. It is made for backup power on the move.",
+      "category": "tech",
+      "tags": [
+        "power-bank",
+        "portable",
+        "charging",
+        "tech",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 139,
+      "currency_code": "usd",
+      "compare_at_price": 188,
+      "images": [
+        "https://photo.yupoo.com/xtd8288/d5c21818/small.png"
+      ],
+      "variants": [
+        {
+          "title": "Black / Standard",
+          "sku": "POS-TEC-003-01",
+          "options": {
+            "Color": "Black",
+            "Size": "Standard"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 13900
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://xtd8288.x.yupoo.com/albums/147941574?uid=1&isSubCate=false&referrercate=654824",
+      "supplier_id": "tech",
+      "shipping_class": "insured-tech",
+      "source_sampling_status": "real_album_url_with_synthesized_generic_merchandising"
+    },
+    {
+      "id": "pos-tech-004-usb-c-fast-charging-kit",
+      "title": "USB-C fast charging kit",
+      "handle": "usb-c-fast-charging-kit",
+      "description": "A compact wall charger and cable kit for fast everyday charging. Keep one in a travel bag, desk drawer, or bedside setup.",
+      "category": "tech",
+      "tags": [
+        "charger",
+        "usb-c",
+        "fast-charging",
+        "tech",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 149,
+      "currency_code": "usd",
+      "compare_at_price": 201,
+      "images": [
+        "https://photo.yupoo.com/xtd8288/c14ab791/small.jpg"
+      ],
+      "variants": [
+        {
+          "title": "White / Standard",
+          "sku": "POS-TEC-004-01",
+          "options": {
+            "Color": "White",
+            "Size": "Standard"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 14900
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://xtd8288.x.yupoo.com/albums/146554682?uid=1&isSubCate=false&referrercate=654824",
+      "supplier_id": "tech",
+      "shipping_class": "insured-tech",
+      "source_sampling_status": "real_album_url_with_synthesized_generic_merchandising"
+    },
+    {
+      "id": "pos-tech-005-tablet-keyboard-folio-case",
+      "title": "Tablet keyboard folio case",
+      "handle": "tablet-keyboard-folio-case",
+      "description": "A protective tablet folio with integrated keyboard-style layout and adjustable viewing angle. It turns a tablet into a lightweight work setup.",
+      "category": "tech",
+      "tags": [
+        "tablet-case",
+        "keyboard",
+        "folio",
+        "tech",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 119,
+      "currency_code": "usd",
+      "compare_at_price": 161,
+      "images": [
+        "https://photo.yupoo.com/xtd8288/c151ecd6/small.jpeg"
+      ],
+      "variants": [
+        {
+          "title": "Charcoal / Standard",
+          "sku": "POS-TEC-005-01",
+          "options": {
+            "Color": "Charcoal",
+            "Size": "Standard"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 11900
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://xtd8288.x.yupoo.com/albums/124814961?uid=1&isSubCate=false&referrercate=654824",
+      "supplier_id": "tech",
+      "shipping_class": "insured-tech",
+      "source_sampling_status": "real_album_url_with_synthesized_generic_merchandising"
+    },
+    {
+      "id": "pos-tech-006-smartwatch-silicone-strap-set",
+      "title": "Smartwatch silicone strap set",
+      "handle": "smartwatch-silicone-strap-set",
+      "description": "A soft silicone strap set with a smooth sport feel and easy color rotation. It refreshes a wearable without using any branded language.",
+      "category": "tech",
+      "tags": [
+        "watch-strap",
+        "silicone",
+        "accessory",
+        "tech",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 129,
+      "currency_code": "usd",
+      "compare_at_price": 174,
+      "images": [
+        "https://photo.yupoo.com/xtd8288/3884eff2/small.png"
+      ],
+      "variants": [
+        {
+          "title": "Midnight / Standard",
+          "sku": "POS-TEC-006-01",
+          "options": {
+            "Color": "Midnight",
+            "Size": "Standard"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 12900
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://xtd8288.x.yupoo.com/albums/124449450?uid=1&isSubCate=false&referrercate=654824",
+      "supplier_id": "tech",
+      "shipping_class": "insured-tech",
+      "source_sampling_status": "real_album_url_with_synthesized_generic_merchandising"
+    },
+    {
+      "id": "pos-tech-007-wireless-charging-stand",
+      "title": "Wireless charging stand",
+      "handle": "wireless-charging-stand",
+      "description": "A vertical wireless charging stand that keeps the phone visible while powering up. It is ideal for desks, nightstands, and kitchen counters.",
+      "category": "tech",
+      "tags": [
+        "wireless-charger",
+        "stand",
+        "desk",
+        "tech",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 139,
+      "currency_code": "usd",
+      "compare_at_price": 188,
+      "images": [
+        "https://photo.yupoo.com/xtd8288/1d12e318/small.png"
+      ],
+      "variants": [
+        {
+          "title": "White / Standard",
+          "sku": "POS-TEC-007-01",
+          "options": {
+            "Color": "White",
+            "Size": "Standard"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 13900
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://xtd8288.x.yupoo.com/albums/124227616?uid=1&isSubCate=false&referrercate=654824",
+      "supplier_id": "tech",
+      "shipping_class": "insured-tech",
+      "source_sampling_status": "real_album_url_with_synthesized_generic_merchandising"
+    },
+    {
+      "id": "pos-tech-008-laptop-sleeve-with-accessory-pouch",
+      "title": "Laptop sleeve with accessory pouch",
+      "handle": "laptop-sleeve-with-accessory-pouch",
+      "description": "A padded laptop sleeve with a matching pouch for cables and small tech. The minimal exterior suits office, campus, and travel bags.",
+      "category": "tech",
+      "tags": [
+        "laptop-sleeve",
+        "pouch",
+        "grey",
+        "tech",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 149,
+      "currency_code": "usd",
+      "compare_at_price": 201,
+      "images": [
+        "https://photo.yupoo.com/xtd8288/ea2c475d/small.png"
+      ],
+      "variants": [
+        {
+          "title": "Grey / Standard",
+          "sku": "POS-TEC-008-01",
+          "options": {
+            "Color": "Grey",
+            "Size": "Standard"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 14900
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://xtd8288.x.yupoo.com/albums/114411349?uid=1&isSubCate=false&referrercate=654824",
+      "supplier_id": "tech",
+      "shipping_class": "insured-tech",
+      "source_sampling_status": "real_album_url_with_synthesized_generic_merchandising"
+    },
+    {
+      "id": "pos-tech-009-noise-reducing-gaming-headset",
+      "title": "Noise-reducing gaming headset",
+      "handle": "noise-reducing-gaming-headset",
+      "description": "A padded headset with boom microphone, adjustable headband, and bold gaming accent color. It is a budget-friendly add-on for streaming and play.",
+      "category": "tech",
+      "tags": [
+        "gaming-headset",
+        "microphone",
+        "noise-reducing",
+        "tech",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 119,
+      "currency_code": "usd",
+      "compare_at_price": 161,
+      "images": [
+        "https://photo.yupoo.com/xtd8288/1acbdacc/small.png"
+      ],
+      "variants": [
+        {
+          "title": "Black/Green / Standard",
+          "sku": "POS-TEC-009-01",
+          "options": {
+            "Color": "Black/Green",
+            "Size": "Standard"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 11900
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://xtd8288.x.yupoo.com/albums/114392741?uid=1&isSubCate=false&referrercate=654824",
+      "supplier_id": "tech",
+      "shipping_class": "insured-tech",
+      "source_sampling_status": "real_album_url_with_synthesized_generic_merchandising"
+    },
+    {
+      "id": "pos-tech-010-portable-mini-speaker",
+      "title": "Portable mini speaker",
+      "handle": "portable-mini-speaker",
+      "description": "A compact speaker with a textured body, strap loop, and travel-friendly size. It brings simple wireless audio to rooms, picnics, and trips.",
+      "category": "tech",
+      "tags": [
+        "speaker",
+        "portable",
+        "wireless",
+        "blue",
+        "source-sampled",
+        "unbranded",
+        "unbranded"
+      ],
+      "price": 129,
+      "currency_code": "usd",
+      "compare_at_price": 174,
+      "images": [
+        "https://photo.yupoo.com/xtd8288/16ddffca/small.png"
+      ],
+      "variants": [
+        {
+          "title": "Blue / Standard",
+          "sku": "POS-TEC-010-01",
+          "options": {
+            "Color": "Blue",
+            "Size": "Standard"
+          },
+          "inventory_quantity": 0,
+          "manage_inventory": false,
+          "prices": [
+            {
+              "currency_code": "usd",
+              "amount": 12900
+            }
+          ]
+        }
+      ],
+      "supplier_url": "https://xtd8288.x.yupoo.com/albums/114379749?uid=1&isSubCate=false&referrercate=654824",
+      "supplier_id": "tech",
+      "shipping_class": "insured-tech",
+      "source_sampling_status": "real_album_url_with_synthesized_generic_merchandising"
+    }
+  ]
+}

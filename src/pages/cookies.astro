@@ -1,0 +1,9 @@
+---
+import LegalLayout from '../layouts/LegalLayout.astro';
+import { marked } from '../lib/marked-stub';
+import raw from '../content/legal/cookies.md?raw';
+const content = marked(raw);
+---
+<LegalLayout title="Cookie Policy" description="How Piece of Stass uses cookies and similar technologies." lastUpdated="June 21, 2026">
+  <div set:html={content} />
+</LegalLayout>

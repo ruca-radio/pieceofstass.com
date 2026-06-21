@@ -1,0 +1,119 @@
+---
+import CartButton from './islands/CartButton';
+import SearchButton from './islands/SearchButton';
+import MobileMenu from './islands/MobileMenu';
+import { allCategories } from '../lib/products';
+
+interface Props {
+  transparent?: boolean;
+}
+
+const { transparent = false } = Astro.props;
+
+const navCategories = allCategories.sort((a, b) => a.sort_order - b.sort_order);
+const currentPath = Astro.url.pathname;
+---
+
+<header
+  id="site-header"
+  class={`site-header ${transparent ? 'transparent' : ''}`}
+  style={`
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: ${transparent ? 'transparent' : 'var(--color-ink)'};
+    border-bottom: 1px solid ${transparent ? 'transparent' : 'var(--color-charcoal)'};
+    transition: background-color 240ms, border-color 240ms;
+  `}
+>
+  <div style="max-width: 1280px; margin: 0 auto; padding: 0 16px; height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 16px;">
+    <!-- Mobile: Hamburger -->
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <MobileMenu categories={navCategories} client:load />
+      <!-- Logo -->
+      <a
+        href="/"
+        aria-label="Piece of Stass — home"
+        style="display: flex; align-items: center; text-decoration: none; gap: 8px; flex-shrink: 0;"
+      >
+        <svg
+          width="32"
+          height="32"
+          viewBox="0 0 32 32"
+          fill="none"
+          aria-hidden="true"
+          style="flex-shrink: 0;"
+        >
+          <!-- P mark: stylized P with lime accent -->
+          <rect width="32" height="32" rx="6" fill="var(--color-lime)" />
+          <path
+            d="M9 7h8c2.761 0 5 2.239 5 5s-2.239 5-5 5H9V7z"
+            fill="var(--color-ink)"
+          />
+          <path d="M9 17v8" stroke="var(--color-ink)" stroke-width="3" stroke-linecap="round" />
+        </svg>
+        <span
+          style="font-family: var(--font-family-display); font-weight: 700; font-size: 18px; color: var(--color-paper); letter-spacing: -0.02em; line-height: 1;"
+        >
+          STASS
+        </span>
+      </a>
+    </div>
+
+    <!-- Desktop nav -->
+    <nav
+      aria-label="Main navigation"
+      style="display: none; align-items: center; gap: 4px; flex: 1; justify-content: center;"
+      class="desktop-nav"
+    >
+      <a
+        href="/shop"
+        style={`font-size: 14px; font-weight: 600; padding: 6px 12px; border-radius: 999px; text-decoration: none; transition: background 150ms; color: ${currentPath === '/shop' ? 'var(--color-lime)' : 'var(--color-paper)'};`}
+      >
+        New
+      </a>
+      {navCategories.slice(0, 6).map((cat) => (
+        <a
+          href={`/shop/${cat.slug}`}
+          style={`font-size: 14px; font-weight: 500; padding: 6px 12px; border-radius: 999px; text-decoration: none; transition: background 150ms; color: ${currentPath === `/shop/${cat.slug}` ? 'var(--color-lime)' : 'var(--color-paper)'};`}
+        >
+          {cat.title}
+        </a>
+      ))}
+    </nav>
+
+    <!-- Actions -->
+    <div style="display: flex; align-items: center; gap: 8px; flex-shrink: 0;">
+      <SearchButton client:load />
+      <CartButton client:load />
+    </div>
+  </div>
+</header>
+
+<style>
+  @media (min-width: 768px) {
+    .desktop-nav {
+      display: flex !important;
+    }
+  }
+
+  .site-header a:hover {
+    color: var(--color-lime) !important;
+  }
+</style>
+
+<script>
+  // Sticky header bg on scroll
+  const header = document.getElementById('site-header');
+  if (header && header.classList.contains('transparent')) {
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 60) {
+        header.style.backgroundColor = 'var(--color-ink)';
+        header.style.borderBottomColor = 'var(--color-charcoal)';
+      } else {
+        header.style.backgroundColor = 'transparent';
+        header.style.borderBottomColor = 'transparent';
+      }
+    }, { passive: true });
+  }
+</script>

@@ -1,0 +1,25 @@
+---
+const messages = [
+  'FREE SHIPPING ON ORDERS $50+ — USE CODE: STASH50',
+  'NEW DROPS EVERY FRIDAY — RAID THE STASH',
+  'TASTE, NOT THE PRICE TAG — SHOP THE EDIT',
+  '10–20 DAY DELIVERY — PRICED FOR THE SCROLL',
+  'PAY IN 4 WITH KLARNA — ZERO INTEREST',
+];
+
+const track = [...messages, ...messages].join('   ·   ');
+---
+
+<div
+  class="announcement-bar"
+  style="background-color: var(--color-lime); color: var(--color-ink); overflow: hidden; height: 36px; display: flex; align-items: center;"
+  role="marquee"
+  aria-label="Announcements"
+>
+  <div
+    class="marquee-track"
+    style="white-space: nowrap; font-family: var(--font-family-mono); font-size: 11px; letter-spacing: 0.08em; padding: 0 16px; will-change: transform;"
+  >
+    {track}
+  </div>
+</div>
