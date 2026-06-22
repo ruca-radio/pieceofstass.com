@@ -1,8 +1,19 @@
 ---
 /**
  * AdminLayout.astro — shell for all /admin/* pages.
- * Left-rail nav with all sections, top bar with global search + profile dropdown.
- * Toast notification system (global, accessible via window.adminToast()).
+ *
+ * Full visual rebuild — June 2026. Replaces the original utilitarian dark
+ * theme with a proper design system: refined palette, typography, spacing,
+ * buttons, form controls, and tables. Every admin page inherits the new
+ * look through the shared --adm-* tokens defined here.
+ *
+ * Layout structure:
+ *   .adm-shell
+ *     ├─ .adm-rail        (left nav, 248px)
+ *     ├─ .adm-topbar      (sticky)
+ *     └─ .adm-main        (page slot)
+ *
+ * Toast helper available globally via window.adminToast(message, level).
  */
 export interface Props {
   title: string;
@@ -12,17 +23,42 @@ export interface Props {
 const { title, activeNav = 'dashboard' } = Astro.props;
 
 const nav = [
-  { key: 'dashboard',  label: 'Dashboard',        href: '/admin',                icon: '▦' },
-  { key: 'orders',     label: 'Orders',            href: '/admin/orders',         icon: '📦' },
-  { key: 'products',   label: 'Products',          href: '/admin/products',       icon: '🏷' },
-  { key: 'customers',  label: 'Customers',         href: '/admin/customers',      icon: '👤' },
-  { key: 'carts',      label: 'Abandoned Carts',   href: '/admin/abandoned-carts',icon: '🛒' },
-  { key: 'inventory',  label: 'Inventory',         href: '/admin/inventory',      icon: '📋' },
-  { key: 'suppliers',  label: 'Suppliers',         href: '/admin/suppliers',      icon: '🏭' },
-  { key: 'analytics',  label: 'Analytics',         href: '/admin/analytics',      icon: '📈' },
-  { key: 'marketing',  label: 'Marketing',         href: '/admin/marketing',      icon: '📣' },
-  { key: 'settings',   label: 'Settings',          href: '/admin/settings',       icon: '⚙' },
+  // OPERATIONS
+  { section: 'Operations' },
+  { key: 'dashboard',  label: 'Dashboard',         href: '/admin',                  icon: 'home' },
+  { key: 'orders',     label: 'Orders',            href: '/admin/orders',           icon: 'box' },
+  { key: 'carts',      label: 'Abandoned carts',   href: '/admin/abandoned-carts',  icon: 'cart' },
+  // CATALOG
+  { section: 'Catalog' },
+  { key: 'products',   label: 'Products',          href: '/admin/products',         icon: 'tag' },
+  { key: 'inventory',  label: 'Inventory',         href: '/admin/inventory',        icon: 'clipboard' },
+  { key: 'suppliers',  label: 'Suppliers',         href: '/admin/suppliers',        icon: 'truck' },
+  // GROWTH
+  { section: 'Growth' },
+  { key: 'customers',  label: 'Customers',         href: '/admin/customers',        icon: 'user' },
+  { key: 'analytics',  label: 'Analytics',         href: '/admin/analytics',        icon: 'chart' },
+  { key: 'marketing',  label: 'Marketing',         href: '/admin/marketing',        icon: 'megaphone' },
+  // SYSTEM
+  { section: 'System' },
+  { key: 'settings',   label: 'Settings',          href: '/admin/settings',         icon: 'gear' },
 ];
+
+// Inline SVG icon set — single source for all nav and inline icons.
+const ICONS: Record<string, string> = {
+  home:      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>',
+  box:       '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m21 8-9 4-9-4"/><path d="M3 8v8l9 4 9-4V8"/><path d="M3 8l9-4 9 4"/></svg>',
+  cart:      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>',
+  tag:       '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41 12 22l-9-9V3h10z"/><circle cx="7" cy="7" r="1.5"/></svg>',
+  clipboard: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg>',
+  truck:     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 18V6h-12v12h12z"/><path d="M14 9h4l4 4v5h-8z"/><circle cx="7" cy="20" r="2"/><circle cx="18" cy="20" r="2"/></svg>',
+  user:      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
+  chart:     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>',
+  megaphone: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 19 3 19 21 3 13 3 11"/><path d="M11 11v8"/><path d="M19 8a3 3 0 0 1 0 6"/></svg>',
+  gear:      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.18a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.18a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1"/></svg>',
+  search:    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>',
+  external:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>',
+  signout:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>',
+};
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -30,695 +66,788 @@ const nav = [
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="noindex, nofollow" />
+  <meta name="theme-color" content="#0b0d10" />
   <title>{title} — Piece of Stass Admin</title>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="preconnect" href="https://rsms.me/" />
+  <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
 
+  <style is:global>
+    /*  ────────────────────────────────────────────────────────────────
+        Design tokens — Atelier Admin
+        Charcoal canvas, refined neutrals, single warm accent (rose),
+        functional colors only where they earn it.
+        ──────────────────────────────────────────────────────────────── */
     :root {
-      --adm-bg: #0f0f10;
-      --adm-rail: #141416;
-      --adm-surface: #1c1c1f;
-      --adm-surface2: #242427;
-      --adm-border: #2a2a2e;
-      --adm-text: #e8e8e3;
-      --adm-muted: #8a8a8e;
-      --adm-lime: #C6FF3A;
-      --adm-ink: #0A0A0B;
-      --adm-violet: #7B5CFF;
-      --adm-success: #2FA866;
-      --adm-error: #E5484D;
-      --adm-warning: #E8A33D;
-      --adm-font: Inter, system-ui, -apple-system, sans-serif;
-      --adm-mono: "Space Mono", ui-monospace, monospace;
-      --adm-display: "Space Grotesk", Inter, sans-serif;
+      /* Surfaces */
+      --adm-bg:        #0b0d10;
+      --adm-rail:      #0e1115;
+      --adm-surface:   #14181d;
+      --adm-elev:      #1a1f26;
+      --adm-hover:     #1f242c;
+      --adm-line:      #232830;
+      --adm-line-soft: #1c2128;
+
+      /* Text */
+      --adm-text:      #e6e8eb;
+      --adm-heading:   #f5f6f8;
+      --adm-muted:     #8a92a0;
+      --adm-faint:     #5a626d;
+
+      /* Brand accent — warm rose, single source */
+      --adm-accent:    #d97e7e;
+      --adm-accent-h:  #e89292;
+      --adm-accent-soft: rgba(217,126,126,0.14);
+      --adm-accent-bd:   rgba(217,126,126,0.32);
+
+      /* Functional */
+      --adm-success:   #4cb47e;
+      --adm-success-soft: rgba(76,180,126,0.14);
+      --adm-warning:   #d4a24a;
+      --adm-warning-soft: rgba(212,162,74,0.14);
+      --adm-error:     #d85a5a;
+      --adm-error-soft: rgba(216,90,90,0.14);
+      --adm-info:      #6fa8d6;
+      --adm-info-soft: rgba(111,168,214,0.14);
+
+      /* Legacy aliases — pages that still reference these get the new look for free. */
+      --adm-violet:    var(--adm-accent);
+      --adm-lime:      var(--adm-accent);
+      --adm-ink:       var(--adm-bg);
+      --adm-border:    var(--adm-line);
+      --bg:            var(--adm-bg);
+      --surface:       var(--adm-surface);
+      --text:          var(--adm-text);
+      --muted:         var(--adm-muted);
+      --border:        var(--adm-line);
+      --violet:        var(--adm-accent);
+      --lime:          var(--adm-accent);
+      --error:         var(--adm-error);
+      --ink:           var(--adm-bg);
+
+      /* Typography */
+      --adm-font:     'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      --adm-display:  var(--adm-font);
+      --adm-mono:     ui-monospace, 'JetBrains Mono', SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      --font:         var(--adm-font);
+      --display:      var(--adm-display);
+
+      /* Geometry */
+      --adm-radius:    8px;
+      --adm-radius-sm: 6px;
+      --adm-radius-lg: 12px;
+      --adm-shadow:    0 1px 0 rgba(0,0,0,0.4), 0 8px 24px -8px rgba(0,0,0,0.5);
+      --adm-shadow-pop: 0 12px 40px -12px rgba(0,0,0,0.7), 0 2px 8px rgba(0,0,0,0.3);
     }
 
-    html, body {
-      height: 100%;
-      background: var(--adm-bg);
-      color: var(--adm-text);
+    @supports (font-variation-settings: normal) {
+      :root { --adm-font: 'Inter var', system-ui, sans-serif; }
+    }
+
+    html, body { background: var(--adm-bg); }
+    body {
       font-family: var(--adm-font);
+      font-feature-settings: 'cv11', 'ss01', 'ss03';
+      color: var(--adm-text);
       font-size: 14px;
       line-height: 1.5;
       -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
     }
 
+    /*  ────────────────────────────────────────────────────────────────
+        Shell
+        ──────────────────────────────────────────────────────────────── */
     .adm-shell {
-      display: flex;
+      display: grid;
+      grid-template-columns: 248px 1fr;
       min-height: 100vh;
     }
+    @media (max-width: 900px) {
+      .adm-shell { grid-template-columns: 1fr; }
+      .adm-rail { display: none; } /* desktop-only for v1 */
+    }
 
-    /* ── Left Rail ── */
+    /*  ────────────────────────────────────────────────────────────────
+        Left rail
+        ──────────────────────────────────────────────────────────────── */
     .adm-rail {
-      width: 220px;
-      flex-shrink: 0;
       background: var(--adm-rail);
-      border-right: 1px solid var(--adm-border);
-      display: flex;
-      flex-direction: column;
+      border-right: 1px solid var(--adm-line);
+      padding: 18px 12px 24px;
       position: sticky;
       top: 0;
       height: 100vh;
       overflow-y: auto;
-    }
-
-    .adm-brand {
-      padding: 20px 16px 16px;
-      border-bottom: 1px solid var(--adm-border);
       display: flex;
       flex-direction: column;
-      gap: 2px;
+    }
+    .adm-brand {
+      display: flex !important;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 10px 18px;
+      text-decoration: none;
+      border-bottom: 1px solid var(--adm-line-soft);
+      margin-bottom: 14px;
+    }
+    .adm-brand img {
+      width: 32px !important;
+      height: 32px !important;
+      border-radius: 7px;
+      object-fit: cover;
     }
     .adm-brand-name {
-      font-family: var(--adm-display);
-      font-weight: 700;
-      font-size: 15px;
-      color: var(--adm-lime);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--adm-heading);
       letter-spacing: -0.01em;
+      line-height: 1.2;
     }
     .adm-brand-sub {
-      font-size: 11px;
-      color: var(--adm-muted);
-      letter-spacing: 0.04em;
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      color: var(--adm-faint);
+      font-weight: 600;
       text-transform: uppercase;
     }
 
-    .adm-nav {
-      padding: 12px 8px;
-      flex: 1;
+    .adm-nav-section {
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      color: var(--adm-faint);
+      padding: 14px 12px 6px;
+      font-weight: 600;
+      text-transform: uppercase;
     }
+    .adm-nav-section:first-child { padding-top: 4px; }
+
     .adm-nav-item {
       display: flex;
       align-items: center;
-      gap: 9px;
-      padding: 8px 10px;
-      border-radius: 6px;
-      text-decoration: none;
-      color: var(--adm-muted);
-      font-size: 13px;
-      font-weight: 500;
-      transition: background 0.1s, color 0.1s;
-      margin-bottom: 2px;
-    }
-    .adm-nav-item:hover {
-      background: var(--adm-surface);
+      gap: 11px;
+      padding: 7px 10px;
+      border-radius: var(--adm-radius-sm);
       color: var(--adm-text);
+      font-size: 13.5px;
+      font-weight: 500;
+      text-decoration: none;
+      margin-bottom: 1px;
+      transition: background 120ms, color 120ms;
     }
-    .adm-nav-item.active {
-      background: var(--adm-surface2);
-      color: var(--adm-lime);
-      font-weight: 600;
+    .adm-nav-item:hover { background: var(--adm-hover); }
+    .adm-nav-item.is-active {
+      background: var(--adm-accent-soft);
+      color: var(--adm-accent-h);
     }
+    .adm-nav-item.is-active .adm-nav-icon { color: var(--adm-accent-h); }
     .adm-nav-icon {
-      width: 18px;
-      text-align: center;
-      font-size: 14px;
-      flex-shrink: 0;
-    }
-    .adm-nav-section {
-      font-size: 10px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
+      width: 16px;
+      height: 16px;
       color: var(--adm-muted);
-      padding: 10px 10px 4px;
-      opacity: 0.6;
+      flex-shrink: 0;
+      display: inline-flex;
     }
+    .adm-nav-icon svg { width: 100%; height: 100%; }
 
     .adm-rail-footer {
-      padding: 12px 8px;
-      border-top: 1px solid var(--adm-border);
-    }
-    .adm-signout {
-      display: flex;
-      align-items: center;
-      gap: 9px;
-      padding: 8px 10px;
-      border-radius: 6px;
-      color: var(--adm-muted);
-      font-size: 13px;
-      font-weight: 500;
-      text-decoration: none;
-      cursor: pointer;
-      background: none;
-      border: none;
-      width: 100%;
-      text-align: left;
-      transition: background 0.1s, color 0.1s;
-    }
-    .adm-signout:hover {
-      background: var(--adm-surface);
-      color: var(--adm-error);
-    }
-
-    /* ── Main Area ── */
-    .adm-main {
-      flex: 1;
+      margin-top: auto;
+      padding-top: 16px;
+      border-top: 1px solid var(--adm-line-soft);
       display: flex;
       flex-direction: column;
-      min-width: 0;
-      overflow-x: auto;
+      gap: 4px;
     }
 
+    /*  ────────────────────────────────────────────────────────────────
+        Topbar
+        ──────────────────────────────────────────────────────────────── */
+    .adm-content { display: flex; flex-direction: column; min-width: 0; }
     .adm-topbar {
-      padding: 10px 24px;
-      border-bottom: 1px solid var(--adm-border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: var(--adm-rail);
       position: sticky;
       top: 0;
-      z-index: 10;
+      z-index: 30;
+      display: flex;
+      align-items: center;
       gap: 16px;
+      padding: 14px 32px;
+      background: rgba(11,13,16,0.85);
+      backdrop-filter: saturate(160%) blur(12px);
+      -webkit-backdrop-filter: saturate(160%) blur(12px);
+      border-bottom: 1px solid var(--adm-line);
     }
     .adm-page-title {
       font-family: var(--adm-display);
-      font-weight: 700;
-      font-size: 17px;
+      font-size: 18px;
+      font-weight: 600;
       letter-spacing: -0.01em;
-      color: var(--adm-text);
-      white-space: nowrap;
+      color: var(--adm-heading);
+      margin-right: auto;
+      line-height: 1;
     }
-
-    /* Global search */
-    .adm-global-search {
-      flex: 1;
-      max-width: 400px;
+    .adm-search {
       position: relative;
-    }
-    .adm-global-search input {
-      width: 100%;
-      background: var(--adm-surface2);
-      border: 1px solid var(--adm-border);
-      border-radius: 6px;
-      color: var(--adm-text);
-      font-family: var(--adm-font);
-      font-size: 13px;
-      padding: 6px 10px 6px 32px;
-      outline: none;
-      transition: border-color 0.15s;
-    }
-    .adm-global-search input:focus {
-      border-color: var(--adm-violet);
-    }
-    .adm-global-search input::placeholder {
-      color: var(--adm-muted);
+      display: flex;
+      align-items: center;
+      width: 320px;
+      max-width: 100%;
     }
     .adm-search-icon {
       position: absolute;
       left: 10px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--adm-muted);
-      font-size: 13px;
+      width: 14px;
+      height: 14px;
+      color: var(--adm-faint);
       pointer-events: none;
     }
-    .adm-search-results {
-      position: absolute;
-      top: calc(100% + 4px);
-      left: 0;
-      right: 0;
-      background: var(--adm-surface);
-      border: 1px solid var(--adm-border);
-      border-radius: 8px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-      z-index: 100;
-      display: none;
-      max-height: 360px;
-      overflow-y: auto;
-    }
-    .adm-search-results.open { display: block; }
-    .adm-search-result-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 9px 12px;
-      cursor: pointer;
-      text-decoration: none;
-      color: var(--adm-text);
-      font-size: 13px;
-      border-bottom: 1px solid var(--adm-border);
-    }
-    .adm-search-result-item:last-child { border-bottom: none; }
-    .adm-search-result-item:hover { background: var(--adm-surface2); }
-    .adm-search-result-label {
-      font-size: 11px;
-      color: var(--adm-muted);
-      font-family: var(--adm-mono);
-    }
-
-    .adm-topbar-right {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-shrink: 0;
-    }
-    .adm-store-link {
-      color: var(--adm-violet);
-      text-decoration: none;
-      font-family: var(--adm-font);
-      font-size: 12px;
-      padding: 4px 10px;
-      border: 1px solid var(--adm-border);
-      border-radius: 4px;
-      transition: border-color 0.1s;
-      white-space: nowrap;
-    }
-    .adm-store-link:hover { border-color: var(--adm-violet); }
-
-    .adm-content {
-      flex: 1;
-      padding: 24px;
-    }
-
-    /* ── Utility classes for pages ── */
-    .adm-card {
-      background: var(--adm-surface);
-      border: 1px solid var(--adm-border);
-      border-radius: 8px;
-      padding: 16px;
-    }
-    .adm-table {
+    .adm-search-icon svg { width: 100%; height: 100%; }
+    .adm-search input {
       width: 100%;
-      border-collapse: collapse;
-      font-size: 13px;
-    }
-    .adm-table th {
-      text-align: left;
-      padding: 8px 12px;
-      font-size: 11px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: var(--adm-muted);
-      border-bottom: 1px solid var(--adm-border);
-      white-space: nowrap;
-      cursor: pointer;
-      user-select: none;
-    }
-    .adm-table th:hover { color: var(--adm-text); }
-    .adm-table td {
-      padding: 10px 12px;
-      border-bottom: 1px solid var(--adm-border);
+      padding: 8px 12px 8px 32px;
+      background: var(--adm-surface);
+      border: 1px solid var(--adm-line);
+      border-radius: var(--adm-radius);
       color: var(--adm-text);
-      vertical-align: middle;
+      font: inherit;
+      font-size: 13px;
+      transition: border-color 120ms, background 120ms;
     }
-    .adm-table tr:last-child td { border-bottom: none; }
-    .adm-table tbody tr:hover td { background: var(--adm-surface2); }
-    .adm-table a { color: var(--adm-lime); text-decoration: none; }
-    .adm-table a:hover { text-decoration: underline; }
-
-    .adm-checkbox {
-      width: 15px;
-      height: 15px;
-      cursor: pointer;
-      accent-color: var(--adm-lime);
+    .adm-search input::placeholder { color: var(--adm-faint); }
+    .adm-search input:focus {
+      outline: none;
+      border-color: var(--adm-accent-bd);
+      background: var(--adm-elev);
     }
 
-    .adm-badge {
-      display: inline-block;
-      padding: 2px 8px;
-      border-radius: 4px;
-      font-size: 11px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      white-space: nowrap;
-    }
-    .adm-badge-pending    { background: rgba(232,163,61,0.15); color: #E8A33D; }
-    .adm-badge-captured   { background: rgba(111,123,95,0.15); color: #a388ff; }
-    .adm-badge-supplier   { background: rgba(178,94,107,0.12); color: var(--adm-lime); }
-    .adm-badge-shipped    { background: rgba(47,168,102,0.15); color: var(--adm-success); }
-    .adm-badge-delivered  { background: rgba(47,168,102,0.2);  color: var(--adm-success); }
-    .adm-badge-refunded   { background: rgba(229,72,77,0.12);  color: var(--adm-error); }
-    .adm-badge-cancelled  { background: rgba(138,138,142,0.12); color: var(--adm-muted); }
-    .adm-badge-active     { background: rgba(47,168,102,0.15); color: var(--adm-success); }
-    .adm-badge-draft      { background: rgba(138,138,142,0.12); color: var(--adm-muted); }
-    .adm-badge-warning    { background: rgba(232,163,61,0.15); color: var(--adm-warning); }
-
-    .adm-btn {
+    .adm-topbar-link {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 7px 14px;
-      border-radius: 6px;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      border: 1px solid transparent;
+      color: var(--adm-muted);
+      font-size: 12px;
+      font-weight: 500;
       text-decoration: none;
-      transition: opacity 0.1s, border-color 0.1s;
-      white-space: nowrap;
-      font-family: var(--adm-font);
+      padding: 6px 10px;
+      border-radius: var(--adm-radius-sm);
+      transition: color 120ms, background 120ms;
     }
-    .adm-btn-primary   { background: var(--adm-lime); color: var(--adm-ink); }
-    .adm-btn-secondary { background: var(--adm-surface2); color: var(--adm-text); border-color: var(--adm-border); }
-    .adm-btn-danger    { background: rgba(229,72,77,0.15); color: var(--adm-error); border-color: rgba(229,72,77,0.3); }
-    .adm-btn-success   { background: rgba(47,168,102,0.15); color: var(--adm-success); border-color: rgba(47,168,102,0.3); }
-    .adm-btn:hover     { opacity: 0.85; }
-    .adm-btn:disabled  { opacity: 0.4; cursor: not-allowed; }
+    .adm-topbar-link:hover { color: var(--adm-text); background: var(--adm-hover); }
+    .adm-topbar-link svg { width: 12px; height: 12px; }
 
-    .adm-input, .adm-select, .adm-textarea {
-      background: var(--adm-surface2);
-      border: 1px solid var(--adm-border);
-      border-radius: 6px;
-      color: var(--adm-text);
-      font-family: var(--adm-font);
-      font-size: 13px;
-      padding: 7px 10px;
-      outline: none;
+    /*  ────────────────────────────────────────────────────────────────
+        Main area
+        ──────────────────────────────────────────────────────────────── */
+    .adm-main {
+      padding: 32px;
+      max-width: 1400px;
       width: 100%;
-      transition: border-color 0.1s;
+      margin: 0 auto;
     }
-    .adm-input:focus, .adm-select:focus, .adm-textarea:focus {
-      border-color: var(--adm-violet);
+    @media (max-width: 700px) {
+      .adm-main { padding: 20px 16px; }
+      .adm-topbar { padding: 12px 16px; }
     }
-    .adm-input::placeholder { color: var(--adm-muted); }
-    .adm-textarea { resize: vertical; min-height: 80px; }
 
-    .adm-label {
-      display: block;
+    /*  ────────────────────────────────────────────────────────────────
+        Headings / typography helpers
+        ──────────────────────────────────────────────────────────────── */
+    h1, h2, h3, h4 {
+      color: var(--adm-heading);
+      font-family: var(--adm-display);
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      line-height: 1.25;
+    }
+    h1 { font-size: 22px; }
+    h2 { font-size: 16px; }
+    h3 { font-size: 14px; }
+    p { color: var(--adm-text); }
+    code, kbd, samp { font-family: var(--adm-mono); font-size: 12.5px; }
+
+    .adm-eyebrow {
       font-size: 11px;
+      letter-spacing: 0.1em;
+      color: var(--adm-faint);
       font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: var(--adm-muted);
-      margin-bottom: 5px;
+      margin-bottom: 6px;
     }
+    .adm-muted { color: var(--adm-muted); }
+    .adm-faint { color: var(--adm-faint); }
+    .adm-mono  { font-family: var(--adm-mono); font-feature-settings: 'tnum'; }
 
+    /*  ────────────────────────────────────────────────────────────────
+        Cards
+        ──────────────────────────────────────────────────────────────── */
+    .adm-card {
+      background: var(--adm-surface);
+      border: 1px solid var(--adm-line);
+      border-radius: var(--adm-radius-lg);
+      padding: 20px;
+      box-shadow: var(--adm-shadow);
+    }
+    .adm-card + .adm-card { margin-top: 16px; }
+    .adm-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .adm-card-title { font-size: 15px; font-weight: 600; color: var(--adm-heading); }
+    .adm-card-sub   { font-size: 12.5px; color: var(--adm-muted); margin-top: 2px; }
+
+    /*  ────────────────────────────────────────────────────────────────
+        KPI tiles
+        ──────────────────────────────────────────────────────────────── */
     .adm-kpi-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
-      gap: 12px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
       margin-bottom: 24px;
     }
     .adm-kpi {
       background: var(--adm-surface);
-      border: 1px solid var(--adm-border);
-      border-radius: 8px;
-      padding: 14px 16px;
+      border: 1px solid var(--adm-line);
+      border-radius: var(--adm-radius-lg);
+      padding: 18px 20px;
+      transition: border-color 120ms, transform 120ms;
     }
+    .adm-kpi:hover { border-color: var(--adm-accent-bd); }
     .adm-kpi-label {
       font-size: 11px;
+      letter-spacing: 0.08em;
+      color: var(--adm-muted);
       font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: var(--adm-muted);
-      margin-bottom: 6px;
+      margin-bottom: 8px;
     }
     .adm-kpi-value {
       font-family: var(--adm-display);
-      font-weight: 700;
-      font-size: 24px;
+      font-size: 28px;
+      font-weight: 600;
       letter-spacing: -0.02em;
-      color: var(--adm-text);
-      line-height: 1;
+      color: var(--adm-heading);
+      font-feature-settings: 'tnum';
+      line-height: 1.1;
     }
+    .adm-kpi-delta {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      margin-top: 6px;
+      font-weight: 500;
+    }
+    .adm-kpi-delta.up   { color: var(--adm-success); }
+    .adm-kpi-delta.down { color: var(--adm-error); }
+    .adm-kpi-delta.flat { color: var(--adm-muted); }
+
+    /*  ────────────────────────────────────────────────────────────────
+        Buttons
+        ──────────────────────────────────────────────────────────────── */
+    .adm-btn,
+    button:not(.adm-search button):not(.adm-toast button):not(.adm-bare),
+    input[type="submit"],
+    input[type="button"] {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 8px 14px;
+      background: var(--adm-elev);
+      border: 1px solid var(--adm-line);
+      border-radius: var(--adm-radius);
+      color: var(--adm-text);
+      font: inherit;
+      font-size: 13px;
+      font-weight: 500;
+      line-height: 1;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 120ms, border-color 120ms, color 120ms;
+      white-space: nowrap;
+    }
+    .adm-btn:hover,
+    button:not(.adm-search button):not(.adm-toast button):not(.adm-bare):hover,
+    input[type="submit"]:hover,
+    input[type="button"]:hover { background: var(--adm-hover); border-color: var(--adm-line); }
+
+    .adm-btn-primary {
+      background: var(--adm-accent);
+      border-color: var(--adm-accent);
+      color: #1a0f0f;
+      font-weight: 600;
+    }
+    .adm-btn-primary:hover { background: var(--adm-accent-h); border-color: var(--adm-accent-h); color: #1a0f0f; }
+
+    .adm-btn-danger {
+      background: transparent;
+      border-color: var(--adm-error);
+      color: var(--adm-error);
+    }
+    .adm-btn-danger:hover { background: var(--adm-error-soft); color: #f8a0a0; }
+
+    .adm-btn-ghost { background: transparent; border-color: transparent; color: var(--adm-muted); }
+    .adm-btn-ghost:hover { background: var(--adm-hover); color: var(--adm-text); border-color: transparent; }
+
+    .adm-btn-sm { padding: 6px 10px; font-size: 12px; }
+    .adm-btn-lg { padding: 10px 18px; font-size: 14px; }
+    .adm-btn:disabled, button:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /*  ────────────────────────────────────────────────────────────────
+        Inputs / forms
+        ──────────────────────────────────────────────────────────────── */
+    input[type="text"], input[type="email"], input[type="tel"],
+    input[type="number"], input[type="password"], input[type="url"],
+    input[type="date"], input[type="search"],
+    select, textarea {
+      width: 100%;
+      padding: 9px 12px;
+      background: var(--adm-bg);
+      border: 1px solid var(--adm-line);
+      border-radius: var(--adm-radius);
+      color: var(--adm-text);
+      font: inherit;
+      font-size: 13.5px;
+      line-height: 1.4;
+      transition: border-color 120ms, background 120ms;
+    }
+    input::placeholder, textarea::placeholder { color: var(--adm-faint); }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--adm-accent-bd);
+      background: var(--adm-elev);
+      box-shadow: 0 0 0 3px var(--adm-accent-soft);
+    }
+    textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
+    select {
+      appearance: none;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238a92a0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 32px;
+    }
+
+    label {
+      display: block;
+      font-size: 11.5px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: var(--adm-muted);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .adm-field { margin-bottom: 16px; }
+    .adm-field-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+    }
+    .adm-hint { font-size: 12px; color: var(--adm-muted); margin-top: 6px; }
+
+    /*  ────────────────────────────────────────────────────────────────
+        Tables
+        ──────────────────────────────────────────────────────────────── */
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      font-size: 13px;
+    }
+    table th {
+      text-align: left;
+      font-weight: 600;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--adm-muted);
+      padding: 11px 14px;
+      background: var(--adm-elev);
+      border-bottom: 1px solid var(--adm-line);
+      white-space: nowrap;
+    }
+    table th:first-child { border-top-left-radius: var(--adm-radius); }
+    table th:last-child  { border-top-right-radius: var(--adm-radius); }
+    table td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--adm-line-soft);
+      color: var(--adm-text);
+      vertical-align: middle;
+    }
+    table tr:last-child td { border-bottom: 0; }
+    table tr:hover td { background: var(--adm-hover); }
+    .adm-table-wrap {
+      background: var(--adm-surface);
+      border: 1px solid var(--adm-line);
+      border-radius: var(--adm-radius-lg);
+      overflow-x: auto;
+      box-shadow: var(--adm-shadow);
+    }
+
+    /*  ────────────────────────────────────────────────────────────────
+        Badges
+        ──────────────────────────────────────────────────────────────── */
+    .adm-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      line-height: 1.4;
+      background: var(--adm-hover);
+      color: var(--adm-text);
+      border: 1px solid transparent;
+    }
+    .adm-badge::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+      opacity: 0.85;
+    }
+    .adm-badge.success { color: var(--adm-success); background: var(--adm-success-soft); }
+    .adm-badge.warning { color: var(--adm-warning); background: var(--adm-warning-soft); }
+    .adm-badge.error,
+    .adm-badge.danger  { color: var(--adm-error); background: var(--adm-error-soft); }
+    .adm-badge.info    { color: var(--adm-info); background: var(--adm-info-soft); }
+    .adm-badge.accent  { color: var(--adm-accent-h); background: var(--adm-accent-soft); }
+    .adm-badge.neutral { color: var(--adm-muted); background: var(--adm-hover); }
+
+    /* Order status badges */
+    .adm-badge-pending   { color: var(--adm-muted);    background: var(--adm-hover); }
+    .adm-badge-captured  { color: var(--adm-info);     background: var(--adm-info-soft); }
+    .adm-badge-supplier  { color: var(--adm-accent-h); background: var(--adm-accent-soft); }
+    .adm-badge-shipped   { color: var(--adm-info);     background: var(--adm-info-soft); }
+    .adm-badge-delivered { color: var(--adm-success);  background: var(--adm-success-soft); }
+    .adm-badge-refunded  { color: var(--adm-warning);  background: var(--adm-warning-soft); }
+    .adm-badge-cancelled { color: var(--adm-error);    background: var(--adm-error-soft); }
+    .adm-badge-active    { color: var(--adm-success);  background: var(--adm-success-soft); }
+    .adm-badge-warning   { color: var(--adm-warning);  background: var(--adm-warning-soft); }
+    .adm-badge-pending::before, .adm-badge-captured::before, .adm-badge-supplier::before,
+    .adm-badge-shipped::before, .adm-badge-delivered::before, .adm-badge-refunded::before,
+    .adm-badge-cancelled::before, .adm-badge-active::before, .adm-badge-warning::before {
+      content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: 0.85;
+    }
+
+    /* KPI sub-line (smaller annotation under the big number) */
     .adm-kpi-sub {
       font-size: 12px;
       color: var(--adm-muted);
       margin-top: 4px;
-      font-family: var(--adm-mono);
     }
+    .adm-kpi-sub a { color: var(--adm-accent-h); }
 
-    .adm-section-title {
-      font-family: var(--adm-display);
-      font-weight: 700;
-      font-size: 16px;
-      letter-spacing: -0.01em;
-      margin-bottom: 12px;
-      color: var(--adm-text);
+    /*  ────────────────────────────────────────────────────────────────
+        Empty states / dividers
+        ──────────────────────────────────────────────────────────────── */
+    .adm-empty {
+      padding: 48px 24px;
+      text-align: center;
+      color: var(--adm-muted);
+      background: var(--adm-surface);
+      border: 1px dashed var(--adm-line);
+      border-radius: var(--adm-radius-lg);
     }
-
-    .adm-filters {
+    .adm-divider {
+      height: 1px;
+      background: var(--adm-line-soft);
+      margin: 24px 0;
+      border: 0;
+    }
+    .adm-section-head {
       display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-bottom: 16px;
-      align-items: flex-end;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 26px 0 14px;
     }
+    .adm-section-head h2 { font-size: 16px; }
 
-    .adm-mono { font-family: var(--adm-mono); }
-    .adm-text-muted { color: var(--adm-muted); }
-    .adm-text-lime  { color: var(--adm-lime); }
-    .adm-text-error { color: var(--adm-error); }
-    .adm-text-success { color: var(--adm-success); }
-
-    /* ── Timeline ── */
-    .adm-timeline {
-      position: relative;
-      padding-left: 20px;
-    }
-    .adm-timeline::before {
-      content: '';
-      position: absolute;
-      left: 6px;
-      top: 6px;
-      bottom: 6px;
-      width: 1px;
-      background: var(--adm-border);
-    }
-    .adm-timeline-event {
-      position: relative;
-      margin-bottom: 16px;
-    }
-    .adm-timeline-event::before {
-      content: '';
-      position: absolute;
-      left: -17px;
-      top: 5px;
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: var(--adm-border);
-    }
-    .adm-timeline-event.type-status_change::before { background: var(--adm-violet); }
-    .adm-timeline-event.type-email_sent::before    { background: var(--adm-success); }
-    .adm-timeline-event.type-refund::before        { background: var(--adm-error); }
-    .adm-timeline-event.type-note::before          { background: var(--adm-warning); }
-    .adm-timeline-event.type-supplier::before      { background: var(--adm-lime); }
-    .adm-timeline-msg { font-size: 13px; color: var(--adm-text); }
-    .adm-timeline-meta { font-size: 11px; color: var(--adm-muted); font-family: var(--adm-mono); margin-top: 2px; }
-
-    /* ── Toast system ── */
-    #adm-toast-container {
+    /*  ────────────────────────────────────────────────────────────────
+        Toast
+        ──────────────────────────────────────────────────────────────── */
+    .adm-toast-stack {
       position: fixed;
-      bottom: 24px;
+      top: 24px;
       right: 24px;
-      z-index: 9999;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 10px;
+      z-index: 1000;
       pointer-events: none;
     }
     .adm-toast {
-      padding: 12px 16px;
-      border-radius: 8px;
+      pointer-events: auto;
+      padding: 12px 18px 12px 14px;
+      border-radius: var(--adm-radius);
       font-size: 13px;
       font-weight: 500;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.4);
-      pointer-events: all;
+      background: var(--adm-elev);
+      border: 1px solid var(--adm-line);
+      box-shadow: var(--adm-shadow-pop);
+      min-width: 240px;
       display: flex;
       align-items: center;
       gap: 10px;
-      animation: adm-toast-in 0.2s ease;
-      max-width: 360px;
+      animation: admToastIn 220ms ease-out;
     }
-    .adm-toast-success { background: #162d1e; color: var(--adm-success); border: 1px solid rgba(47,168,102,0.3); }
-    .adm-toast-error   { background: #2d1516; color: var(--adm-error);   border: 1px solid rgba(229,72,77,0.3); }
-    .adm-toast-info    { background: #1a1a2e; color: #a388ff;             border: 1px solid rgba(123,92,255,0.3); }
-    .adm-toast-warning { background: #2a2010; color: var(--adm-warning);  border: 1px solid rgba(232,163,61,0.3); }
-    @keyframes adm-toast-in {
-      from { opacity: 0; transform: translateY(8px); }
-      to   { opacity: 1; transform: translateY(0); }
+    .adm-toast::before {
+      content: '';
+      width: 4px;
+      align-self: stretch;
+      border-radius: 999px;
+      background: var(--adm-accent);
+    }
+    .adm-toast.success::before { background: var(--adm-success); }
+    .adm-toast.warning::before { background: var(--adm-warning); }
+    .adm-toast.error::before   { background: var(--adm-error); }
+    .adm-toast.info::before    { background: var(--adm-info); }
+    @keyframes admToastIn {
+      from { opacity: 0; transform: translateY(-8px) scale(0.98); }
+      to   { opacity: 1; transform: translateY(0)   scale(1); }
     }
 
-    /* ── Confirm dialog ── */
-    .adm-confirm-overlay {
-      position: fixed; inset: 0;
-      background: rgba(0,0,0,0.6);
-      z-index: 1000;
-      display: flex; align-items: center; justify-content: center;
+    /*  ────────────────────────────────────────────────────────────────
+        Misc / utilities other pages reference
+        ──────────────────────────────────────────────────────────────── */
+    a { color: var(--adm-accent-h); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .adm-link { color: var(--adm-accent-h); }
+    .adm-stack > * + * { margin-top: 16px; }
+    .adm-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
     }
-    .adm-confirm-box {
-      background: var(--adm-surface);
-      border: 1px solid var(--adm-border);
-      border-radius: 12px;
-      padding: 24px;
-      max-width: 400px;
-      width: 90%;
-    }
-    .adm-confirm-title { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
-    .adm-confirm-msg   { font-size: 13px; color: var(--adm-muted); margin-bottom: 20px; line-height: 1.5; }
-    .adm-confirm-btns  { display: flex; gap: 8px; justify-content: flex-end; }
-
-    @media (max-width: 768px) {
-      .adm-rail { width: 56px; }
-      .adm-nav-item span:not(.adm-nav-icon) { display: none; }
-      .adm-brand-name, .adm-brand-sub, .adm-nav-section { display: none; }
-      .adm-global-search { display: none; }
-    }
+    hr { border: 0; border-top: 1px solid var(--adm-line-soft); margin: 24px 0; }
   </style>
 </head>
 <body>
   <div class="adm-shell">
-    <!-- Left Rail Navigation -->
-    <nav class="adm-rail">
-      <a href="/admin" class="adm-brand" style="text-decoration:none;display:flex;align-items:center;gap:10px;">
-        <img
-          src="/brand/icon-192.png"
-          alt=""
-          width="36"
-          height="36"
-          decoding="async"
-          style="width:36px;height:36px;border-radius:8px;flex-shrink:0;"
-        />
+    <!-- ────── Left rail ─────────────────────────────────────────── -->
+    <nav class="adm-rail" aria-label="Admin navigation">
+      <a href="/admin" class="adm-brand" aria-label="Piece of Stass admin home">
+        <img src="/brand/icon-192.png" alt="" width="32" height="32" decoding="async" />
         <div>
           <div class="adm-brand-name">Piece of Stass</div>
           <div class="adm-brand-sub">Admin</div>
         </div>
       </a>
-      <div class="adm-nav">
-        <div class="adm-nav-section">Operations</div>
-        {nav.slice(0, 5).map((item) => (
+
+      {nav.map((item: any) => {
+        if (item.section) {
+          return <div class="adm-nav-section">{item.section}</div>;
+        }
+        const isActive = item.key === activeNav;
+        return (
           <a
             href={item.href}
-            class={`adm-nav-item${activeNav === item.key ? ' active' : ''}`}
+            class={`adm-nav-item ${isActive ? 'is-active' : ''}`}
+            aria-current={isActive ? 'page' : undefined}
           >
-            <span class="adm-nav-icon">{item.icon}</span>
+            <span class="adm-nav-icon" aria-hidden="true" set:html={ICONS[item.icon]}></span>
             <span>{item.label}</span>
           </a>
-        ))}
-        <div class="adm-nav-section" style="margin-top:8px;">Management</div>
-        {nav.slice(5).map((item) => (
-          <a
-            href={item.href}
-            class={`adm-nav-item${activeNav === item.key ? ' active' : ''}`}
-          >
-            <span class="adm-nav-icon">{item.icon}</span>
-            <span>{item.label}</span>
-          </a>
-        ))}
-      </div>
+        );
+      })}
+
       <div class="adm-rail-footer">
-        <form method="POST" action="/api/admin/sign-out" style="margin:0">
-          <button type="submit" class="adm-signout">
-            <span class="adm-nav-icon">↩</span>
+        <a href="/" target="_blank" class="adm-nav-item" rel="noopener">
+          <span class="adm-nav-icon" set:html={ICONS.external}></span>
+          <span>View storefront</span>
+        </a>
+        <form action="/api/admin/sign-out" method="POST">
+          <button
+            type="submit"
+            class="adm-nav-item adm-bare"
+            style="width:100%; background:none; border:0; cursor:pointer; padding:7px 10px; font:inherit; color:var(--adm-muted); text-align:left;"
+          >
+            <span class="adm-nav-icon" set:html={ICONS.signout}></span>
             <span>Sign out</span>
           </button>
         </form>
       </div>
     </nav>
 
-    <!-- Main content area -->
-    <div class="adm-main">
-      <div class="adm-topbar">
+    <!-- ────── Main content ─────────────────────────────────────── -->
+    <div class="adm-content">
+      <header class="adm-topbar">
         <h1 class="adm-page-title">{title}</h1>
 
-        <!-- Global search -->
-        <div class="adm-global-search">
-          <span class="adm-search-icon">⌕</span>
+        <div class="adm-search" role="search">
+          <span class="adm-search-icon" set:html={ICONS.search}></span>
           <input
-            type="text"
-            id="adm-global-search-input"
+            type="search"
+            id="adm-global-search"
             placeholder="Search orders, products, customers…"
-            autocomplete="off"
+            aria-label="Global search"
           />
-          <div class="adm-search-results" id="adm-search-results"></div>
         </div>
 
-        <div class="adm-topbar-right">
-          <a href="https://dashboard.stripe.com" target="_blank" class="adm-store-link" title="Stripe Dashboard">Stripe ↗</a>
-          <a href="/" class="adm-store-link" target="_blank">Store ↗</a>
-        </div>
-      </div>
-      <main class="adm-content">
+        <a class="adm-topbar-link" href="https://dashboard.stripe.com" target="_blank" rel="noopener">
+          Stripe
+          <span set:html={ICONS.external}></span>
+        </a>
+        <a class="adm-topbar-link" href="/" target="_blank" rel="noopener">
+          Store
+          <span set:html={ICONS.external}></span>
+        </a>
+      </header>
+
+      <main class="adm-main">
         <slot />
       </main>
     </div>
   </div>
 
-  <!-- Toast container -->
-  <div id="adm-toast-container"></div>
+  <!-- Toast stack -->
+  <div class="adm-toast-stack" id="adm-toast-stack" aria-live="polite" aria-atomic="true"></div>
 
+  <!-- Global helpers: toast + search -->
   <script>
-    // ── Toast system ──────────────────────────────────────────────────────────
-    window.adminToast = function(message, type = 'info', duration = 3500) {
-      const container = document.getElementById('adm-toast-container');
-      if (!container) return;
-      const toast = document.createElement('div');
-      const icons = { success: '✓', error: '✗', info: 'ℹ', warning: '⚠' };
-      toast.className = `adm-toast adm-toast-${type}`;
-      toast.innerHTML = `<span>${icons[type] || 'ℹ'}</span><span>${message}</span>`;
-      container.appendChild(toast);
-      setTimeout(() => {
-        toast.style.opacity = '0';
-        toast.style.transition = 'opacity 0.2s';
-        setTimeout(() => toast.remove(), 200);
-      }, duration);
-    };
+    (() => {
+      const stack = document.getElementById('adm-toast-stack');
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (window as any).adminToast = (message: string, level: 'info' | 'success' | 'warning' | 'error' = 'info', ttl = 4000) => {
+        if (!stack) return;
+        const el = document.createElement('div');
+        el.className = `adm-toast ${level}`;
+        el.textContent = message;
+        stack.appendChild(el);
+        setTimeout(() => {
+          el.style.transition = 'opacity 180ms, transform 180ms';
+          el.style.opacity = '0';
+          el.style.transform = 'translateY(-6px)';
+          setTimeout(() => el.remove(), 200);
+        }, ttl);
+      };
 
-    // ── Global search ─────────────────────────────────────────────────────────
-    const searchInput = document.getElementById('adm-global-search-input');
-    const searchResults = document.getElementById('adm-search-results');
-    let searchTimeout = null;
-
-    if (searchInput && searchResults) {
-      searchInput.addEventListener('input', (e) => {
-        clearTimeout(searchTimeout);
-        const q = e.target.value.trim();
-        if (q.length < 2) {
-          searchResults.classList.remove('open');
-          return;
-        }
-        searchTimeout = setTimeout(async () => {
-          try {
-            const [ordersRes, customersRes] = await Promise.all([
-              fetch(`/api/admin/orders?q=${encodeURIComponent(q)}&limit=5`),
-              fetch(`/api/admin/customers?q=${encodeURIComponent(q)}&limit=5`),
-            ]);
-            const ordersData = ordersRes.ok ? await ordersRes.json() : { orders: [] };
-            const customersData = customersRes.ok ? await customersRes.json() : { customers: [] };
-
-            let html = '';
-            for (const o of (ordersData.orders || [])) {
-              html += `<a href="/admin/orders/${o.id}" class="adm-search-result-item">
-                <span>📦</span>
-                <span>
-                  <div>${o.id}</div>
-                  <div class="adm-search-result-label">${o.customer_email} · $${o.total}</div>
-                </span>
-              </a>`;
-            }
-            for (const c of (customersData.customers || [])) {
-              html += `<a href="/admin/customers/${encodeURIComponent(c.email)}" class="adm-search-result-item">
-                <span>👤</span>
-                <span>
-                  <div>${c.name || c.email}</div>
-                  <div class="adm-search-result-label">${c.email} · ${c.orderCount} orders</div>
-                </span>
-              </a>`;
-            }
-            if (!html) {
-              html = '<div style="padding:12px;color:var(--adm-muted);font-size:13px;">No results found</div>';
-            }
-            searchResults.innerHTML = html;
-            searchResults.classList.add('open');
-          } catch {}
-        }, 250);
-      });
-
-      document.addEventListener('click', (e) => {
-        if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
-          searchResults.classList.remove('open');
-        }
-      });
-
-      searchInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') searchResults.classList.remove('open');
-      });
-    }
+      // Global search → /admin/orders?q= for now
+      const search = document.getElementById('adm-global-search') as HTMLInputElement | null;
+      if (search) {
+        search.addEventListener('keydown', (e: KeyboardEvent) => {
+          if (e.key === 'Enter') {
+            const q = search.value.trim();
+            if (!q) return;
+            window.location.href = `/admin/orders?q=${encodeURIComponent(q)}`;
+          }
+        });
+        // Cmd/Ctrl-K shortcut
+        document.addEventListener('keydown', (e: KeyboardEvent) => {
+          if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+            e.preventDefault();
+            search.focus();
+          }
+        });
+      }
+    })();
   </script>
 </body>
 </html>
