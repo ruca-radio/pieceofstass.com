@@ -1,0 +1,9 @@
+/*
+  Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(self), interest-cohort=()
+  Cross-Origin-Opener-Policy: same-origin
+  X-DNS-Prefetch-Control: on
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://js.stripe.com https://www.googletagmanager.com https://*.google-analytics.com https://connect.facebook.net https://analytics.tiktok.com https://*.klaviyo.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://cdn.pieceofstass.com https://*.r2.cloudflarestorage.com https://photo.yupoo.com https://*.yupoo.com https://*.stripe.com https://www.googletagmanager.com https://*.google-analytics.com; connect-src 'self' https://api.stripe.com https://*.stripe.com https://checkout.stripe.com https://www.googletagmanager.com https://*.google-analytics.com https://connect.facebook.net https://*.facebook.com https://analytics.tiktok.com https://business-api.tiktok.com https://*.klaviyo.com https://a.klaviyo.com https://static.cloudflareinsights.com https://cloudflareinsights.com; frame-src https://js.stripe.com https://checkout.stripe.com https://hooks.stripe.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; report-uri /api/csp-report

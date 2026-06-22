@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import ShareButtons from '../../components/islands/ShareButtons';
 
 // Blog content is not yet populated — route exists, ready for CMS integration
 export const prerender = true;
@@ -9,15 +10,32 @@ export function getStaticPaths() {
 }
 
 const { slug } = Astro.params;
+const siteUrl = 'https://pieceofstass.com';
+const postUrl = `${siteUrl}/blog/${slug}`;
 ---
 
 <BaseLayout
   title="Post not found — Piece of Stass"
   description="This blog post doesn't exist yet."
+  ogImage={`/api/og/blog/${slug}.png`}
+  ogType="article"
   noindex={true}
 >
   <div style="max-width: 640px; margin: 0 auto; padding: 80px 16px; text-align: center;">
     <h1 style="font-family: var(--font-family-display); font-weight: 700; font-size: 30px; color: var(--color-espresso);">Post not found</h1>
-    <a href="/blog" style="color: var(--color-lime); text-decoration: none; font-size: 14px; font-weight: 600;">← Back to The Edit</a>
+    <p style="color: var(--color-muted); margin: 16px 0 24px; font-size: 15px;">
+      This post doesn't exist yet — blog content is coming soon.
+    </p>
+    <a href="/blog" style="color: var(--color-rose, #A14C58); text-decoration: none; font-size: 14px; font-weight: 600;">← Back to The Edit</a>
+
+    <!-- Share when content exists -->
+    <div style="margin-top: 48px; display: flex; justify-content: center;">
+      <ShareButtons
+        url={postUrl}
+        title="The Edit — Piece of Stass"
+        description="Style guides and trend reports from Anna L."
+        client:load
+      />
+    </div>
   </div>
 </BaseLayout>

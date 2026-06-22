@@ -42,6 +42,8 @@ const itemListJsonLd = {
 <BaseLayout
   title={category.seo_title}
   description={category.seo_description}
+  ogImage={`/api/og/shop/${category.slug}.png`}
+  ogImageAlt={`Shop ${category.title} at Piece of Stass`}
   jsonLd={[breadcrumbJsonLd, itemListJsonLd]}
 >
   <div style="max-width: 1280px; margin: 0 auto; padding: 32px 16px;">

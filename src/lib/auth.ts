@@ -37,7 +37,23 @@ export interface User {
 
 // ─── Key helpers ─────────────────────────────────────────────────────────────
 function getSecret(authSecret?: string): Uint8Array {
-  const secret = authSecret ?? import.meta.env.AUTH_SECRET ?? 'dev-secret-change-in-production';
+  const secret = authSecret ?? import.meta.env.AUTH_SECRET;
+
+  // Fail closed in production: never fall back to a weak default key.
+  // In production (NODE_ENV=production or CF Workers), AUTH_SECRET MUST be set.
+  const isProduction =
+    (typeof process !== 'undefined' && process.env.NODE_ENV === 'production') ||
+    import.meta.env.PROD;
+
+  if (!secret) {
+    if (isProduction) {
+      throw new Error('[auth] AUTH_SECRET env var is required in production. Set it via wrangler secrets.');
+    }
+    // Dev fallback — acceptable locally, never shipped
+    console.warn('[auth] AUTH_SECRET not set — using insecure dev fallback. Set AUTH_SECRET in .dev.vars.');
+    return new TextEncoder().encode('dev-secret-change-in-production');
+  }
+
   return new TextEncoder().encode(secret);
 }
 

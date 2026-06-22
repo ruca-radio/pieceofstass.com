@@ -5,6 +5,7 @@ import AdminLayout from '../../../layouts/AdminLayout.astro';
 import { requireAdmin } from '../../../lib/admin-auth';
 import { listOrders, getOrdersKVFromEnv } from '../../../lib/orders-server';
 import type { OrderStatus } from '../../../lib/orders-server';
+import { CATEGORY_SUPPLIER_MAP } from '../../../lib/supplier-routing';
 
 const env = await requireAdmin(Astro);
 if (!env) return Astro.redirect('/admin/sign-in?error=session');
@@ -15,17 +16,29 @@ const kv = getOrdersKVFromEnv(runtimeEnv);
 const url = Astro.url;
 const statusFilter = (url.searchParams.get('status') ?? 'all') as OrderStatus | 'all';
 const searchQuery = url.searchParams.get('q') ?? '';
+const emailSearch = url.searchParams.get('email') ?? '';
 const dateFrom = url.searchParams.get('from') ?? '';
 const dateTo = url.searchParams.get('to') ?? '';
+const totalMin = url.searchParams.get('tmin') ? parseFloat(url.searchParams.get('tmin')!) : undefined;
+const totalMax = url.searchParams.get('tmax') ? parseFloat(url.searchParams.get('tmax')!) : undefined;
+const supplierFilter = url.searchParams.get('supplier') ?? '';
+const sortParam = (url.searchParams.get('sort') ?? 'created_at_desc') as 'created_at_desc' | 'created_at_asc' | 'total_desc' | 'total_asc';
 const page = Math.max(1, parseInt(url.searchParams.get('page') ?? '1', 10));
-const limit = 25;
+const limit = 50;
 const offset = (page - 1) * limit;
+
+// Combined search: q or email
+const combinedSearch = searchQuery || emailSearch || undefined;
 
 const { orders, total } = await listOrders(kv, {
   status: statusFilter,
-  search: searchQuery || undefined,
+  search: combinedSearch,
   date_from: dateFrom || undefined,
   date_to: dateTo || undefined,
+  total_min: totalMin,
+  total_max: totalMax,
+  supplier: supplierFilter || undefined,
+  sort: sortParam,
   limit,
   offset,
 });
@@ -38,7 +51,7 @@ function formatMoney(n: number) {
 
 function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString('en-US', {
-    month: 'short', day: 'numeric', year: 'numeric',
+    month: 'short', day: 'numeric', year: '2-digit',
     hour: '2-digit', minute: '2-digit'
   });
 }
@@ -65,22 +78,57 @@ const statusLabel: Record<string, string> = {
 };
 
 const statusOptions = ['all', 'pending', 'payment_captured', 'sent_to_supplier', 'shipped', 'delivered', 'refunded', 'cancelled'];
+const suppliers = Object.entries(CATEGORY_SUPPLIER_MAP).map(([k, v]) => ({ key: k, name: v.supplier_name }));
+
+function sortLink(field: string) {
+  const asc = `${field}_asc`;
+  const desc = `${field}_desc`;
+  const next = sortParam === desc ? asc : desc;
+  const arrow = sortParam === desc ? '↑' : sortParam === asc ? '↓' : '';
+  const p = new URLSearchParams(url.searchParams);
+  p.set('sort', next);
+  p.delete('page');
+  return { href: `?${p.toString()}`, arrow };
+}
+
+const dateSort = sortLink('created_at');
+const totalSort = sortLink('total');
+
+// Build current filter query string for pagination links
+function filterQS(extraParams: Record<string, string> = {}) {
+  const p = new URLSearchParams();
+  if (statusFilter !== 'all') p.set('status', statusFilter);
+  if (searchQuery) p.set('q', searchQuery);
+  if (emailSearch) p.set('email', emailSearch);
+  if (dateFrom) p.set('from', dateFrom);
+  if (dateTo) p.set('to', dateTo);
+  if (totalMin !== undefined) p.set('tmin', String(totalMin));
+  if (totalMax !== undefined) p.set('tmax', String(totalMax));
+  if (supplierFilter) p.set('supplier', supplierFilter);
+  if (sortParam !== 'created_at_desc') p.set('sort', sortParam);
+  for (const [k, v] of Object.entries(extraParams)) p.set(k, v);
+  return p.toString() ? `?${p.toString()}` : '';
+}
 ---
 <AdminLayout title="Orders" activeNav="orders">
 
   <!-- Filters -->
-  <form method="GET" class="adm-filters">
+  <form method="GET" class="adm-filters" id="orders-filter-form">
     <div>
       <label class="adm-label">Status</label>
-      <select name="status" class="adm-select" style="width:160px;">
+      <select name="status" class="adm-select" style="width:155px;">
         {statusOptions.map((s) => (
           <option value={s} selected={statusFilter === s}>{statusLabel[s]}</option>
         ))}
       </select>
     </div>
     <div>
-      <label class="adm-label">Search (email / order ID)</label>
-      <input type="text" name="q" value={searchQuery} class="adm-input" placeholder="Search..." style="width:220px;" />
+      <label class="adm-label">Search</label>
+      <input type="text" name="q" value={searchQuery} class="adm-input" placeholder="Order ID or name…" style="width:180px;" />
+    </div>
+    <div>
+      <label class="adm-label">Customer Email</label>
+      <input type="email" name="email" value={emailSearch} class="adm-input" placeholder="Email…" style="width:200px;" />
     </div>
     <div>
       <label class="adm-label">From</label>
@@ -90,20 +138,56 @@ const statusOptions = ['all', 'pending', 'payment_captured', 'sent_to_supplier',
       <label class="adm-label">To</label>
       <input type="date" name="to" value={dateTo} class="adm-input" style="width:140px;" />
     </div>
+    <div>
+      <label class="adm-label">Total $Min</label>
+      <input type="number" name="tmin" value={totalMin ?? ''} class="adm-input" placeholder="0" style="width:80px;" min="0" step="1" />
+    </div>
+    <div>
+      <label class="adm-label">$Max</label>
+      <input type="number" name="tmax" value={totalMax ?? ''} class="adm-input" placeholder="∞" style="width:80px;" min="0" step="1" />
+    </div>
+    <div>
+      <label class="adm-label">Supplier</label>
+      <select name="supplier" class="adm-select" style="width:150px;">
+        <option value="">All Suppliers</option>
+        {suppliers.map((s) => (
+          <option value={s.key} selected={supplierFilter === s.key}>{s.name}</option>
+        ))}
+      </select>
+    </div>
     <div style="padding-top:18px;">
       <button type="submit" class="adm-btn adm-btn-primary">Filter</button>
     </div>
-    {(statusFilter !== 'all' || searchQuery || dateFrom || dateTo) && (
+    {(statusFilter !== 'all' || searchQuery || emailSearch || dateFrom || dateTo || totalMin !== undefined || totalMax !== undefined || supplierFilter) && (
       <div style="padding-top:18px;">
         <a href="/admin/orders" class="adm-btn adm-btn-secondary">Clear</a>
       </div>
     )}
   </form>
 
+  <!-- Bulk actions toolbar -->
+  <div id="bulk-toolbar" style="display:none;align-items:center;gap:8px;margin-bottom:12px;padding:10px 12px;background:var(--adm-surface2);border:1px solid var(--adm-border);border-radius:8px;">
+    <span id="bulk-count" style="font-size:13px;color:var(--adm-muted);margin-right:4px;">0 selected</span>
+    <button type="button" class="adm-btn adm-btn-secondary" style="font-size:12px;" onclick="bulkAction('sent_to_supplier')">
+      Mark Sent to Supplier
+    </button>
+    <button type="button" class="adm-btn adm-btn-secondary" style="font-size:12px;" onclick="exportSelectedCSV()">
+      Export CSV
+    </button>
+    <button type="button" class="adm-btn adm-btn-secondary" style="font-size:12px;margin-left:auto;" onclick="clearSelection()">
+      Deselect All
+    </button>
+  </div>
+
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
     <div style="font-size:13px;color:var(--adm-muted);">
       {total} order{total !== 1 ? 's' : ''}
       {statusFilter !== 'all' ? ` · ${statusLabel[statusFilter]}` : ''}
+    </div>
+    <div style="display:flex;gap:8px;">
+      <a href={`/api/admin/orders/export-csv${filterQS()}`} class="adm-btn adm-btn-secondary" style="font-size:12px;">
+        ↓ Export All CSV
+      </a>
     </div>
   </div>
 
@@ -111,45 +195,62 @@ const statusOptions = ['all', 'pending', 'payment_captured', 'sent_to_supplier',
     {orders.length === 0 ? (
       <div style="padding:32px;text-align:center;color:var(--adm-muted);">No orders match the current filters.</div>
     ) : (
-      <table class="adm-table">
+      <table class="adm-table" id="orders-table">
         <thead>
           <tr>
+            <th style="width:36px;">
+              <input type="checkbox" class="adm-checkbox" id="select-all" onchange="toggleSelectAll(this)" />
+            </th>
             <th>Order ID</th>
-            <th>Date</th>
+            <th>
+              <a href={dateSort.href} style="color:inherit;text-decoration:none;">
+                Date {dateSort.arrow}
+              </a>
+            </th>
             <th>Customer</th>
             <th>Items</th>
-            <th>Total</th>
+            <th>
+              <a href={totalSort.href} style="color:inherit;text-decoration:none;">
+                Total {totalSort.arrow}
+              </a>
+            </th>
             <th>Status</th>
             <th>Supplier</th>
             <th></th>
           </tr>
         </thead>
         <tbody>
-          {orders.map((o) => (
-            <tr>
-              <td>
-                <a href={`/admin/orders/${o.id}`} class="adm-mono" style="font-size:11px;">{o.id}</a>
-              </td>
-              <td class="adm-mono" style="font-size:11px;color:var(--adm-muted);white-space:nowrap;">{formatDate(o.created_at)}</td>
-              <td>
-                <div style="font-size:13px;">{o.customer_name ?? '—'}</div>
-                <div style="font-size:11px;color:var(--adm-muted);">{o.customer_email}</div>
-              </td>
-              <td style="color:var(--adm-muted);font-size:12px;">{o.items.length} item{o.items.length !== 1 ? 's' : ''}</td>
-              <td class="adm-mono" style="font-size:13px;">{formatMoney(o.total)}</td>
-              <td>
-                <span class={`adm-badge ${statusBadgeClass[o.status] ?? ''}`}>
-                  {statusLabel[o.status] ?? o.status}
-                </span>
-              </td>
-              <td style="font-size:12px;color:var(--adm-muted);">
-                {o.supplier_status ?? '—'}
-              </td>
-              <td>
-                <a href={`/admin/orders/${o.id}`} class="adm-btn adm-btn-secondary" style="padding:4px 10px;font-size:12px;">View →</a>
-              </td>
-            </tr>
-          ))}
+          {orders.map((o) => {
+            const category = o.items[0]?.category ?? '';
+            return (
+              <tr data-order-id={o.id} data-status={o.status}>
+                <td style="padding:8px 12px;">
+                  <input type="checkbox" class="adm-checkbox order-checkbox" value={o.id} onchange="updateBulkToolbar()" />
+                </td>
+                <td>
+                  <a href={`/admin/orders/${o.id}`} class="adm-mono" style="font-size:11px;">{o.id}</a>
+                </td>
+                <td class="adm-mono" style="font-size:11px;color:var(--adm-muted);white-space:nowrap;">{formatDate(o.created_at)}</td>
+                <td>
+                  <div style="font-size:13px;">{o.customer_name ?? '—'}</div>
+                  <div style="font-size:11px;color:var(--adm-muted);">{o.customer_email}</div>
+                </td>
+                <td style="color:var(--adm-muted);font-size:12px;">{o.items.length} item{o.items.length !== 1 ? 's' : ''}</td>
+                <td class="adm-mono" style="font-size:13px;">{formatMoney(o.total)}</td>
+                <td>
+                  <span class={`adm-badge ${statusBadgeClass[o.status] ?? ''}`}>
+                    {statusLabel[o.status] ?? o.status}
+                  </span>
+                </td>
+                <td style="font-size:11px;color:var(--adm-muted);">
+                  {category || '—'}
+                </td>
+                <td>
+                  <a href={`/admin/orders/${o.id}`} class="adm-btn adm-btn-secondary" style="padding:4px 10px;font-size:12px;">View →</a>
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     )}
@@ -159,15 +260,97 @@ const statusOptions = ['all', 'pending', 'payment_captured', 'sent_to_supplier',
   {totalPages > 1 && (
     <div style="display:flex;gap:8px;align-items:center;margin-top:16px;justify-content:flex-end;">
       {page > 1 && (
-        <a href={`/admin/orders?status=${statusFilter}&q=${searchQuery}&from=${dateFrom}&to=${dateTo}&page=${page - 1}`}
-           class="adm-btn adm-btn-secondary" style="padding:6px 12px;font-size:12px;">← Prev</a>
+        <a href={filterQS({ page: String(page - 1) })} class="adm-btn adm-btn-secondary" style="padding:6px 12px;font-size:12px;">← Prev</a>
       )}
-      <span style="font-size:12px;color:var(--adm-muted);">Page {page} of {totalPages}</span>
+      <span style="font-size:12px;color:var(--adm-muted);">Page {page} of {totalPages} ({total} orders)</span>
       {page < totalPages && (
-        <a href={`/admin/orders?status=${statusFilter}&q=${searchQuery}&from=${dateFrom}&to=${dateTo}&page=${page + 1}`}
-           class="adm-btn adm-btn-secondary" style="padding:6px 12px;font-size:12px;">Next →</a>
+        <a href={filterQS({ page: String(page + 1) })} class="adm-btn adm-btn-secondary" style="padding:6px 12px;font-size:12px;">Next →</a>
       )}
     </div>
   )}
 
 </AdminLayout>
+
+<script>
+  function getSelectedIds() {
+    return [...document.querySelectorAll('.order-checkbox:checked')].map(el => el.value);
+  }
+
+  function updateBulkToolbar() {
+    const ids = getSelectedIds();
+    const toolbar = document.getElementById('bulk-toolbar');
+    const countEl = document.getElementById('bulk-count');
+    if (toolbar) toolbar.style.display = ids.length > 0 ? 'flex' : 'none';
+    if (countEl) countEl.textContent = `${ids.length} selected`;
+
+    // Update select-all checkbox state
+    const all = document.querySelectorAll('.order-checkbox');
+    const selectAll = document.getElementById('select-all');
+    if (selectAll) {
+      selectAll.indeterminate = ids.length > 0 && ids.length < all.length;
+      selectAll.checked = ids.length === all.length && all.length > 0;
+    }
+  }
+
+  function toggleSelectAll(cb) {
+    document.querySelectorAll('.order-checkbox').forEach(el => el.checked = cb.checked);
+    updateBulkToolbar();
+  }
+
+  function clearSelection() {
+    document.querySelectorAll('.order-checkbox, #select-all').forEach(el => el.checked = false);
+    updateBulkToolbar();
+  }
+
+  async function bulkAction(status) {
+    const ids = getSelectedIds();
+    if (!ids.length) return;
+    if (!confirm(`Mark ${ids.length} order(s) as "${status}"?`)) return;
+
+    let successCount = 0;
+    let failCount = 0;
+    for (const id of ids) {
+      try {
+        const r = await fetch(`/api/admin/orders/${id}`, {
+          method: 'PATCH',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({ status }),
+        });
+        if (r.ok) successCount++;
+        else failCount++;
+      } catch { failCount++; }
+    }
+
+    const msg = failCount > 0
+      ? `${successCount} updated, ${failCount} failed`
+      : `${successCount} order(s) updated`;
+    window.adminToast(msg, failCount > 0 ? 'warning' : 'success');
+    setTimeout(() => location.reload(), 1000);
+  }
+
+  function exportSelectedCSV() {
+    const ids = getSelectedIds();
+    if (!ids.length) { window.adminToast('No orders selected', 'info'); return; }
+    // Build a CSV from visible order rows — for full data use the API
+    const rows = [['Order ID', 'Date', 'Customer', 'Email', 'Total', 'Status']];
+    ids.forEach(id => {
+      const row = document.querySelector(`tr[data-order-id="${id}"]`);
+      if (!row) return;
+      const cells = row.querySelectorAll('td');
+      const orderId = cells[1]?.textContent?.trim() ?? id;
+      const date = cells[2]?.textContent?.trim() ?? '';
+      const customer = cells[3]?.querySelector('div')?.textContent?.trim() ?? '';
+      const email = cells[3]?.querySelectorAll('div')[1]?.textContent?.trim() ?? '';
+      const total = cells[5]?.textContent?.trim() ?? '';
+      const status = cells[6]?.textContent?.trim() ?? '';
+      rows.push([orderId, date, customer, email, total, status]);
+    });
+    const csv = rows.map(r => r.map(v => `"${v.replace(/"/g,'""')}"`).join(',')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `orders-export-${Date.now()}.csv`;
+    a.click();
+    window.adminToast(`Exported ${ids.length} orders`, 'success');
+  }
+</script>

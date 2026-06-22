@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import ProductCard from '../components/islands/ProductCard';
 import InternalLinks from '../components/InternalLinks.astro';
 import { allProducts } from '../lib/products';
+import ShareButtons from '../components/islands/ShareButtons';
 
 const favorites = allProducts.slice(0, 6);
 
@@ -27,6 +28,8 @@ const breadcrumbJsonLd = {
 <BaseLayout
   title="About Anna — Piece of Stass"
   description="Meet Anna L., founder and curator of Piece of Stass. Taste, not the price tag."
+  ogImage="/api/og/about.png"
+  ogImageAlt="About Anna — Meet the founder of Piece of Stass"
   jsonLd={[personJsonLd, breadcrumbJsonLd]}
 >
   <!-- Hero -->
@@ -103,6 +106,19 @@ const breadcrumbJsonLd = {
       </div>
       
       <InternalLinks type="category" currentCategory="all" />
+
+      <!-- Share section -->
+      <div style="margin-top: 48px; padding: 32px; background: var(--color-surfaceSunken, #F0E7DA); border-radius: 16px; text-align: center;">
+        <p style="font-family: var(--font-family-display); font-weight: 700; font-size: 18px; color: var(--color-espresso); margin: 0 0 16px;">Share the stash</p>
+        <div style="display: flex; justify-content: center;">
+          <ShareButtons
+            url="https://pieceofstass.com/about-anna"
+            title="About Anna — Piece of Stass"
+            description="Meet Anna L., founder and curator of Piece of Stass. Taste, not the price tag."
+            client:load
+          />
+        </div>
+      </div>
     </div>
   </section>
 </BaseLayout>

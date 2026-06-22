@@ -16,6 +16,15 @@ dist/
 .env.preview.local
 .env.*.local
 
+# Wrangler dev secrets — NEVER commit
+.dev.vars
+
+# Keys and certificates
+*.pem
+*.key
+*.p12
+*.pfx
+
 # Wrangler local state
 .wrangler/
 

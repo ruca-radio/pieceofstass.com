@@ -1,22 +1,27 @@
 ---
 /**
  * AdminLayout.astro — shell for all /admin/* pages.
- * Left-rail nav, utilitarian dense design using brand tokens.
- * Props: title (page title), activeNav (nav item key)
+ * Left-rail nav with all sections, top bar with global search + profile dropdown.
+ * Toast notification system (global, accessible via window.adminToast()).
  */
 export interface Props {
   title: string;
-  activeNav?: 'dashboard' | 'orders' | 'products' | 'customers' | 'carts';
+  activeNav?: 'dashboard' | 'orders' | 'products' | 'customers' | 'carts' | 'inventory' | 'suppliers' | 'analytics' | 'marketing' | 'settings';
 }
 
 const { title, activeNav = 'dashboard' } = Astro.props;
 
 const nav = [
-  { key: 'dashboard', label: 'Dashboard', href: '/admin', icon: '▦' },
-  { key: 'orders', label: 'Orders', href: '/admin/orders', icon: '📦' },
-  { key: 'products', label: 'Products', href: '/admin/products', icon: '🏷' },
-  { key: 'customers', label: 'Customers', href: '/admin/customers', icon: '👤' },
-  { key: 'carts', label: 'Abandoned Carts', href: '/admin/abandoned-carts', icon: '🛒' },
+  { key: 'dashboard',  label: 'Dashboard',        href: '/admin',                icon: '▦' },
+  { key: 'orders',     label: 'Orders',            href: '/admin/orders',         icon: '📦' },
+  { key: 'products',   label: 'Products',          href: '/admin/products',       icon: '🏷' },
+  { key: 'customers',  label: 'Customers',         href: '/admin/customers',      icon: '👤' },
+  { key: 'carts',      label: 'Abandoned Carts',   href: '/admin/abandoned-carts',icon: '🛒' },
+  { key: 'inventory',  label: 'Inventory',         href: '/admin/inventory',      icon: '📋' },
+  { key: 'suppliers',  label: 'Suppliers',         href: '/admin/suppliers',      icon: '🏭' },
+  { key: 'analytics',  label: 'Analytics',         href: '/admin/analytics',      icon: '📈' },
+  { key: 'marketing',  label: 'Marketing',         href: '/admin/marketing',      icon: '📣' },
+  { key: 'settings',   label: 'Settings',          href: '/admin/settings',       icon: '⚙' },
 ];
 ---
 <!DOCTYPE html>
@@ -130,6 +135,15 @@ const nav = [
       font-size: 14px;
       flex-shrink: 0;
     }
+    .adm-nav-section {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--adm-muted);
+      padding: 10px 10px 4px;
+      opacity: 0.6;
+    }
 
     .adm-rail-footer {
       padding: 12px 8px;
@@ -167,7 +181,7 @@ const nav = [
     }
 
     .adm-topbar {
-      padding: 14px 24px;
+      padding: 10px 24px;
       border-bottom: 1px solid var(--adm-border);
       display: flex;
       align-items: center;
@@ -176,21 +190,89 @@ const nav = [
       position: sticky;
       top: 0;
       z-index: 10;
+      gap: 16px;
     }
     .adm-page-title {
       font-family: var(--adm-display);
       font-weight: 700;
-      font-size: 18px;
+      font-size: 17px;
       letter-spacing: -0.01em;
       color: var(--adm-text);
+      white-space: nowrap;
     }
+
+    /* Global search */
+    .adm-global-search {
+      flex: 1;
+      max-width: 400px;
+      position: relative;
+    }
+    .adm-global-search input {
+      width: 100%;
+      background: var(--adm-surface2);
+      border: 1px solid var(--adm-border);
+      border-radius: 6px;
+      color: var(--adm-text);
+      font-family: var(--adm-font);
+      font-size: 13px;
+      padding: 6px 10px 6px 32px;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .adm-global-search input:focus {
+      border-color: var(--adm-violet);
+    }
+    .adm-global-search input::placeholder {
+      color: var(--adm-muted);
+    }
+    .adm-search-icon {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--adm-muted);
+      font-size: 13px;
+      pointer-events: none;
+    }
+    .adm-search-results {
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      right: 0;
+      background: var(--adm-surface);
+      border: 1px solid var(--adm-border);
+      border-radius: 8px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+      z-index: 100;
+      display: none;
+      max-height: 360px;
+      overflow-y: auto;
+    }
+    .adm-search-results.open { display: block; }
+    .adm-search-result-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      cursor: pointer;
+      text-decoration: none;
+      color: var(--adm-text);
+      font-size: 13px;
+      border-bottom: 1px solid var(--adm-border);
+    }
+    .adm-search-result-item:last-child { border-bottom: none; }
+    .adm-search-result-item:hover { background: var(--adm-surface2); }
+    .adm-search-result-label {
+      font-size: 11px;
+      color: var(--adm-muted);
+      font-family: var(--adm-mono);
+    }
+
     .adm-topbar-right {
       display: flex;
       align-items: center;
-      gap: 12px;
-      font-size: 12px;
-      color: var(--adm-muted);
-      font-family: var(--adm-mono);
+      gap: 10px;
+      flex-shrink: 0;
     }
     .adm-store-link {
       color: var(--adm-violet);
@@ -201,6 +283,7 @@ const nav = [
       border: 1px solid var(--adm-border);
       border-radius: 4px;
       transition: border-color 0.1s;
+      white-space: nowrap;
     }
     .adm-store-link:hover { border-color: var(--adm-violet); }
 
@@ -231,7 +314,10 @@ const nav = [
       color: var(--adm-muted);
       border-bottom: 1px solid var(--adm-border);
       white-space: nowrap;
+      cursor: pointer;
+      user-select: none;
     }
+    .adm-table th:hover { color: var(--adm-text); }
     .adm-table td {
       padding: 10px 12px;
       border-bottom: 1px solid var(--adm-border);
@@ -242,6 +328,13 @@ const nav = [
     .adm-table tbody tr:hover td { background: var(--adm-surface2); }
     .adm-table a { color: var(--adm-lime); text-decoration: none; }
     .adm-table a:hover { text-decoration: underline; }
+
+    .adm-checkbox {
+      width: 15px;
+      height: 15px;
+      cursor: pointer;
+      accent-color: var(--adm-lime);
+    }
 
     .adm-badge {
       display: inline-block;
@@ -262,6 +355,7 @@ const nav = [
     .adm-badge-cancelled  { background: rgba(138,138,142,0.12); color: var(--adm-muted); }
     .adm-badge-active     { background: rgba(47,168,102,0.15); color: var(--adm-success); }
     .adm-badge-draft      { background: rgba(138,138,142,0.12); color: var(--adm-muted); }
+    .adm-badge-warning    { background: rgba(232,163,61,0.15); color: var(--adm-warning); }
 
     .adm-btn {
       display: inline-flex;
@@ -276,11 +370,14 @@ const nav = [
       text-decoration: none;
       transition: opacity 0.1s, border-color 0.1s;
       white-space: nowrap;
+      font-family: var(--adm-font);
     }
     .adm-btn-primary   { background: var(--adm-lime); color: var(--adm-ink); }
     .adm-btn-secondary { background: var(--adm-surface2); color: var(--adm-text); border-color: var(--adm-border); }
     .adm-btn-danger    { background: rgba(229,72,77,0.15); color: var(--adm-error); border-color: rgba(229,72,77,0.3); }
+    .adm-btn-success   { background: rgba(47,168,102,0.15); color: var(--adm-success); border-color: rgba(47,168,102,0.3); }
     .adm-btn:hover     { opacity: 0.85; }
+    .adm-btn:disabled  { opacity: 0.4; cursor: not-allowed; }
 
     .adm-input, .adm-select, .adm-textarea {
       background: var(--adm-surface2);
@@ -297,6 +394,7 @@ const nav = [
     .adm-input:focus, .adm-select:focus, .adm-textarea:focus {
       border-color: var(--adm-violet);
     }
+    .adm-input::placeholder { color: var(--adm-muted); }
     .adm-textarea { resize: vertical; min-height: 80px; }
 
     .adm-label {
@@ -311,7 +409,7 @@ const nav = [
 
     .adm-kpi-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
       gap: 12px;
       margin-bottom: 24px;
     }
@@ -332,7 +430,7 @@ const nav = [
     .adm-kpi-value {
       font-family: var(--adm-display);
       font-weight: 700;
-      font-size: 26px;
+      font-size: 24px;
       letter-spacing: -0.02em;
       color: var(--adm-text);
       line-height: 1;
@@ -364,11 +462,102 @@ const nav = [
     .adm-mono { font-family: var(--adm-mono); }
     .adm-text-muted { color: var(--adm-muted); }
     .adm-text-lime  { color: var(--adm-lime); }
+    .adm-text-error { color: var(--adm-error); }
+    .adm-text-success { color: var(--adm-success); }
+
+    /* ── Timeline ── */
+    .adm-timeline {
+      position: relative;
+      padding-left: 20px;
+    }
+    .adm-timeline::before {
+      content: '';
+      position: absolute;
+      left: 6px;
+      top: 6px;
+      bottom: 6px;
+      width: 1px;
+      background: var(--adm-border);
+    }
+    .adm-timeline-event {
+      position: relative;
+      margin-bottom: 16px;
+    }
+    .adm-timeline-event::before {
+      content: '';
+      position: absolute;
+      left: -17px;
+      top: 5px;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--adm-border);
+    }
+    .adm-timeline-event.type-status_change::before { background: var(--adm-violet); }
+    .adm-timeline-event.type-email_sent::before    { background: var(--adm-success); }
+    .adm-timeline-event.type-refund::before        { background: var(--adm-error); }
+    .adm-timeline-event.type-note::before          { background: var(--adm-warning); }
+    .adm-timeline-event.type-supplier::before      { background: var(--adm-lime); }
+    .adm-timeline-msg { font-size: 13px; color: var(--adm-text); }
+    .adm-timeline-meta { font-size: 11px; color: var(--adm-muted); font-family: var(--adm-mono); margin-top: 2px; }
+
+    /* ── Toast system ── */
+    #adm-toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      pointer-events: none;
+    }
+    .adm-toast {
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+      pointer-events: all;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      animation: adm-toast-in 0.2s ease;
+      max-width: 360px;
+    }
+    .adm-toast-success { background: #162d1e; color: var(--adm-success); border: 1px solid rgba(47,168,102,0.3); }
+    .adm-toast-error   { background: #2d1516; color: var(--adm-error);   border: 1px solid rgba(229,72,77,0.3); }
+    .adm-toast-info    { background: #1a1a2e; color: #a388ff;             border: 1px solid rgba(123,92,255,0.3); }
+    .adm-toast-warning { background: #2a2010; color: var(--adm-warning);  border: 1px solid rgba(232,163,61,0.3); }
+    @keyframes adm-toast-in {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Confirm dialog ── */
+    .adm-confirm-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 1000;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .adm-confirm-box {
+      background: var(--adm-surface);
+      border: 1px solid var(--adm-border);
+      border-radius: 12px;
+      padding: 24px;
+      max-width: 400px;
+      width: 90%;
+    }
+    .adm-confirm-title { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+    .adm-confirm-msg   { font-size: 13px; color: var(--adm-muted); margin-bottom: 20px; line-height: 1.5; }
+    .adm-confirm-btns  { display: flex; gap: 8px; justify-content: flex-end; }
 
     @media (max-width: 768px) {
       .adm-rail { width: 56px; }
-      .adm-nav-item span { display: none; }
-      .adm-brand-name, .adm-brand-sub { display: none; }
+      .adm-nav-item span:not(.adm-nav-icon) { display: none; }
+      .adm-brand-name, .adm-brand-sub, .adm-nav-section { display: none; }
+      .adm-global-search { display: none; }
     }
   </style>
 </head>
@@ -381,7 +570,18 @@ const nav = [
         <div class="adm-brand-sub">Admin</div>
       </div>
       <div class="adm-nav">
-        {nav.map((item) => (
+        <div class="adm-nav-section">Operations</div>
+        {nav.slice(0, 5).map((item) => (
+          <a
+            href={item.href}
+            class={`adm-nav-item${activeNav === item.key ? ' active' : ''}`}
+          >
+            <span class="adm-nav-icon">{item.icon}</span>
+            <span>{item.label}</span>
+          </a>
+        ))}
+        <div class="adm-nav-section" style="margin-top:8px;">Management</div>
+        {nav.slice(5).map((item) => (
           <a
             href={item.href}
             class={`adm-nav-item${activeNav === item.key ? ' active' : ''}`}
@@ -405,8 +605,22 @@ const nav = [
     <div class="adm-main">
       <div class="adm-topbar">
         <h1 class="adm-page-title">{title}</h1>
+
+        <!-- Global search -->
+        <div class="adm-global-search">
+          <span class="adm-search-icon">⌕</span>
+          <input
+            type="text"
+            id="adm-global-search-input"
+            placeholder="Search orders, products, customers…"
+            autocomplete="off"
+          />
+          <div class="adm-search-results" id="adm-search-results"></div>
+        </div>
+
         <div class="adm-topbar-right">
-          <a href="/" class="adm-store-link" target="_blank">← View store</a>
+          <a href="https://dashboard.stripe.com" target="_blank" class="adm-store-link" title="Stripe Dashboard">Stripe ↗</a>
+          <a href="/" class="adm-store-link" target="_blank">Store ↗</a>
         </div>
       </div>
       <main class="adm-content">
@@ -414,5 +628,87 @@ const nav = [
       </main>
     </div>
   </div>
+
+  <!-- Toast container -->
+  <div id="adm-toast-container"></div>
+
+  <script>
+    // ── Toast system ──────────────────────────────────────────────────────────
+    window.adminToast = function(message, type = 'info', duration = 3500) {
+      const container = document.getElementById('adm-toast-container');
+      if (!container) return;
+      const toast = document.createElement('div');
+      const icons = { success: '✓', error: '✗', info: 'ℹ', warning: '⚠' };
+      toast.className = `adm-toast adm-toast-${type}`;
+      toast.innerHTML = `<span>${icons[type] || 'ℹ'}</span><span>${message}</span>`;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transition = 'opacity 0.2s';
+        setTimeout(() => toast.remove(), 200);
+      }, duration);
+    };
+
+    // ── Global search ─────────────────────────────────────────────────────────
+    const searchInput = document.getElementById('adm-global-search-input');
+    const searchResults = document.getElementById('adm-search-results');
+    let searchTimeout = null;
+
+    if (searchInput && searchResults) {
+      searchInput.addEventListener('input', (e) => {
+        clearTimeout(searchTimeout);
+        const q = e.target.value.trim();
+        if (q.length < 2) {
+          searchResults.classList.remove('open');
+          return;
+        }
+        searchTimeout = setTimeout(async () => {
+          try {
+            const [ordersRes, customersRes] = await Promise.all([
+              fetch(`/api/admin/orders?q=${encodeURIComponent(q)}&limit=5`),
+              fetch(`/api/admin/customers?q=${encodeURIComponent(q)}&limit=5`),
+            ]);
+            const ordersData = ordersRes.ok ? await ordersRes.json() : { orders: [] };
+            const customersData = customersRes.ok ? await customersRes.json() : { customers: [] };
+
+            let html = '';
+            for (const o of (ordersData.orders || [])) {
+              html += `<a href="/admin/orders/${o.id}" class="adm-search-result-item">
+                <span>📦</span>
+                <span>
+                  <div>${o.id}</div>
+                  <div class="adm-search-result-label">${o.customer_email} · $${o.total}</div>
+                </span>
+              </a>`;
+            }
+            for (const c of (customersData.customers || [])) {
+              html += `<a href="/admin/customers/${encodeURIComponent(c.email)}" class="adm-search-result-item">
+                <span>👤</span>
+                <span>
+                  <div>${c.name || c.email}</div>
+                  <div class="adm-search-result-label">${c.email} · ${c.orderCount} orders</div>
+                </span>
+              </a>`;
+            }
+            if (!html) {
+              html = '<div style="padding:12px;color:var(--adm-muted);font-size:13px;">No results found</div>';
+            }
+            searchResults.innerHTML = html;
+            searchResults.classList.add('open');
+          } catch {}
+        }, 250);
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+          searchResults.classList.remove('open');
+        }
+      });
+
+      searchInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') searchResults.classList.remove('open');
+      });
+    }
+  </script>
 </body>
 </html>

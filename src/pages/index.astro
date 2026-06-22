@@ -4,6 +4,7 @@ import ProductCard from '../components/islands/ProductCard';
 import EmailSignup from '../components/islands/EmailSignup';
 import InternalLinks from '../components/InternalLinks.astro';
 import { allProducts, allCategories, getTrendingProducts, formatPriceDollars } from '../lib/products';
+import { SOCIAL_URLS } from '../lib/social-links';
 
 const trending = getTrendingProducts(8);
 const categories = allCategories.sort((a, b) => a.sort_order - b.sort_order);
@@ -15,10 +16,7 @@ const orgJsonLd = {
   name: 'Piece of Stass',
   url: 'https://pieceofstass.com',
   logo: 'https://pieceofstass.com/og-default.png',
-  sameAs: [
-    'https://instagram.com/pieceofstass',
-    'https://tiktok.com/@pieceofstass',
-  ],
+  sameAs: SOCIAL_URLS,
 };
 
 const websiteJsonLd = {
@@ -52,6 +50,9 @@ const itemListJsonLd = {
 <BaseLayout
   title="Piece of Stass | Raid The Stash | Aesthetic Fashion & Accessories"
   description="Shop the latest in clean girl, quiet luxury, and Y2K aesthetics. Unbranded, trend-forward apparel, footwear, and accessories. Raid the stash today."
+  ogImage="/api/og/home.png"
+  ogImageAlt="Raid the stash. — Piece of Stass, aesthetic fashion & accessories"
+  seeAlso={SOCIAL_URLS}
   jsonLd={[orgJsonLd, websiteJsonLd, itemListJsonLd]}
 >
   <link rel="preload" as="image" href={trending[0].images[0]} fetchpriority="high" />

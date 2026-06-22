@@ -181,10 +181,24 @@ Go to `https://pieceofstass.com/admin` → enter your password at the sign-in sc
 ### Security
 
 - Auth uses **PBKDF2-SHA256** (310,000 iterations, 16-byte random salt) — Web Crypto only, runs in Cloudflare Workers without native bindings
-- Session cookie: `pos_admin` — HttpOnly, SameSite=Lax, 12-hour expiry, signed JWT (HMAC-SHA256)
-- Cookie path restricted to `/admin` — does not interfere with `pos_session` (customer auth)
-- Rate limiting: 5 failed attempts per IP → 10-minute lockout
+- Admin session cookie: `pos_admin` — HttpOnly, **SameSite=Strict**, 12-hour expiry, signed JWT (HMAC-SHA256)
+- Customer session cookie: `pos_session` — HttpOnly, SameSite=Lax, 30-day rolling expiry
+- Rate limiting: 5 failed admin attempts per IP → 10-minute lockout; 3 magic-link requests per IP per hour
 - Admin password rotation automatically invalidates all active sessions
+
+---
+
+## Security
+
+See **[docs/security/README.md](docs/security/README.md)** for the full security posture.
+
+Quick summary:
+- All responses carry HTTP security headers (HSTS, CSP, X-Frame-Options, etc.).
+- CSP allows Stripe, GTM, Meta, TikTok, Klaviyo, and Cloudflare Insights.
+- CSRF protection on all state-changing `/api/*` endpoints (Origin/Referer check).
+- Stripe webhooks require `stripe-signature` verification.
+- `.dev.vars` is gitignored. Secrets are managed via `wrangler secret put`.
+- Run `npm audit` regularly; remaining known vulns require Astro 6 upgrade (planned).
 
 ### KV namespaces (admin-related)
 

@@ -4,6 +4,7 @@ import ProductGallery from '../../../components/islands/ProductGallery';
 import AddToCart from '../../../components/islands/AddToCart';
 import StickyATC from '../../../components/islands/StickyATC';
 import ProductCard from '../../../components/islands/ProductCard';
+import ShareButtons from '../../../components/islands/ShareButtons';
 import InternalLinks from '../../../components/InternalLinks.astro';
 import {
   allProducts,
@@ -59,8 +60,13 @@ const breadcrumbJsonLd = {
 <BaseLayout
   title={`${product.title} — Piece of Stass`}
   description={product.description}
-  ogImage={product.images[0]}
+  ogImage={`/api/og/product/${product.handle}.png`}
+  ogImageAlt={`${product.title} — Shop at Piece of Stass`}
   ogType="product"
+  productPrice={product.price}
+  productCurrency="USD"
+  productAvailability="in stock"
+  productSku={product.variants?.[0]?.sku}
   jsonLd={[productJsonLd, breadcrumbJsonLd]}
 >
   <div style="max-width: 1280px; margin: 0 auto; padding: 24px 16px 120px;">
@@ -158,6 +164,16 @@ const breadcrumbJsonLd = {
             </details>
           ))}
         </div>
+
+        <!-- Share buttons -->
+        <ShareButtons
+          url={`https://pieceofstass.com/shop/${product.category}/${product.handle}`}
+          title={`${product.title} — Piece of Stass`}
+          description={product.description}
+          imageUrl={product.images?.[0] ?? ''}
+          client:load
+        />
+
       </div>
     </div>
 

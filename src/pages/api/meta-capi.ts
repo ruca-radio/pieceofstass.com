@@ -49,6 +49,26 @@ export const POST: APIRoute = async ({ request }) => {
     return json({ error: `event_name must be one of: ${VALID_EVENTS.join(', ')}` }, 400);
   }
 
+  // Validate event_time (must be a recent Unix timestamp or omitted)
+  if (event_time !== undefined) {
+    const now = Math.floor(Date.now() / 1000);
+    if (typeof event_time !== 'number' || event_time < now - 7 * 86400 || event_time > now + 60) {
+      return json({ error: 'event_time must be a Unix timestamp within the last 7 days' }, 400);
+    }
+  }
+
+  // Sanitize user_data string fields (cap at 500 chars each)
+  if (user_data && typeof user_data === 'object') {
+    for (const key of Object.keys(user_data)) {
+      if (typeof user_data[key] !== 'string') {
+        return json({ error: `user_data.${key} must be a string` }, 400);
+      }
+      if (user_data[key].length > 500) {
+        user_data[key] = user_data[key].slice(0, 500);
+      }
+    }
+  }
+
   // Read env (Cloudflare Workers / Astro SSR)
   const META_PIXEL_ID = (import.meta.env.META_PIXEL_ID as string | undefined)
     ?? (typeof process !== 'undefined' ? process.env.META_PIXEL_ID : undefined);

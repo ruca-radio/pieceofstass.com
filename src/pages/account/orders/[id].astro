@@ -2,195 +2,319 @@
 export const prerender = false;
 
 import BaseLayout from '../../../layouts/BaseLayout.astro';
-import { getOrderById } from '../../../lib/users-server';
+import { getOrdersKVFromEnv, getOrder } from '../../../lib/orders-server';
+import { resolveCarrier } from '../../../lib/tracking';
+import { signJWT } from '../../../lib/auth';
 
 if (!Astro.locals.user) {
   return Astro.redirect('/account/sign-in');
 }
 
 const user = Astro.locals.user;
-const env = (Astro.locals as Record<string, unknown>).runtime?.env as
+const runtimeEnv = (Astro.locals as Record<string, unknown>).runtime?.env as
   | Record<string, unknown>
   | undefined;
+const envVars = (runtimeEnv ?? {}) as Record<string, string | undefined>;
+const authSecret = envVars.AUTH_SECRET ?? import.meta.env.AUTH_SECRET;
 
 const { id } = Astro.params;
 if (!id) return Astro.redirect('/account/orders');
 
-const order = await getOrderById(id, env);
+const kv = getOrdersKVFromEnv(runtimeEnv);
+const order = await getOrder(kv, id);
 
-// Only show orders belonging to this user (or associated by email)
-if (!order || (order.user_id !== user.id && order.email !== user.email)) {
+// Only show orders belonging to this user
+if (!order || order.customer_email !== user.email) {
   return Astro.redirect('/account/orders');
 }
 
-function formatCurrency(amount: number, currency = 'USD'): string {
-  return new Intl.NumberFormat('en-US', { style: 'currency', currency }).format(amount / 100);
+// Generate a 30-day signed token for the PDF receipt link
+let receiptToken = '';
+try {
+  receiptToken = await signJWT(
+    { order_id: order.id, type: 'receipt' },
+    30 * 24 * 60 * 60,
+    authSecret
+  );
+} catch {
+  // Non-fatal — PDF will fall back to auth-gated check
+}
+
+// Carrier info
+const carrierInfo = order.tracking_number ? resolveCarrier(order.tracking_number) : null;
+
+function formatCurrency(amount: number): string {
+  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
 }
 function formatDate(iso: string): string {
-  return new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }).format(new Date(iso));
+  return new Intl.DateTimeFormat('en-US', {
+    year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'
+  }).format(new Date(iso));
+}
+function addBizDays(d: Date, n: number): Date {
+  const r = new Date(d);
+  let added = 0;
+  while (added < n) { r.setDate(r.getDate() + 1); if (r.getDay() !== 0 && r.getDay() !== 6) added++; }
+  return r;
 }
 
-const statusSteps = ['pending', 'processing', 'shipped', 'delivered'];
-const currentStep = statusSteps.indexOf(order.status);
+// Status timeline definition (full state machine)
+type StatusStep = { key: string; label: string };
+const STEPS: StatusStep[] = [
+  { key: 'payment_captured', label: 'Paid' },
+  { key: 'sent_to_supplier', label: 'Processing' },
+  { key: 'shipped',          label: 'Shipped' },
+  { key: 'out_for_delivery', label: 'Out for Delivery' },
+  { key: 'delivered',        label: 'Delivered' },
+];
+
+const COMPLETED_STEPS = new Set([
+  'payment_captured', 'sent_to_supplier', 'shipped', 'out_for_delivery', 'delivered', 'completed'
+]);
+
+function getStepIndex(status: string): number {
+  const map: Record<string, number> = {
+    pending: -1,
+    payment_captured: 0,
+    sent_to_supplier: 1,
+    shipped: 2,
+    out_for_delivery: 3,
+    delivered: 4,
+    completed: 4,
+  };
+  return map[status] ?? -1;
+}
+
+const currentStepIdx = getStepIndex(order.status);
+const isCancelled = order.status === 'cancelled';
+const isRefunded = order.status === 'refunded';
 
 const statusColors: Record<string, string> = {
-  pending:    '#9C6A22',
-  processing: '#6F7B5F',
-  shipped:    '#A14C58',
-  delivered:  '#3F6A44',
-  cancelled:  '#B23A33',
-  refunded:   '#726558',
+  pending:          '#9C6A22',
+  payment_captured: '#6F7B5F',
+  sent_to_supplier: '#6F7B5F',
+  shipped:          '#A14C58',
+  out_for_delivery: '#A14C58',
+  delivered:        '#3F6A44',
+  completed:        '#3F6A44',
+  cancelled:        '#B23A33',
+  refunded:         '#726558',
 };
+const statusLabels: Record<string, string> = {
+  pending:          'Pending',
+  payment_captured: 'Paid',
+  sent_to_supplier: 'Processing',
+  shipped:          'Shipped',
+  out_for_delivery: 'Out for Delivery',
+  delivered:        'Delivered',
+  completed:        'Complete',
+  cancelled:        'Cancelled',
+  refunded:         'Refunded',
+};
+
+const now = new Date();
+const etaMin = addBizDays(new Date(order.created_at), 15);
+const etaMax = addBizDays(new Date(order.created_at), 20);
+const etaStr = `${etaMin.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} – ${etaMax.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`;
+
+const orderNum = order.id.slice(-8).toUpperCase();
+const receiptUrl = `/api/orders/${order.id}/invoice.pdf?token=${encodeURIComponent(receiptToken)}`;
+const helpEmail = `mailto:help@pieceofstass.com?subject=Order%20${orderNum}`;
 ---
 
 <BaseLayout
-  title={`Order #${id.slice(0, 8).toUpperCase()} — Piece of Stass`}
-  description="View your order details."
+  title={`Order #${orderNum} — Piece of Stass`}
+  description="View your order details and tracking."
   noindex
 >
-  <div style="max-width: 960px; margin: 0 auto; padding: 48px 16px 96px;">
+  <div style="max-width: 880px; margin: 0 auto; padding: 48px 16px 96px;">
+
     <!-- Breadcrumb -->
     <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--color-muted); margin-bottom: 32px;">
       <a href="/account" style="color: var(--color-muted); text-decoration: none;">Account</a>
       <span>›</span>
       <a href="/account/orders" style="color: var(--color-muted); text-decoration: none;">Orders</a>
       <span>›</span>
-      <span style="color: var(--color-espresso); font-family: var(--font-family-mono);">#{id.slice(0, 8).toUpperCase()}</span>
+      <span style="color: var(--color-espresso); font-family: var(--font-family-mono);">#{orderNum}</span>
     </div>
 
     <!-- Header -->
     <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 32px; flex-wrap: wrap;">
       <div>
-        <h1 style="font-family: var(--font-family-display); font-size: 28px; font-weight: 700; color: var(--color-espresso); letter-spacing: -0.03em; margin-bottom: 4px;">
-          Order #{id.slice(0, 8).toUpperCase()}
+        <h1 style="font-family: var(--font-family-display); font-size: 28px; font-weight: 700; color: var(--color-espresso); letter-spacing: -0.03em; margin: 0 0 4px 0;">
+          Order #{orderNum}
         </h1>
-        <p style="font-size: 13px; color: var(--color-muted);">Placed {formatDate(order.created_at)}</p>
+        <p style="font-size: 13px; color: var(--color-muted); margin: 0;">Placed {formatDate(order.created_at)}</p>
       </div>
-      <span style={`font-size: 13px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: ${statusColors[order.status] ?? '#726558'}; background: rgba(42,33,28,0.04); padding: 6px 14px; border-radius: var(--radius-pill); border: 1px solid currentColor;`}>
-        {order.status}
-      </span>
+      <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+        <span style={`font-size: 12px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: ${statusColors[order.status] ?? '#726558'}; background: rgba(42,33,28,0.04); padding: 6px 14px; border-radius: 999px; border: 1px solid currentColor;`}>
+          {statusLabels[order.status] ?? order.status}
+        </span>
+        {receiptToken && (
+          <a href={receiptUrl} style="font-size: 13px; font-weight: 600; color: var(--color-rose); text-decoration: none; padding: 6px 14px; border: 1.5px solid var(--color-rose); border-radius: 999px; white-space: nowrap;">
+            Download receipt (PDF)
+          </a>
+        )}
+      </div>
     </div>
 
-    <!-- Status timeline (for active orders) -->
-    {!['cancelled', 'refunded'].includes(order.status) && (
-      <div style="background: var(--color-charcoal); border-radius: var(--radius-xl); border: 1px solid var(--color-slate); padding: 28px 32px; margin-bottom: 24px;">
-        <h2 style="font-size: 14px; font-weight: 600; color: var(--color-muted); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 24px;">Order status</h2>
-        <div style="display: flex; align-items: center; gap: 0; position: relative;">
-          {statusSteps.map((step, i) => (
-            <div style="flex: 1; display: flex; flex-direction: column; align-items: center; position: relative; z-index: 1;">
-              <!-- Connector line -->
-              {i > 0 && (
-                <div style={`position: absolute; top: 14px; right: 50%; left: -50%; height: 2px; background: ${i <= currentStep ? 'var(--color-lime)' : 'var(--color-slate)'}; z-index: 0;`}></div>
-              )}
-              <!-- Dot -->
-              <div style={`width: 28px; height: 28px; border-radius: 50%; border: 2px solid ${i <= currentStep ? 'var(--color-lime)' : 'var(--color-slate)'}; background: ${i <= currentStep ? 'var(--color-lime)' : 'var(--color-charcoal)'}; display: flex; align-items: center; justify-content: center; margin-bottom: 8px; flex-shrink: 0; z-index: 1; position: relative;`}>
-                {i <= currentStep && <span style="color: var(--color-cream); font-size: 12px; font-weight: 700;">✓</span>}
+    <!-- Status timeline (active orders) -->
+    {!isCancelled && !isRefunded && (
+      <div style="background: var(--color-charcoal); border-radius: 16px; border: 1px solid var(--color-slate); padding: 28px 28px 24px; margin-bottom: 20px;">
+        <p style="font-size: 12px; font-weight: 700; color: var(--color-muted); letter-spacing: 0.06em; text-transform: uppercase; margin: 0 0 24px 0;">Order status</p>
+
+        <!-- Timeline steps -->
+        <div style="display: flex; align-items: flex-start; position: relative;">
+          {STEPS.map((step, i) => {
+            const done = i <= currentStepIdx;
+            const active = i === currentStepIdx;
+            return (
+              <div style="flex: 1; display: flex; flex-direction: column; align-items: center; position: relative; z-index: 1;">
+                {i > 0 && (
+                  <div style={`position: absolute; top: 13px; right: 50%; left: -50%; height: 2px; background: ${i <= currentStepIdx ? 'var(--color-rose)' : 'var(--color-slate)'}; z-index: 0;`}></div>
+                )}
+                <div style={`width: 26px; height: 26px; border-radius: 50%; border: 2px solid ${done ? 'var(--color-rose)' : 'var(--color-slate)'}; background: ${done ? 'var(--color-rose)' : 'var(--color-charcoal)'}; display: flex; align-items: center; justify-content: center; margin-bottom: 8px; flex-shrink: 0; z-index: 1; position: relative;`}>
+                  {done && <span style="color: #F6F0E8; font-size: 11px; font-weight: 700;">✓</span>}
+                </div>
+                <span style={`font-size: 11px; font-weight: 600; letter-spacing: 0.03em; text-transform: uppercase; color: ${active ? 'var(--color-espresso)' : done ? 'var(--color-muted)' : 'var(--color-faint)'}; text-align: center; line-height: 1.3;`}>
+                  {step.label}
+                </span>
               </div>
-              <!-- Label -->
-              <span style={`font-size: 11px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: ${i <= currentStep ? 'var(--color-paper)' : 'var(--color-muted)'}; text-align: center;`}>
-                {step.charAt(0).toUpperCase() + step.slice(1)}
-              </span>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
-        {order.tracking_url && order.tracking_number && (
+        <!-- Tracking info -->
+        {order.tracking_number && carrierInfo && (
           <div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--color-slate);">
-            <p style="font-size: 14px; color: var(--color-muted); margin-bottom: 8px;">Tracking number: <span style="font-family: var(--font-family-mono); color: var(--color-espresso);">{order.tracking_number}</span></p>
-            <a href={order.tracking_url} target="_blank" rel="noopener noreferrer" style="display: inline-block; font-size: 14px; font-weight: 600; color: var(--color-lime); text-decoration: none;">
-              Track shipment →
-            </a>
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+              <div>
+                <p style="font-size: 12px; color: var(--color-muted); margin: 0 0 3px 0;">Carrier: <strong style="color: var(--color-espresso);">{carrierInfo.name}</strong></p>
+                <p style="font-size: 12px; color: var(--color-muted); margin: 0;">Tracking: <span style="font-family: var(--font-family-mono); color: var(--color-espresso);">{order.tracking_number}</span></p>
+              </div>
+              <a href={carrierInfo.url} target="_blank" rel="noopener noreferrer"
+                style="display: inline-block; font-size: 14px; font-weight: 700; color: #F6F0E8; background: var(--color-rose); text-decoration: none; padding: 10px 22px; border-radius: 999px; white-space: nowrap;">
+                Track with {carrierInfo.name}
+              </a>
+            </div>
           </div>
         )}
-        {!order.tracking_url && order.status === 'processing' && (
-          <p style="font-size: 13px; color: var(--color-muted); margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--color-slate);">
-            Tracking information will appear here once your order ships (typically 2–5 business days).
-          </p>
+
+        <!-- ETA when not yet shipped -->
+        {!order.tracking_number && !isCancelled && !isRefunded && (
+          <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--color-slate);">
+            <p style="font-size: 13px; color: var(--color-muted); margin: 0; line-height: 1.6;">
+              <strong style="color: var(--color-espresso);">Estimated delivery:</strong> {etaStr}
+              <span style="display: block; font-size: 12px; margin-top: 2px;">Tracking info will appear here once your order ships (typically 3–7 business days).</span>
+            </p>
+          </div>
         )}
       </div>
     )}
 
-    <div style="display: grid; grid-template-columns: 1fr; gap: 24px;">
+    <!-- Cancelled / Refunded notice -->
+    {(isCancelled || isRefunded) && (
+      <div style="background: rgba(178,58,51,0.06); border: 1px solid rgba(178,58,51,0.2); border-radius: 12px; padding: 18px 22px; margin-bottom: 20px;">
+        <p style="font-size: 14px; font-weight: 600; color: #B23A33; margin: 0 0 4px 0;">
+          {isCancelled ? 'This order was cancelled.' : 'Refund processed.'}
+        </p>
+        <p style="font-size: 13px; color: var(--color-muted); margin: 0; line-height: 1.6;">
+          {isRefunded && 'Your refund should appear on your original payment method within 3–7 business days.'}
+          {isCancelled && 'If you have questions, reach out to us below.'}
+        </p>
+      </div>
+    )}
+
+    <div style="display: grid; grid-template-columns: 1fr; gap: 16px;">
 
       <!-- Line items -->
-      <section style="background: var(--color-charcoal); border-radius: var(--radius-xl); border: 1px solid var(--color-slate); padding: 28px 32px;">
-        <h2 style="font-size: 16px; font-weight: 700; color: var(--color-espresso); margin-bottom: 20px; letter-spacing: -0.01em;">Items</h2>
-        <div style="display: flex; flex-direction: column; gap: 16px;">
+      <section style="background: var(--color-charcoal); border-radius: 16px; border: 1px solid var(--color-slate); padding: 24px 28px;">
+        <h2 style="font-size: 15px; font-weight: 700; color: var(--color-espresso); margin: 0 0 18px 0; letter-spacing: -0.01em;">Items</h2>
+        <div style="display: flex; flex-direction: column; gap: 14px;">
           {order.items.map((item) => (
-            <div style="display: flex; gap: 16px; align-items: center; padding-bottom: 16px; border-bottom: 1px solid var(--color-slate); last:border-bottom-none;">
-              {item.image && (
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  width="60"
-                  height="60"
-                  style="width: 60px; height: 60px; object-fit: cover; border-radius: var(--radius-md); flex-shrink: 0; background: var(--color-slate);"
-                />
-              )}
-              {!item.image && (
-                <div style="width: 60px; height: 60px; background: var(--color-slate); border-radius: var(--radius-md); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 24px; opacity: 0.4;">
-                  📦
-                </div>
-              )}
+            <div style="display: flex; gap: 14px; align-items: center; padding-bottom: 14px; border-bottom: 1px solid var(--color-slate);">
+              {item.image
+                ? <img src={item.image} alt={item.title} width="64" height="64"
+                    style="width: 64px; height: 64px; object-fit: cover; border-radius: 10px; flex-shrink: 0;" />
+                : <div style="width: 64px; height: 64px; background: var(--color-slate); border-radius: 10px; flex-shrink: 0;"></div>
+              }
               <div style="flex: 1; min-width: 0;">
-                <div style="font-size: 15px; font-weight: 600; color: var(--color-espresso); margin-bottom: 2px;">{item.title}</div>
-                {item.options && Object.keys(item.options).length > 0 && (
-                  <div style="font-size: 13px; color: var(--color-muted);">
-                    {Object.entries(item.options).map(([k, v]) => `${k}: ${v}`).join(' · ')}
-                  </div>
+                <p style="font-size: 14px; font-weight: 600; color: var(--color-espresso); margin: 0 0 3px 0; line-height: 1.3;">{item.title}</p>
+                {(item.color || item.size) && (
+                  <p style="font-size: 12px; color: var(--color-muted); margin: 0 0 2px 0;">
+                    {[item.color, item.size].filter(Boolean).join(' · ')}
+                  </p>
                 )}
-                <div style="font-size: 13px; color: var(--color-muted); margin-top: 2px;">Qty: {item.quantity}</div>
+                <p style="font-size: 12px; color: var(--color-muted); margin: 0;">Qty: {item.qty}</p>
               </div>
-              <div style="font-size: 15px; font-weight: 600; color: var(--color-espresso); flex-shrink: 0;">
-                {formatCurrency(item.price * item.quantity, order.currency)}
-              </div>
+              <p style="font-size: 14px; font-weight: 600; color: var(--color-espresso); flex-shrink: 0; margin: 0;">
+                {formatCurrency(item.unit_price * item.qty)}
+              </p>
             </div>
           ))}
         </div>
 
-        <!-- Order totals -->
-        <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--color-slate);">
-          <div style="display: flex; justify-content: space-between; font-size: 13px; color: var(--color-muted); margin-bottom: 8px;">
-            <span>Subtotal</span>
-            <span>{formatCurrency(order.subtotal, order.currency)}</span>
+        <!-- Totals -->
+        <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--color-slate);">
+          <div style="display: flex; justify-content: space-between; font-size: 13px; color: var(--color-muted); margin-bottom: 6px;">
+            <span>Subtotal</span><span>{formatCurrency(order.subtotal)}</span>
           </div>
-          <div style="display: flex; justify-content: space-between; font-size: 13px; color: var(--color-muted); margin-bottom: 8px;">
-            <span>Shipping</span>
-            <span>{order.shipping === 0 ? 'Free' : formatCurrency(order.shipping, order.currency)}</span>
+          <div style="display: flex; justify-content: space-between; font-size: 13px; color: var(--color-muted); margin-bottom: 6px;">
+            <span>Shipping</span><span>{order.shipping === 0 ? 'Free' : formatCurrency(order.shipping)}</span>
           </div>
-          <div style="display: flex; justify-content: space-between; font-size: 13px; color: var(--color-muted); margin-bottom: 16px;">
-            <span>Tax</span>
-            <span>{formatCurrency(order.tax, order.currency)}</span>
+          <div style="display: flex; justify-content: space-between; font-size: 13px; color: var(--color-muted); margin-bottom: 14px;">
+            <span>Tax</span><span>{formatCurrency(order.tax)}</span>
           </div>
-          <div style="display: flex; justify-content: space-between; font-size: 18px; font-weight: 700; color: var(--color-espresso); padding-top: 12px; border-top: 1px solid var(--color-slate);">
+          <div style="display: flex; justify-content: space-between; font-size: 17px; font-weight: 700; color: var(--color-espresso); padding-top: 10px; border-top: 1px solid var(--color-slate);">
             <span>Total</span>
-            <span style="color: var(--color-lime);">{formatCurrency(order.total, order.currency)}</span>
+            <span style="color: var(--color-rose);">{formatCurrency(order.total)}</span>
           </div>
         </div>
       </section>
 
       <!-- Shipping address -->
       {order.shipping_address && (
-        <section style="background: var(--color-charcoal); border-radius: var(--radius-xl); border: 1px solid var(--color-slate); padding: 28px 32px;">
-          <h2 style="font-size: 16px; font-weight: 700; color: var(--color-espresso); margin-bottom: 16px; letter-spacing: -0.01em;">Shipping address</h2>
-          <address style="font-style: normal; font-size: 15px; color: var(--color-muted); line-height: 1.8;">
-            {order.shipping_address.first_name} {order.shipping_address.last_name}<br />
-            {order.shipping_address.address_1}<br />
-            {order.shipping_address.address_2 && <>{order.shipping_address.address_2}<br /></>}
+        <section style="background: var(--color-charcoal); border-radius: 16px; border: 1px solid var(--color-slate); padding: 24px 28px;">
+          <h2 style="font-size: 15px; font-weight: 700; color: var(--color-espresso); margin: 0 0 14px 0; letter-spacing: -0.01em;">Shipping address</h2>
+          <address style="font-style: normal; font-size: 14px; color: var(--color-muted); line-height: 1.8;">
+            <strong style="color: var(--color-espresso);">{order.shipping_address.name}</strong><br />
+            {order.shipping_address.line1}<br />
+            {order.shipping_address.line2 && <>{order.shipping_address.line2}<br /></>}
             {order.shipping_address.city}, {order.shipping_address.state} {order.shipping_address.postal_code}<br />
             {order.shipping_address.country}
           </address>
         </section>
       )}
+
+      <!-- Actions row -->
+      <section style="display: flex; gap: 12px; flex-wrap: wrap;">
+        <!-- Reorder -->
+        <form method="POST" action="/api/cart/reorder" id="reorder-form-{orderNum}" style="margin: 0;">
+          <input type="hidden" name="order_id" value={order.id} />
+          <button type="submit"
+            style="font-size: 14px; font-weight: 700; color: #F6F0E8; background: var(--color-rose); border: none; border-radius: 999px; padding: 11px 24px; cursor: pointer; font-family: var(--font-family-display);">
+            Reorder
+          </button>
+        </form>
+
+        <!-- Receipt PDF -->
+        {receiptToken && (
+          <a href={receiptUrl}
+            style="font-size: 14px; font-weight: 700; color: var(--color-rose); border: 2px solid var(--color-rose); background: transparent; border-radius: 999px; padding: 9px 22px; text-decoration: none;">
+            Download receipt (PDF)
+          </a>
+        )}
+      </section>
+
     </div>
 
-    <!-- Help -->
-    <div style="margin-top: 32px; padding: 20px 24px; background: rgba(111,123,95,0.08); border-radius: var(--radius-lg); border: 1px solid rgba(111,123,95,0.2);">
-      <p style="font-size: 14px; color: var(--color-muted); line-height: 1.6;">
-        Need help with this order? Email us at
-        <a href="mailto:hello@pieceofstass.com" style="color: var(--color-violet); font-weight: 600; text-decoration: none;">hello@pieceofstass.com</a>
-        and include your order number.
+    <!-- Need help? -->
+    <div style="margin-top: 28px; padding: 18px 22px; background: rgba(111,123,95,0.07); border-radius: 12px; border: 1px solid rgba(111,123,95,0.18);">
+      <p style="font-size: 13px; color: var(--color-muted); margin: 0; line-height: 1.6;">
+        <strong style="color: var(--color-espresso);">Need help?</strong>
+        &nbsp;<a href={helpEmail} style="color: var(--color-sage); font-weight: 600; text-decoration: none;">Email us</a> with your order number <span style="font-family: var(--font-family-mono);">#{orderNum}</span> and we'll get back to you quickly.
       </p>
     </div>
+
   </div>
 </BaseLayout>

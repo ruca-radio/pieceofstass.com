@@ -218,10 +218,11 @@ export async function verifyAdminJWT(
  * setAdminCookie — set the pos_admin session cookie.
  */
 export function setAdminCookie(context: APIContext, token: string): void {
-  // Path '/' so cookie is sent to both /admin/* (pages) and /api/admin/* (API routes)
+  // Path '/' so cookie is sent to both /admin/* (pages) and /api/admin/* (API routes).
+  // SameSite=Strict: admin sessions must never be initiated cross-site.
   context.cookies.set(ADMIN_COOKIE, token, {
     httpOnly: true,
-    sameSite: 'lax',
+    sameSite: 'strict',
     path: '/',
     maxAge: COOKIE_MAX_AGE,
     secure: true,
@@ -234,7 +235,7 @@ export function setAdminCookie(context: APIContext, token: string): void {
 export function clearAdminCookie(context: APIContext): void {
   context.cookies.set(ADMIN_COOKIE, '', {
     httpOnly: true,
-    sameSite: 'lax',
+    sameSite: 'strict',
     path: '/',
     maxAge: 0,
     secure: true,

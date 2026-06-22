@@ -1,123 +1,226 @@
 /**
- * order-confirmation.ts — Email template for order confirmation
- * Placeholder: actual sending is handled by Klaviyo via Medusa webhooks.
- * This module is for any direct send fallback or dev preview.
+ * order-confirmation.ts — Transactional email: order confirmed
+ * ─────────────────────────────────────────────────────────────────────────────
+ * Sent immediately when payment is captured (status: paid / payment_captured).
+ * Includes: order summary, line items with images, totals, shipping address,
+ * estimated delivery window (15-20 business days), receipt PDF link,
+ * "Track this order" CTA, and support link.
+ *
+ * Voice: Anna's warm, cheeky, confident. "Raid the stash."
+ * Spec: inline styles, 600px max, mobile-friendly, plain-text fallback.
  */
 
-import type { Order } from '../users-server';
+import type { Order } from '../orders-server';
+import {
+  emailShell,
+  ctaButton,
+  card,
+  divider,
+  label,
+  h1,
+  p,
+  formatCurrency,
+  formatDate,
+  addBusinessDays,
+  BRAND,
+} from './base';
 
-export function orderConfirmationEmail(order: Order): {
-  subject: string;
-  html: string;
-  text: string;
-} {
-  const subject = `Order confirmed — #${order.id.slice(0, 8).toUpperCase()}`;
-  const itemsHtml = order.items
-    .map(
-      (item) => `
-    <tr>
-      <td style="padding:12px 0; border-bottom:1px solid #3A3A3E; font-size:14px; color:#FAFAF7;">
-        ${item.title}
-        ${
-          item.options
-            ? `<span style="color:#6B6B6E; font-size:12px;"> — ${Object.values(item.options).join(', ')}</span>`
-            : ''
-        }
+export interface OrderConfirmationOptions {
+  /** Signed JWT token for the receipt PDF link (30-day expiry) */
+  receiptToken?: string;
+  baseUrl?: string;
+}
+
+export function orderConfirmationEmail(
+  order: Order,
+  opts: OrderConfirmationOptions = {}
+): { subject: string; html: string; text: string } {
+  const baseUrl = opts.baseUrl ?? 'https://pieceofstass.com';
+  const firstName = order.customer_name?.split(' ')[0] ?? 'there';
+  const orderId = order.id;
+  const orderNum = orderId.slice(-8).toUpperCase();
+
+  const now = new Date();
+  const etaMin = addBusinessDays(now, 15);
+  const etaMax = addBusinessDays(now, 20);
+  const etaStr = `${etaMin.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} – ${etaMax.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`;
+
+  const trackUrl = `${baseUrl}/account/orders/${orderId}`;
+  const receiptUrl = opts.receiptToken
+    ? `${baseUrl}/api/orders/${orderId}/invoice.pdf?token=${encodeURIComponent(opts.receiptToken)}`
+    : `${trackUrl}#receipt`;
+
+  const subject = `Your order's confirmed — #${orderNum}`;
+
+  // ── Line items ──────────────────────────────────────────────────────────────
+  const itemsHtml = order.items.map((item) => {
+    const lineTotal = formatCurrency(item.unit_price * item.qty);
+    const variantLabel = [item.color, item.size].filter(Boolean).join(' · ');
+    return `<tr>
+      <td style="padding:12px 0;border-bottom:1px solid ${BRAND.line};vertical-align:middle;">
+        <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+          <tr>
+            <td style="width:64px;vertical-align:top;padding-right:12px;">
+              ${item.image
+                ? `<img src="${item.image}" alt="${item.title}" width="64" height="64" style="width:64px;height:64px;object-fit:cover;border-radius:10px;display:block;background:${BRAND.line};">`
+                : `<div style="width:64px;height:64px;background:${BRAND.line};border-radius:10px;"></div>`
+              }
+            </td>
+            <td style="vertical-align:top;">
+              <p style="font-size:14px;font-weight:600;color:${BRAND.espresso};margin:0 0 3px 0;line-height:1.3;">${item.title}</p>
+              ${variantLabel ? `<p style="font-size:12px;color:${BRAND.muted};margin:0 0 3px 0;">${variantLabel}</p>` : ''}
+              <p style="font-size:12px;color:${BRAND.muted};margin:0;">Qty: ${item.qty}</p>
+            </td>
+            <td style="vertical-align:top;text-align:right;white-space:nowrap;">
+              <p style="font-size:14px;font-weight:600;color:${BRAND.espresso};margin:0;">${lineTotal}</p>
+            </td>
+          </tr>
+        </table>
       </td>
-      <td style="padding:12px 0; border-bottom:1px solid #3A3A3E; font-size:14px; color:#6B6B6E; text-align:right;">
-        ×${item.quantity}
-      </td>
-      <td style="padding:12px 0; border-bottom:1px solid #3A3A3E; font-size:14px; color:#FAFAF7; text-align:right;">
-        $${((item.price * item.quantity) / 100).toFixed(2)}
-      </td>
-    </tr>`
-    )
-    .join('');
+    </tr>`;
+  }).join('');
 
-  const html = `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${subject}</title>
-</head>
-<body style="background:#0A0A0B; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; color:#FAFAF7; margin:0; padding:0;">
-  <div style="max-width:560px; margin:0 auto; padding:40px 20px;">
+  // ── Shipping address ────────────────────────────────────────────────────────
+  const addr = order.shipping_address;
+  const addrHtml = addr
+    ? `<p style="font-size:14px;color:${BRAND.muted};line-height:1.8;margin:0;">
+        <strong style="color:${BRAND.espresso};font-weight:600;">${addr.name}</strong><br>
+        ${addr.line1}${addr.line2 ? `<br>${addr.line2}` : ''}<br>
+        ${addr.city}, ${addr.state} ${addr.postal_code}<br>
+        ${addr.country}
+      </p>`
+    : '';
 
-    <!-- Logo -->
-    <div style="margin-bottom:40px;">
-      <span style="display:inline-block; width:36px; height:36px; border-radius:8px; background:#C6FF3A; vertical-align:middle; margin-right:10px;"></span>
-      <span style="font-size:20px; font-weight:700; letter-spacing:-0.02em; vertical-align:middle;">STASS</span>
-    </div>
-
-    <!-- Hero -->
-    <div style="background:#1C1C1F; border-radius:16px; padding:40px 36px; margin-bottom:24px;">
-      <p style="font-size:12px; font-weight:600; color:#C6FF3A; letter-spacing:0.08em; text-transform:uppercase; margin-bottom:8px;">Order Confirmed</p>
-      <h1 style="font-size:24px; font-weight:700; letter-spacing:-0.02em; margin-bottom:12px;">
-        Thanks, ${order.shipping_address?.first_name ?? 'friend'}! 🎉
-      </h1>
-      <p style="font-size:16px; color:#6B6B6E; line-height:1.6; margin-bottom:0;">
-        Your order <strong style="color:#FAFAF7">#${order.id.slice(0, 8).toUpperCase()}</strong> is confirmed.
-        We'll send you a shipping update when your item ships (typically 10–20 days for international delivery).
-      </p>
-    </div>
+  // ── Body HTML ───────────────────────────────────────────────────────────────
+  const bodyHtml = `
+    <!-- Hero card -->
+    ${card(`
+      ${label('Order Confirmed')}
+      ${h1(`Thanks, ${firstName} — your stash is incoming.`)}
+      ${p(`Order <strong style="color:${BRAND.espresso};font-family:monospace;">#${orderNum}</strong> is confirmed and we're getting it ready. You'll hear from us when it's on the move.`)}
+      <div style="background:${BRAND.surfaceSunken};border-radius:10px;padding:14px 16px;margin-bottom:20px;">
+        <p style="font-size:13px;color:${BRAND.muted};margin:0;line-height:1.6;">
+          <strong style="color:${BRAND.espresso};">Estimated delivery:</strong> ${etaStr}<br>
+          <span style="font-size:12px;">15–20 business days for international shipping. We'll send tracking as soon as it ships.</span>
+        </p>
+      </div>
+      <table role="presentation" border="0" cellpadding="0" cellspacing="0" style="margin:0 auto 8px auto;">
+        <tr>
+          <td style="padding-right:8px;">
+            ${ctaButton('Track this order', trackUrl)}
+          </td>
+        </tr>
+      </table>
+    `)}
 
     <!-- Items -->
-    <div style="background:#1C1C1F; border-radius:16px; padding:32px 36px; margin-bottom:24px;">
-      <h2 style="font-size:16px; font-weight:600; margin-bottom:20px;">Your items</h2>
-      <table style="width:100%; border-collapse:collapse;">
-        <tbody>
-          ${itemsHtml}
-        </tbody>
-        <tfoot>
-          <tr>
-            <td colspan="2" style="padding:16px 0 4px; font-size:13px; color:#6B6B6E;">Subtotal</td>
-            <td style="padding:16px 0 4px; font-size:13px; color:#6B6B6E; text-align:right;">$${(order.subtotal / 100).toFixed(2)}</td>
-          </tr>
-          <tr>
-            <td colspan="2" style="padding:4px 0; font-size:13px; color:#6B6B6E;">Shipping</td>
-            <td style="padding:4px 0; font-size:13px; color:#6B6B6E; text-align:right;">${order.shipping === 0 ? 'Free' : `$${(order.shipping / 100).toFixed(2)}`}</td>
-          </tr>
-          <tr>
-            <td colspan="2" style="padding:4px 0 12px; font-size:13px; color:#6B6B6E;">Tax</td>
-            <td style="padding:4px 0 12px; font-size:13px; color:#6B6B6E; text-align:right;">$${(order.tax / 100).toFixed(2)}</td>
-          </tr>
-          <tr>
-            <td colspan="2" style="padding:12px 0 0; font-size:16px; font-weight:700; color:#FAFAF7; border-top:1px solid #3A3A3E;">Total</td>
-            <td style="padding:12px 0 0; font-size:16px; font-weight:700; color:#C6FF3A; text-align:right; border-top:1px solid #3A3A3E;">$${(order.total / 100).toFixed(2)}</td>
-          </tr>
-        </tfoot>
-      </table>
-    </div>
+    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color:${BRAND.surface};border-radius:16px;margin-bottom:16px;">
+      <tr><td style="padding:24px 28px 8px 28px;">
+        <p style="font-size:14px;font-weight:700;color:${BRAND.espresso};margin:0 0 16px 0;letter-spacing:-0.01em;">Your items</p>
+        <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+          <tbody>${itemsHtml}</tbody>
+          <tfoot>
+            <tr>
+              <td style="padding:12px 0 4px 0;">
+                <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                  <tr>
+                    <td style="font-size:13px;color:${BRAND.muted};padding:2px 0;">Subtotal</td>
+                    <td style="font-size:13px;color:${BRAND.muted};padding:2px 0;text-align:right;">${formatCurrency(order.subtotal)}</td>
+                  </tr>
+                  <tr>
+                    <td style="font-size:13px;color:${BRAND.muted};padding:2px 0;">Shipping</td>
+                    <td style="font-size:13px;color:${BRAND.muted};padding:2px 0;text-align:right;">${order.shipping === 0 ? 'Free' : formatCurrency(order.shipping)}</td>
+                  </tr>
+                  <tr>
+                    <td style="font-size:13px;color:${BRAND.muted};padding:2px 0 10px 0;">Tax</td>
+                    <td style="font-size:13px;color:${BRAND.muted};padding:2px 0 10px 0;text-align:right;">${formatCurrency(order.tax)}</td>
+                  </tr>
+                  <tr style="border-top:2px solid ${BRAND.line};">
+                    <td style="font-size:16px;font-weight:700;color:${BRAND.espresso};padding:10px 0 0 0;">Total</td>
+                    <td style="font-size:16px;font-weight:700;color:${BRAND.rose};padding:10px 0 0 0;text-align:right;">${formatCurrency(order.total)}</td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      </td></tr>
+    </table>
 
-    <!-- Track order CTA -->
-    <div style="text-align:center; margin-bottom:32px;">
-      <a href="https://pieceofstass.com/track-order" style="display:inline-block; background:#C6FF3A; color:#0A0A0B; font-size:15px; font-weight:700; text-decoration:none; padding:14px 32px; border-radius:999px; letter-spacing:-0.01em;">
-        Track my order
-      </a>
-    </div>
+    <!-- Shipping address -->
+    ${addr ? card(`
+      ${label('Shipping to', BRAND.sage)}
+      ${addrHtml}
+    `) : ''}
 
-    <!-- Footer -->
-    <p style="font-size:12px; color:#6B6B6E; text-align:center; line-height:1.7;">
-      &copy; ${new Date().getFullYear()} Piece of Stass. All rights reserved.<br>
-      Questions? <a href="mailto:hello@pieceofstass.com" style="color:#6B6B6E;">hello@pieceofstass.com</a><br>
-      <a href="https://pieceofstass.com/privacy" style="color:#6B6B6E;">Privacy Policy</a>
-    </p>
-  </div>
-</body>
-</html>`;
+    <!-- Receipt download -->
+    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom:16px;">
+      <tr>
+        <td style="background:${BRAND.surfaceSunken};border-radius:12px;padding:16px 20px;">
+          <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+            <tr>
+              <td>
+                <p style="font-size:13px;font-weight:600;color:${BRAND.espresso};margin:0 0 2px 0;">Receipt / Invoice</p>
+                <p style="font-size:12px;color:${BRAND.muted};margin:0;">Download a PDF copy for your records.</p>
+              </td>
+              <td style="text-align:right;white-space:nowrap;padding-left:12px;">
+                <a href="${receiptUrl}" style="display:inline-block;font-size:13px;font-weight:600;color:${BRAND.rose};text-decoration:none;padding:8px 16px;border:1.5px solid ${BRAND.rose};border-radius:999px;">Download PDF</a>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
 
-  const text = `Order confirmed — #${order.id.slice(0, 8).toUpperCase()}
+    <!-- Support -->
+    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr>
+        <td style="background:rgba(111,123,95,0.08);border-radius:10px;border:1px solid rgba(111,123,95,0.2);padding:14px 18px;">
+          <p style="font-size:13px;color:${BRAND.muted};margin:0;line-height:1.6;">
+            Questions about your order? Reply to this email or reach us at <a href="mailto:help@pieceofstass.com" style="color:${BRAND.sage};font-weight:600;text-decoration:none;">help@pieceofstass.com</a> — include <strong style="color:${BRAND.espresso};font-family:monospace;">#${orderNum}</strong> and we'll sort you out.
+          </p>
+        </td>
+      </tr>
+    </table>
+  `;
 
-Thanks for your order! We'll send you a shipping update when it ships (10–20 days international delivery).
+  const html = emailShell(subject, bodyHtml, `Your stash is on its way — est. delivery ${etaStr}`);
 
-${order.items.map((i) => `- ${i.title} ×${i.quantity} — $${((i.price * i.quantity) / 100).toFixed(2)}`).join('\n')}
+  // ── Plain text ──────────────────────────────────────────────────────────────
+  const itemsText = order.items
+    .map((i) => {
+      const variant = [i.color, i.size].filter(Boolean).join(' / ');
+      return `  • ${i.title}${variant ? ` (${variant})` : ''} × ${i.qty}  ${formatCurrency(i.unit_price * i.qty)}`;
+    })
+    .join('\n');
 
-Total: $${(order.total / 100).toFixed(2)}
+  const addrText = addr
+    ? `\nSHIPPING TO:\n${addr.name}\n${addr.line1}${addr.line2 ? '\n' + addr.line2 : ''}\n${addr.city}, ${addr.state} ${addr.postal_code}\n${addr.country}\n`
+    : '';
 
-Track your order: https://pieceofstass.com/track-order
+  const text = `Order confirmed — #${orderNum}
 
-— Piece of Stass`;
+Hi ${firstName},
+
+Thanks for your order! We're getting it ready to ship. You'll get another email as soon as it's on the move.
+
+Estimated delivery: ${etaStr} (15–20 business days, international shipping).
+
+YOUR ITEMS:
+${itemsText}
+
+Subtotal:  ${formatCurrency(order.subtotal)}
+Shipping:  ${order.shipping === 0 ? 'Free' : formatCurrency(order.shipping)}
+Tax:       ${formatCurrency(order.tax)}
+Total:     ${formatCurrency(order.total)}
+${addrText}
+Track your order:  ${trackUrl}
+Download receipt:  ${receiptUrl}
+
+Need help? Email help@pieceofstass.com with order #${orderNum}.
+
+— Anna at Piece of Stass
+https://pieceofstass.com`;
 
   return { subject, html, text };
 }

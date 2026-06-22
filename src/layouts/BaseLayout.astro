@@ -14,10 +14,22 @@ interface Props {
   description: string;
   canonical?: string;
   ogImage?: string;
-  ogType?: 'website' | 'product' | 'article';
+  ogSquareImage?: string;
+  ogType?: 'website' | 'product' | 'article' | 'profile';
+  ogImageAlt?: string;
   jsonLd?: object | object[];
   noindex?: boolean;
   transparentHeader?: boolean;
+  // Product-specific
+  productPrice?: number;
+  productCurrency?: string;
+  productAvailability?: 'in stock' | 'out of stock' | 'preorder';
+  productSku?: string;
+  // og:see_also for social profiles (home)
+  seeAlso?: string[];
+  // Article-specific
+  articlePublishedTime?: string;
+  articleModifiedTime?: string;
 }
 
 const {
@@ -25,10 +37,19 @@ const {
   description,
   canonical,
   ogImage,
+  ogSquareImage,
   ogType,
+  ogImageAlt,
   jsonLd,
   noindex,
   transparentHeader = false,
+  productPrice,
+  productCurrency,
+  productAvailability,
+  productSku,
+  seeAlso,
+  articlePublishedTime,
+  articleModifiedTime,
 } = Astro.props;
 
 // Read env vars (available at SSR time on Cloudflare Workers)
@@ -49,17 +70,23 @@ const country = '';
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#F6F0E8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <SEO
       title={title}
       description={description}
       canonical={canonical}
       ogImage={ogImage}
+      ogSquareImage={ogSquareImage}
       ogType={ogType}
+      ogImageAlt={ogImageAlt}
       jsonLd={jsonLd}
       noindex={noindex}
+      productPrice={productPrice}
+      productCurrency={productCurrency}
+      productAvailability={productAvailability}
+      productSku={productSku}
+      seeAlso={seeAlso}
+      articlePublishedTime={articlePublishedTime}
+      articleModifiedTime={articleModifiedTime}
     />
 
     {/* ── GA4 — consent mode defaults set before gtag loads ── */}
