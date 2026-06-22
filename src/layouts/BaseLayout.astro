@@ -38,14 +38,10 @@ const META_PIXEL_ID = import.meta.env.META_PIXEL_ID ?? '';
 const TIKTOK_PIXEL_ID = import.meta.env.TIKTOK_PIXEL_ID ?? '';
 const KLAVIYO_SITE_ID = import.meta.env.KLAVIYO_SITE_ID ?? '';
 
-// CF-IPCountry header for consent gating (injected by Cloudflare at runtime)
-// try/catch so static analysis passes during build time prerender
-let country = '';
-try {
-  country = Astro.request.headers.get('cf-ipcountry') ?? '';
-} catch {
-  // Build-time prerender pass — banner will default to showing
-}
+// Country detection happens client-side in CookieBanner via /api/geo to keep
+// every page prerenderable on Cloudflare Workers (request.headers is only
+// available on SSR pages, not prerendered ones).
+const country = '';
 ---
 
 <!doctype html>
@@ -131,6 +127,7 @@ try {
 
     {/* ── Cookie Consent Banner ── */}
     <CookieBanner client:load country={country} />
+
 
     {/* ── Meta Pixel init (gated by consent via analytics.ts) ── */}
     {META_PIXEL_ID && (

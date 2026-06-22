@@ -69,54 +69,69 @@ interface Props {
   country?: string;
 }
 
-export default function CookieBanner({ country = '' }: Props) {
+export default function CookieBanner({ country: initialCountry = '' }: Props) {
   const [visible, setVisible] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
   const [analytics, setAnalytics] = useState(true);
   const [marketing, setMarketing] = useState(true);
 
   useEffect(() => {
-    // Check GPC signal first
-    const gpcActive = (navigator as Navigator & { globalPrivacyControl?: boolean }).globalPrivacyControl === true;
+    let cancelled = false;
 
-    // Check existing consent cookie
-    const existing = parseCookie();
-    if (existing) {
-      applyConsent(existing);
-      return;
+    const decide = (country: string) => {
+      if (cancelled) return;
+
+      const gpcActive = (navigator as Navigator & { globalPrivacyControl?: boolean }).globalPrivacyControl === true;
+
+      const existing = parseCookie();
+      if (existing) {
+        applyConsent(existing);
+        return;
+      }
+
+      if (gpcActive) {
+        const consent: ConsentState = { necessary: true, analytics: false, marketing: false };
+        setCookie(consent);
+        applyConsent(consent);
+        return;
+      }
+
+      if (country && !CONSENT_REQUIRED_COUNTRIES.has(country.toUpperCase())) {
+        const consent: ConsentState = { necessary: true, analytics: true, marketing: true };
+        setCookie(consent);
+        applyConsent(consent);
+        return;
+      }
+
+      setVisible(true);
+
+      if (typeof window.gtag === 'function') {
+        window.gtag('consent', 'default', {
+          analytics_storage: 'denied',
+          ad_storage: 'denied',
+          ad_user_data: 'denied',
+          ad_personalization: 'denied',
+          wait_for_update: 2000,
+        });
+      }
+    };
+
+    if (initialCountry) {
+      decide(initialCountry);
+    } else {
+      // Country wasn't provided at render time (all pages are prerendered).
+      // Fetch from the SSR /api/geo endpoint, then decide. On failure, show
+      // the banner to fail-safe toward stricter consent.
+      fetch('/api/geo')
+        .then((r) => (r.ok ? r.json() : { country: '' }))
+        .then((data: { country?: string }) => decide(data.country ?? ''))
+        .catch(() => decide(''));
     }
 
-    // If GPC active → auto-deny non-essential without showing banner
-    if (gpcActive) {
-      const consent: ConsentState = { necessary: true, analytics: false, marketing: false };
-      setCookie(consent);
-      applyConsent(consent);
-      return;
-    }
-
-    // Only show banner for relevant countries
-    if (country && !CONSENT_REQUIRED_COUNTRIES.has(country.toUpperCase())) {
-      // Auto-accept for non-regulated regions
-      const consent: ConsentState = { necessary: true, analytics: true, marketing: true };
-      setCookie(consent);
-      applyConsent(consent);
-      return;
-    }
-
-    // Show banner
-    setVisible(true);
-
-    // Default GA4 consent mode to denied until user decides
-    if (typeof window.gtag === 'function') {
-      window.gtag('consent', 'default', {
-        analytics_storage: 'denied',
-        ad_storage: 'denied',
-        ad_user_data: 'denied',
-        ad_personalization: 'denied',
-        wait_for_update: 2000,
-      });
-    }
-  }, [country]);
+    return () => {
+      cancelled = true;
+    };
+  }, [initialCountry]);
 
   if (!visible) return null;
 
