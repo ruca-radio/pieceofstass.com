@@ -43,7 +43,7 @@ export default function SearchOverlay() {
     <>
       <div
         onClick={() => searchOpen.set(false)}
-        style={{ position: 'fixed', inset: 0, background: 'rgba(10,10,11,0.7)', backdropFilter: 'blur(8px)', zIndex: 300, animation: 'fadeIn 200ms' }}
+        style={{ position: 'fixed', inset: 0, background: 'rgba(42,33,28,0.7)', backdropFilter: 'blur(8px)', zIndex: 300, animation: 'fadeIn 200ms' }}
         aria-hidden="true"
       />
       <div

@@ -1,0 +1,127 @@
+---
+export const prerender = false;
+
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import { requireAdmin } from '../../../lib/admin-auth';
+import { listProductsWithOverrides } from '../../../lib/products-server';
+import { getOrdersKVFromEnv } from '../../../lib/orders-server';
+
+const env = await requireAdmin(Astro);
+if (!env) return Astro.redirect('/admin/sign-in?error=session');
+
+const runtimeEnv = ((Astro.locals as Record<string, unknown>)?.runtime as Record<string, unknown>)?.env as Record<string, unknown> | undefined;
+const kv = getOrdersKVFromEnv(runtimeEnv);
+
+const products = await listProductsWithOverrides(kv);
+
+const url = Astro.url;
+const searchQuery = url.searchParams.get('q') ?? '';
+const categoryFilter = url.searchParams.get('category') ?? 'all';
+const statusFilter = url.searchParams.get('status') ?? 'all';
+
+let filtered = products;
+if (searchQuery) {
+  const q = searchQuery.toLowerCase();
+  filtered = filtered.filter(
+    (p) => p.title.toLowerCase().includes(q) || p.id.toLowerCase().includes(q)
+  );
+}
+if (categoryFilter !== 'all') {
+  filtered = filtered.filter((p) => p.category === categoryFilter);
+}
+if (statusFilter !== 'all') {
+  filtered = filtered.filter((p) => p.status === statusFilter);
+}
+
+const categories = [...new Set(products.map((p) => p.category))].sort();
+---
+<AdminLayout title="Products" activeNav="products">
+
+  <div class="adm-filters">
+    <form method="GET" style="display:contents;">
+      <div>
+        <label class="adm-label">Search</label>
+        <input type="text" name="q" value={searchQuery} class="adm-input" placeholder="Title or ID..." style="width:200px;" />
+      </div>
+      <div>
+        <label class="adm-label">Category</label>
+        <select name="category" class="adm-select" style="width:150px;">
+          <option value="all">All Categories</option>
+          {categories.map((c) => (
+            <option value={c} selected={categoryFilter === c}>{c}</option>
+          ))}
+        </select>
+      </div>
+      <div>
+        <label class="adm-label">Status</label>
+        <select name="status" class="adm-select" style="width:120px;">
+          <option value="all">All</option>
+          <option value="active" selected={statusFilter === 'active'}>Active</option>
+          <option value="draft" selected={statusFilter === 'draft'}>Draft</option>
+        </select>
+      </div>
+      <div style="padding-top:18px;">
+        <button type="submit" class="adm-btn adm-btn-primary">Filter</button>
+      </div>
+      {(searchQuery || categoryFilter !== 'all' || statusFilter !== 'all') && (
+        <div style="padding-top:18px;">
+          <a href="/admin/products" class="adm-btn adm-btn-secondary">Clear</a>
+        </div>
+      )}
+    </form>
+  </div>
+
+  <div style="font-size:13px;color:var(--adm-muted);margin-bottom:12px;">
+    {filtered.length} product{filtered.length !== 1 ? 's' : ''}
+    {filtered.filter(p => p.status === 'draft').length > 0 && (
+      <span> · {filtered.filter(p => p.status === 'draft').length} draft</span>
+    )}
+  </div>
+
+  <div class="adm-card" style="padding:0;overflow:hidden;">
+    <table class="adm-table">
+      <thead>
+        <tr>
+          <th>Image</th>
+          <th>Title</th>
+          <th>Category</th>
+          <th>Price</th>
+          <th>Compare at</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {filtered.map((p) => (
+          <tr>
+            <td style="width:52px;padding:8px 8px 8px 12px;">
+              {p.images[0] ? (
+                <img src={p.images[0]} alt="" style="width:44px;height:44px;object-fit:cover;border-radius:4px;display:block;" loading="lazy" />
+              ) : (
+                <div style="width:44px;height:44px;border-radius:4px;background:var(--adm-surface2);"></div>
+              )}
+            </td>
+            <td>
+              <a href={`/admin/products/${p.id}`} style="font-size:13px;font-weight:500;">{p.title}</a>
+              <div class="adm-mono" style="font-size:10px;color:var(--adm-muted);margin-top:2px;">{p.id}</div>
+            </td>
+            <td style="font-size:12px;color:var(--adm-muted);">{p.category}</td>
+            <td class="adm-mono" style="font-size:13px;">${p.price}</td>
+            <td class="adm-mono" style="font-size:12px;color:var(--adm-muted);">
+              {p.compare_at_price ? `$${p.compare_at_price}` : '—'}
+            </td>
+            <td>
+              <span class={`adm-badge ${p.status === 'active' ? 'adm-badge-active' : 'adm-badge-draft'}`}>
+                {p.status}
+              </span>
+            </td>
+            <td>
+              <a href={`/admin/products/${p.id}`} class="adm-btn adm-btn-secondary" style="padding:4px 10px;font-size:12px;">Edit →</a>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+</AdminLayout>

@@ -37,9 +37,9 @@ export default function ToastContainer() {
     info: 'var(--color-violet)',
   };
   const textColors: Record<Toast['type'], string> = {
-    success: 'var(--color-ink)',
-    error: 'var(--color-espresso)',
-    info: 'var(--color-espresso)',
+    success: 'var(--color-cream)',
+    error: 'var(--color-cream)',
+    info: 'var(--color-cream)',
   };
 
   return (

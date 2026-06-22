@@ -81,7 +81,7 @@ export default function TrackOrder() {
                   <div key={step.id} style={{ display: 'flex', gap: '12px', marginBottom: i < STEPS.length - 1 ? '0' : '0' }}>
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                       <div style={{ width: '20px', height: '20px', borderRadius: '999px', background: done || active ? 'var(--color-lime)' : 'var(--color-slate)', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        {done && <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--color-ink)" strokeWidth="3"><path d="M20 6 9 17l-5-5"/></svg>}
+                        {done && <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--color-cream)" strokeWidth="3"><path d="M20 6 9 17l-5-5"/></svg>}
                       </div>
                       {i < STEPS.length - 1 && (
                         <div style={{ width: '2px', height: '32px', background: done ? 'var(--color-lime)' : 'var(--color-slate)', flexShrink: 0 }} />

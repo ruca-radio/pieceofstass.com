@@ -55,18 +55,18 @@ const itemListJsonLd = {
   jsonLd={[orgJsonLd, websiteJsonLd, itemListJsonLd]}
 >
   <link rel="preload" as="image" href={trending[0].images[0]} fetchpriority="high" />
-  <section style="position: relative; min-height: 90vh; display: flex; align-items: center; overflow: hidden; background: var(--color-ink);">
-    <!-- Background gradient accent -->
-    <div style="position: absolute; inset: 0; background: radial-gradient(ellipse 60% 80% at 80% 50%, rgba(198,255,58,0.06) 0%, transparent 70%); pointer-events: none;"/>
-    <div style="position: absolute; inset: 0; background: radial-gradient(ellipse 40% 60% at 20% 80%, rgba(123,92,255,0.04) 0%, transparent 70%); pointer-events: none;"/>
+  <section style="position: relative; min-height: 90vh; display: flex; align-items: center; overflow: hidden; background: var(--bg-cream-wash);">
+    <!-- Soft warm gradient accents -->
+    <div style="position: absolute; inset: 0; background: radial-gradient(ellipse 60% 80% at 82% 45%, rgba(178,94,107,0.14) 0%, transparent 70%); pointer-events: none;"/>
+    <div style="position: absolute; inset: 0; background: radial-gradient(ellipse 44% 62% at 16% 82%, rgba(196,103,61,0.10) 0%, transparent 70%); pointer-events: none;"/>
 
     <div style="max-width: 1280px; margin: 0 auto; padding: 64px 16px; display: grid; grid-template-columns: 1fr; gap: 48px; align-items: center; width: 100%;" class="hero-grid">
       <!-- Copy -->
       <div>
-        <p style="font-family: var(--font-family-mono); font-size: 11px; letter-spacing: 0.12em; color: var(--color-lime); text-transform: uppercase; margin: 0 0 16px;">The summer drop is live</p>
+        <p style="font-family: var(--font-family-mono); font-size: 11px; letter-spacing: 0.12em; color: var(--color-rose-deep); text-transform: uppercase; margin: 0 0 16px;">The summer drop is live</p>
         <h1 style="font-family: var(--font-family-display); font-weight: 700; font-size: clamp(48px, 8vw, 84px); line-height: 1.0; letter-spacing: -0.03em; color: var(--color-espresso); margin: 0 0 24px;">
           Piece of Stass:<br/>
-          <span style="color: var(--color-lime);">Curated Aesthetic Essentials.</span>
+          <span style="color: var(--color-rose-deep);">Curated Aesthetic Essentials.</span>
         </h1>
         <p style="font-size: 18px; color: var(--color-muted); margin: 0 0 32px; max-width: 480px; line-height: 1.6;">
           The look for less, dropped daily. Trend-driven finds across 8 categories — picked by someone with taste.
@@ -74,8 +74,8 @@ const itemListJsonLd = {
         <div style="display: flex; gap: 12px; flex-wrap: wrap;">
           <a
             href="/shop"
-            style="background: var(--color-lime); color: var(--color-cream); border-radius: 999px; padding: 16px 32px; font-family: var(--font-family-display); font-weight: 700; font-size: 16px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: box-shadow 200ms; letter-spacing: -0.01em;"
-            onmouseover="this.style.boxShadow='var(--shadow-lime-glow)'"
+            style="background: var(--color-rose); color: var(--color-cream); border-radius: 999px; padding: 16px 32px; font-family: var(--font-family-display); font-weight: 700; font-size: 16px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: box-shadow 200ms, transform 150ms; letter-spacing: -0.01em;"
+            onmouseover="this.style.boxShadow='var(--shadow-rose-glow)'"
             onmouseout="this.style.boxShadow='none'"
           >
             Shop now
@@ -83,9 +83,9 @@ const itemListJsonLd = {
           </a>
           <a
             href="/shop/footwear"
-            style="background: transparent; color: var(--color-espresso); border: 1.5px solid var(--color-slate); border-radius: 999px; padding: 16px 32px; font-family: var(--font-family-display); font-weight: 600; font-size: 16px; text-decoration: none; transition: border-color 150ms, color 150ms;"
-            onmouseover="this.style.borderColor='var(--color-espresso)'"
-            onmouseout="this.style.borderColor='var(--color-slate)'"
+            style="background: transparent; color: var(--color-espresso); border: 1.5px solid var(--color-rose); border-radius: 999px; padding: 16px 32px; font-family: var(--font-family-display); font-weight: 600; font-size: 16px; text-decoration: none; transition: border-color 150ms, color 150ms, background 150ms;"
+            onmouseover="this.style.borderColor='var(--color-rose)';this.style.color='var(--color-rose-deep)'"
+            onmouseout="this.style.borderColor='var(--color-rose)';this.style.color='var(--color-espresso)'"
           >
             Footwear
           </a>
@@ -126,7 +126,7 @@ const itemListJsonLd = {
           <a
             href={`/shop/${cat.slug}`}
             style="flex-shrink: 0; display: flex; flex-direction: column; align-items: center; gap: 8px; text-decoration: none; padding: 16px 20px; background: var(--color-charcoal); border-radius: var(--radius-xl); border: 1px solid var(--color-slate); min-width: 100px; text-align: center; transition: border-color 150ms, background 150ms; cursor: pointer;"
-            onmouseover="this.style.borderColor='var(--color-lime)'; this.style.background='rgba(198,255,58,0.06)'"
+            onmouseover="this.style.borderColor='var(--color-lime)'; this.style.background='rgba(178,94,107,0.06)'"
             onmouseout="this.style.borderColor='var(--color-slate)'; this.style.background='var(--color-charcoal)'"
           >
             <span style="font-size: 22px;" aria-hidden="true">
@@ -182,7 +182,7 @@ const itemListJsonLd = {
               onmouseover="this.style.transform='scale(1.06)'"
               onmouseout="this.style.transform='scale(1)'"
             />
-            <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(10,10,11,0.6) 0%, transparent 60%); display: flex; align-items: flex-end; padding: 10px;">
+            <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(42,33,28,0.6) 0%, transparent 60%); display: flex; align-items: flex-end; padding: 10px;">
               <span style="font-size: 11px; color: var(--color-espresso); font-weight: 600; font-family: var(--font-family-display);">{formatPriceDollars(product.price)}</span>
             </div>
           </a>

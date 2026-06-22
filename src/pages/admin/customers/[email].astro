@@ -1,0 +1,152 @@
+---
+export const prerender = false;
+
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import { requireAdmin } from '../../../lib/admin-auth';
+import { listOrders, getOrdersKVFromEnv } from '../../../lib/orders-server';
+
+const env = await requireAdmin(Astro);
+if (!env) return Astro.redirect('/admin/sign-in?error=session');
+
+const { email: emailParam } = Astro.params;
+if (!emailParam) return Astro.redirect('/admin/customers');
+
+const email = decodeURIComponent(emailParam);
+
+const runtimeEnv = ((Astro.locals as Record<string, unknown>)?.runtime as Record<string, unknown>)?.env as Record<string, unknown> | undefined;
+const kv = getOrdersKVFromEnv(runtimeEnv);
+
+const { orders: allOrders } = await listOrders(kv, { limit: 500 });
+const customerOrders = allOrders
+  .filter((o) => o.customer_email === email)
+  .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+
+if (customerOrders.length === 0) {
+  return new Response('Customer not found', { status: 404 });
+}
+
+const name = customerOrders[0].customer_name;
+const totalSpend = customerOrders.reduce((sum, o) => sum + o.total, 0);
+const shippingAddresses = customerOrders
+  .filter((o) => o.shipping_address)
+  .map((o) => o.shipping_address!)
+  .reduce((unique, addr) => {
+    const key = `${addr.line1}|${addr.postal_code}`;
+    if (!unique.some((a) => `${a.line1}|${a.postal_code}` === key)) unique.push(addr);
+    return unique;
+  }, [] as typeof customerOrders[0]['shipping_address'][]);
+
+function formatMoney(n: number) {
+  return `$${n.toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
+}
+function formatDate(iso: string) {
+  return new Date(iso).toLocaleDateString('en-US', {
+    month: 'long', day: 'numeric', year: 'numeric'
+  });
+}
+
+const statusBadgeClass: Record<string, string> = {
+  pending: 'adm-badge-pending', payment_captured: 'adm-badge-captured',
+  sent_to_supplier: 'adm-badge-supplier', shipped: 'adm-badge-shipped',
+  delivered: 'adm-badge-delivered', refunded: 'adm-badge-refunded',
+  cancelled: 'adm-badge-cancelled',
+};
+const statusLabel: Record<string, string> = {
+  pending: 'Pending', payment_captured: 'Paid', sent_to_supplier: 'Sent',
+  shipped: 'Shipped', delivered: 'Delivered', refunded: 'Refunded', cancelled: 'Cancelled',
+};
+---
+<AdminLayout title="Customer Detail" activeNav="customers">
+
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+    <a href="/admin/customers" style="color:var(--adm-muted);text-decoration:none;font-size:13px;">← Customers</a>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 280px;gap:16px;align-items:start;">
+
+    <!-- Orders history -->
+    <div>
+      <div class="adm-section-title">Order History ({customerOrders.length})</div>
+      <div class="adm-card" style="padding:0;overflow:hidden;">
+        <table class="adm-table">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Date</th>
+              <th>Items</th>
+              <th>Total</th>
+              <th>Status</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {customerOrders.map((o) => (
+              <tr>
+                <td>
+                  <a href={`/admin/orders/${o.id}`} class="adm-mono" style="font-size:11px;">{o.id}</a>
+                </td>
+                <td style="font-size:12px;color:var(--adm-muted);">{formatDate(o.created_at)}</td>
+                <td style="font-size:12px;color:var(--adm-muted);">{o.items.length} item{o.items.length !== 1 ? 's' : ''}</td>
+                <td class="adm-mono" style="font-size:13px;">{formatMoney(o.total)}</td>
+                <td>
+                  <span class={`adm-badge ${statusBadgeClass[o.status] ?? ''}`}>
+                    {statusLabel[o.status] ?? o.status}
+                  </span>
+                </td>
+                <td>
+                  <a href={`/admin/orders/${o.id}`} class="adm-btn adm-btn-secondary" style="padding:4px 10px;font-size:12px;">View →</a>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Customer summary -->
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <div class="adm-card">
+        <div style="font-weight:600;font-size:13px;margin-bottom:12px;">Customer</div>
+        <div style="font-size:15px;font-weight:600;margin-bottom:4px;">{name ?? '—'}</div>
+        <div style="font-size:13px;color:var(--adm-violet);">{email}</div>
+        <div style="margin-top:12px;display:flex;flex-direction:column;gap:6px;">
+          <div style="display:flex;justify-content:space-between;font-size:12px;">
+            <span style="color:var(--adm-muted);">Orders</span>
+            <span style="font-weight:600;">{customerOrders.length}</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:12px;">
+            <span style="color:var(--adm-muted);">Total Spend</span>
+            <span class="adm-mono" style="font-weight:600;">{formatMoney(totalSpend)}</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:12px;">
+            <span style="color:var(--adm-muted);">Avg Order</span>
+            <span class="adm-mono">{formatMoney(totalSpend / customerOrders.length)}</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:12px;">
+            <span style="color:var(--adm-muted);">First Order</span>
+            <span>{formatDate(customerOrders[customerOrders.length - 1].created_at)}</span>
+          </div>
+        </div>
+      </div>
+
+      {shippingAddresses.length > 0 && (
+        <div class="adm-card">
+          <div style="font-weight:600;font-size:13px;margin-bottom:12px;">
+            Address{shippingAddresses.length > 1 ? 'es' : ''} (read-only)
+          </div>
+          {shippingAddresses.map((addr, i) => (
+            <div style={`font-size:12px;line-height:1.8;${i > 0 ? 'margin-top:12px;padding-top:12px;border-top:1px solid var(--adm-border);' : ''}`}>
+              <div style="font-weight:500;">{addr.name}</div>
+              <div>{addr.line1}</div>
+              {addr.line2 && <div>{addr.line2}</div>}
+              <div>{addr.city}, {addr.state} {addr.postal_code}</div>
+              <div>{addr.country}</div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+
+  </div>
+
+</AdminLayout>

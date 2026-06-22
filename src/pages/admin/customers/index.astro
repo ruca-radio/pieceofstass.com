@@ -1,0 +1,128 @@
+---
+export const prerender = false;
+
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import { requireAdmin } from '../../../lib/admin-auth';
+import { listOrders, getOrdersKVFromEnv } from '../../../lib/orders-server';
+
+const env = await requireAdmin(Astro);
+if (!env) return Astro.redirect('/admin/sign-in?error=session');
+
+const runtimeEnv = ((Astro.locals as Record<string, unknown>)?.runtime as Record<string, unknown>)?.env as Record<string, unknown> | undefined;
+const kv = getOrdersKVFromEnv(runtimeEnv);
+
+// Build customer list from orders
+const { orders } = await listOrders(kv, { limit: 500 });
+
+const searchQuery = Astro.url.searchParams.get('q') ?? '';
+
+// Aggregate by email
+const customerMap = new Map<string, {
+  email: string;
+  name: string | undefined;
+  orderCount: number;
+  totalSpend: number;
+  lastOrderDate: string;
+}>();
+
+for (const order of orders) {
+  const existing = customerMap.get(order.customer_email);
+  if (existing) {
+    existing.orderCount++;
+    existing.totalSpend += order.total;
+    if (order.created_at > existing.lastOrderDate) {
+      existing.lastOrderDate = order.created_at;
+    }
+  } else {
+    customerMap.set(order.customer_email, {
+      email: order.customer_email,
+      name: order.customer_name,
+      orderCount: 1,
+      totalSpend: order.total,
+      lastOrderDate: order.created_at,
+    });
+  }
+}
+
+let customers = [...customerMap.values()].sort(
+  (a, b) => new Date(b.lastOrderDate).getTime() - new Date(a.lastOrderDate).getTime()
+);
+
+if (searchQuery) {
+  const q = searchQuery.toLowerCase();
+  customers = customers.filter(
+    (c) =>
+      c.email.toLowerCase().includes(q) ||
+      (c.name ?? '').toLowerCase().includes(q)
+  );
+}
+
+function formatMoney(n: number) {
+  return `$${n.toLocaleString('en-US', { minimumFractionDigits: 0 })}`;
+}
+function formatDate(iso: string) {
+  return new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+---
+<AdminLayout title="Customers" activeNav="customers">
+
+  <div class="adm-filters">
+    <form method="GET" style="display:contents;">
+      <div>
+        <label class="adm-label">Search by email or name</label>
+        <input type="text" name="q" value={searchQuery} class="adm-input" placeholder="Search..." style="width:260px;" />
+      </div>
+      <div style="padding-top:18px;">
+        <button type="submit" class="adm-btn adm-btn-primary">Search</button>
+      </div>
+      {searchQuery && (
+        <div style="padding-top:18px;">
+          <a href="/admin/customers" class="adm-btn adm-btn-secondary">Clear</a>
+        </div>
+      )}
+    </form>
+  </div>
+
+  <div style="font-size:13px;color:var(--adm-muted);margin-bottom:12px;">
+    {customers.length} customer{customers.length !== 1 ? 's' : ''}
+  </div>
+
+  <div class="adm-card" style="padding:0;overflow:hidden;">
+    {customers.length === 0 ? (
+      <div style="padding:32px;text-align:center;color:var(--adm-muted);">No customers found.</div>
+    ) : (
+      <table class="adm-table">
+        <thead>
+          <tr>
+            <th>Name / Email</th>
+            <th>Orders</th>
+            <th>Total Spend</th>
+            <th>Last Order</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {customers.map((c) => (
+            <tr>
+              <td>
+                <div style="font-size:13px;font-weight:500;">{c.name ?? '—'}</div>
+                <div style="font-size:11px;color:var(--adm-muted);">{c.email}</div>
+              </td>
+              <td style="font-size:13px;">{c.orderCount}</td>
+              <td class="adm-mono" style="font-size:13px;">{formatMoney(c.totalSpend)}</td>
+              <td style="font-size:12px;color:var(--adm-muted);">{formatDate(c.lastOrderDate)}</td>
+              <td>
+                <a
+                  href={`/admin/customers/${encodeURIComponent(c.email)}`}
+                  class="adm-btn adm-btn-secondary"
+                  style="padding:4px 10px;font-size:12px;"
+                >View →</a>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    )}
+  </div>
+
+</AdminLayout>

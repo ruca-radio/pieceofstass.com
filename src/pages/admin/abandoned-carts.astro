@@ -1,0 +1,142 @@
+---
+export const prerender = false;
+
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import { requireAdmin } from '../../lib/admin-auth';
+import { getOrdersKVFromEnv } from '../../lib/orders-server';
+
+const env = await requireAdmin(Astro);
+if (!env) return Astro.redirect('/admin/sign-in?error=session');
+
+const runtimeEnv = ((Astro.locals as Record<string, unknown>)?.runtime as Record<string, unknown>)?.env as Record<string, unknown> | undefined;
+const kv = getOrdersKVFromEnv(runtimeEnv);
+
+// Attempt to list carts from KV
+// CF KV `.list()` works in production but may be limited in dev.
+// We scan for keys prefixed `cart:` and filter to those created in last 30 days.
+let carts: Array<{ id: string; items: number; created_at?: string }> = [];
+let listError: string | null = null;
+let cartKvAvailable = false;
+
+try {
+  const result = await kv.list({ prefix: 'cart:' });
+  cartKvAvailable = true;
+
+  // Fetch cart data for up to 50 carts (avoid overloading in dev)
+  const cartKeys = result.keys.slice(0, 50);
+  const thirtyDaysAgo = Date.now() - 30 * 24 * 60 * 60 * 1000;
+
+  const cartDatas = await Promise.all(
+    cartKeys.map(async (k) => {
+      const raw = await kv.get(k.name);
+      if (!raw) return null;
+      try {
+        const cart = JSON.parse(raw);
+        const createdAt = cart.created_at ? new Date(cart.created_at).getTime() : 0;
+        // Only include non-empty carts created in last 30 days
+        if (
+          cart.items?.length > 0 &&
+          createdAt > thirtyDaysAgo
+        ) {
+          return {
+            id: cart.id ?? k.name.replace('cart:', ''),
+            items: cart.items.length,
+            created_at: cart.created_at,
+          };
+        }
+        return null;
+      } catch {
+        return null;
+      }
+    })
+  );
+
+  carts = cartDatas
+    .filter((c): c is NonNullable<typeof c> => c !== null)
+    .sort((a, b) => {
+      const at = a.created_at ? new Date(a.created_at).getTime() : 0;
+      const bt = b.created_at ? new Date(b.created_at).getTime() : 0;
+      return bt - at;
+    });
+} catch (e) {
+  listError = `KV list not available in this environment. In production, KV.list() returns all cart keys. ${e}`;
+}
+
+function formatDate(iso: string) {
+  return new Date(iso).toLocaleDateString('en-US', {
+    month: 'short', day: 'numeric', year: 'numeric',
+    hour: '2-digit', minute: '2-digit'
+  });
+}
+---
+<AdminLayout title="Abandoned Carts" activeNav="carts">
+
+  <div class="adm-card" style="margin-bottom:16px;background:rgba(232,163,61,0.08);border-color:rgba(232,163,61,0.25);">
+    <div style="font-size:12px;color:#E8A33D;line-height:1.6;">
+      <strong>Note:</strong> Abandoned carts are read from CART_KV (prefix <code class="adm-mono">cart:</code>).
+      In production, KV.list() scans all cart keys. Carts with at least one item, created in the last 30 days,
+      and not converted to an order are shown here.
+      For Klaviyo abandoned cart flows, connect your email platform to the
+      <code class="adm-mono">/api/cart</code> webhook.
+    </div>
+  </div>
+
+  {listError && (
+    <div class="adm-card" style="margin-bottom:16px;background:rgba(229,72,77,0.08);border-color:rgba(229,72,77,0.25);">
+      <div style="font-size:12px;color:var(--adm-error);">
+        <strong>TODO:</strong> {listError}
+      </div>
+      <div style="font-size:12px;color:var(--adm-muted);margin-top:8px;">
+        Placeholder data structure for production implementation:<br/>
+        <code class="adm-mono">KV.list(&#123; prefix: 'cart:' &#125;) → filter items.length &gt; 0 → diff against order_index → show last 30d</code>
+      </div>
+    </div>
+  )}
+
+  {carts.length === 0 && !listError ? (
+    <div class="adm-card" style="text-align:center;padding:32px;">
+      <div style="font-size:24px;margin-bottom:8px;">🛒</div>
+      <div style="color:var(--adm-muted);font-size:14px;">No abandoned carts in the last 30 days.</div>
+    </div>
+  ) : carts.length > 0 ? (
+    <div>
+      <div style="font-size:13px;color:var(--adm-muted);margin-bottom:12px;">
+        {carts.length} cart{carts.length !== 1 ? 's' : ''} with items (last 30 days)
+      </div>
+      <div class="adm-card" style="padding:0;overflow:hidden;">
+        <table class="adm-table">
+          <thead>
+            <tr>
+              <th>Cart ID</th>
+              <th>Created</th>
+              <th>Items</th>
+            </tr>
+          </thead>
+          <tbody>
+            {carts.map((c) => (
+              <tr>
+                <td class="adm-mono" style="font-size:11px;">{c.id}</td>
+                <td style="font-size:12px;color:var(--adm-muted);">
+                  {c.created_at ? formatDate(c.created_at) : '—'}
+                </td>
+                <td style="font-size:13px;">{c.items} item{c.items !== 1 ? 's' : ''}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  ) : null}
+
+  <!-- Instructions for recovery -->
+  <div class="adm-card" style="margin-top:20px;">
+    <div style="font-weight:600;font-size:13px;margin-bottom:10px;">Recovery Flow</div>
+    <div style="font-size:12px;color:var(--adm-muted);line-height:1.8;">
+      <div>1. Collect customer email at checkout step 1 (before payment)</div>
+      <div>2. On cart abandon (no Stripe session within 1 hour), trigger Klaviyo "Abandoned Cart" flow</div>
+      <div>3. Pass <code class="adm-mono">cart_id</code> as a URL parameter in recovery email → pre-fill cart on return</div>
+      <div>4. In <code class="adm-mono">CART_KV</code>, store <code class="adm-mono">customer_email</code> field on cart when email is captured</div>
+    </div>
+  </div>
+
+</AdminLayout>

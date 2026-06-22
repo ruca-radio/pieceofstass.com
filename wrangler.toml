@@ -54,6 +54,14 @@ binding = "CART_KV"
 id = "REPLACE_WITH_KV_NAMESPACE_ID"          # ← run: wrangler kv:namespace create CART_KV
 preview_id = "REPLACE_WITH_PREVIEW_KV_ID"   # ← run: wrangler kv:namespace create CART_KV --preview
 
+# ─── KV: User accounts, auth, addresses ─────────────────────
+# Auth & CX: stores user profiles, magic-link rate limits, saved addresses.
+# Create: npx wrangler kv:namespace create USERS_KV
+[[kv_namespaces]]
+binding = "USERS_KV"
+id = "REPLACE_WITH_USERS_KV_NAMESPACE_ID"       # ← run: wrangler kv:namespace create USERS_KV
+preview_id = "REPLACE_WITH_USERS_KV_PREVIEW_ID" # ← run: wrangler kv:namespace create USERS_KV --preview
+
 # ─── D1 Database Binding (optional) ─────────────────────────
 # Local persistence for: wishlists, recently viewed, A/B test assignments.
 # Create: npx wrangler d1 create pieceofstass-db
@@ -86,6 +94,9 @@ PUBLIC_GA4_MEASUREMENT_ID = "G-REPLACE_ME"             # ← replace with GA4 pr
 PUBLIC_CF_WEB_ANALYTICS_TOKEN = "REPLACE_ME"           # ← CF Dashboard → Web Analytics token
 
 # Secrets (set via wrangler secret put, NOT here):
+#   AUTH_SECRET              (generate: openssl rand -base64 32)
+#   RESEND_API_KEY
+#   EMAIL_FROM               (default: hello@pieceofstass.com)
 #   STRIPE_WEBHOOK_SECRET
 #   MEDUSA_BACKEND_URL
 #   MEDUSA_PUBLISHABLE_KEY
@@ -96,7 +107,6 @@ PUBLIC_CF_WEB_ANALYTICS_TOKEN = "REPLACE_ME"           # ← CF Dashboard → We
 #   TIKTOK_ACCESS_TOKEN
 #   KLAVIYO_API_KEY
 #   KLAVIYO_LIST_ID
-#   RESEND_API_KEY
 #   SENTRY_DSN
 
 # R2 binding — production bucket
@@ -108,6 +118,11 @@ bucket_name = "pieceofstass-images"
 [[env.production.kv_namespaces]]
 binding = "CART_KV"
 id = "REPLACE_WITH_KV_NAMESPACE_ID"
+
+# KV: User accounts — production
+[[env.production.kv_namespaces]]
+binding = "USERS_KV"
+id = "REPLACE_WITH_USERS_KV_NAMESPACE_ID"
 
 # D1 binding — production database (uncomment when created)
 # [[env.production.d1_databases]]
@@ -154,3 +169,8 @@ bucket_name = "pieceofstass-images"
 [[env.preview.kv_namespaces]]
 binding = "CART_KV"
 id = "REPLACE_WITH_PREVIEW_KV_ID"
+
+# KV: User accounts — preview
+[[env.preview.kv_namespaces]]
+binding = "USERS_KV"
+id = "REPLACE_WITH_USERS_KV_PREVIEW_ID"

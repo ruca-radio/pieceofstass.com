@@ -55,13 +55,13 @@ const statusColors: Record<string, string> = {
       <span>›</span>
       <a href="/account/orders" style="color: var(--color-muted); text-decoration: none;">Orders</a>
       <span>›</span>
-      <span style="color: var(--color-paper); font-family: var(--font-family-mono);">#{id.slice(0, 8).toUpperCase()}</span>
+      <span style="color: var(--color-espresso); font-family: var(--font-family-mono);">#{id.slice(0, 8).toUpperCase()}</span>
     </div>
 
     <!-- Header -->
     <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 32px; flex-wrap: wrap;">
       <div>
-        <h1 style="font-family: var(--font-family-display); font-size: 28px; font-weight: 700; color: var(--color-paper); letter-spacing: -0.03em; margin-bottom: 4px;">
+        <h1 style="font-family: var(--font-family-display); font-size: 28px; font-weight: 700; color: var(--color-espresso); letter-spacing: -0.03em; margin-bottom: 4px;">
           Order #{id.slice(0, 8).toUpperCase()}
         </h1>
         <p style="font-size: 13px; color: var(--color-muted);">Placed {formatDate(order.created_at)}</p>
@@ -84,7 +84,7 @@ const statusColors: Record<string, string> = {
               )}
               <!-- Dot -->
               <div style={`width: 28px; height: 28px; border-radius: 50%; border: 2px solid ${i <= currentStep ? 'var(--color-lime)' : 'var(--color-slate)'}; background: ${i <= currentStep ? 'var(--color-lime)' : 'var(--color-charcoal)'}; display: flex; align-items: center; justify-content: center; margin-bottom: 8px; flex-shrink: 0; z-index: 1; position: relative;`}>
-                {i <= currentStep && <span style="color: var(--color-ink); font-size: 12px; font-weight: 700;">✓</span>}
+                {i <= currentStep && <span style="color: var(--color-cream); font-size: 12px; font-weight: 700;">✓</span>}
               </div>
               <!-- Label -->
               <span style={`font-size: 11px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: ${i <= currentStep ? 'var(--color-paper)' : 'var(--color-muted)'}; text-align: center;`}>
@@ -96,7 +96,7 @@ const statusColors: Record<string, string> = {
 
         {order.tracking_url && order.tracking_number && (
           <div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--color-slate);">
-            <p style="font-size: 14px; color: var(--color-muted); margin-bottom: 8px;">Tracking number: <span style="font-family: var(--font-family-mono); color: var(--color-paper);">{order.tracking_number}</span></p>
+            <p style="font-size: 14px; color: var(--color-muted); margin-bottom: 8px;">Tracking number: <span style="font-family: var(--font-family-mono); color: var(--color-espresso);">{order.tracking_number}</span></p>
             <a href={order.tracking_url} target="_blank" rel="noopener noreferrer" style="display: inline-block; font-size: 14px; font-weight: 600; color: var(--color-lime); text-decoration: none;">
               Track shipment →
             </a>
@@ -114,7 +114,7 @@ const statusColors: Record<string, string> = {
 
       <!-- Line items -->
       <section style="background: var(--color-charcoal); border-radius: var(--radius-xl); border: 1px solid var(--color-slate); padding: 28px 32px;">
-        <h2 style="font-size: 16px; font-weight: 700; color: var(--color-paper); margin-bottom: 20px; letter-spacing: -0.01em;">Items</h2>
+        <h2 style="font-size: 16px; font-weight: 700; color: var(--color-espresso); margin-bottom: 20px; letter-spacing: -0.01em;">Items</h2>
         <div style="display: flex; flex-direction: column; gap: 16px;">
           {order.items.map((item) => (
             <div style="display: flex; gap: 16px; align-items: center; padding-bottom: 16px; border-bottom: 1px solid var(--color-slate); last:border-bottom-none;">
@@ -133,7 +133,7 @@ const statusColors: Record<string, string> = {
                 </div>
               )}
               <div style="flex: 1; min-width: 0;">
-                <div style="font-size: 15px; font-weight: 600; color: var(--color-paper); margin-bottom: 2px;">{item.title}</div>
+                <div style="font-size: 15px; font-weight: 600; color: var(--color-espresso); margin-bottom: 2px;">{item.title}</div>
                 {item.options && Object.keys(item.options).length > 0 && (
                   <div style="font-size: 13px; color: var(--color-muted);">
                     {Object.entries(item.options).map(([k, v]) => `${k}: ${v}`).join(' · ')}
@@ -141,7 +141,7 @@ const statusColors: Record<string, string> = {
                 )}
                 <div style="font-size: 13px; color: var(--color-muted); margin-top: 2px;">Qty: {item.quantity}</div>
               </div>
-              <div style="font-size: 15px; font-weight: 600; color: var(--color-paper); flex-shrink: 0;">
+              <div style="font-size: 15px; font-weight: 600; color: var(--color-espresso); flex-shrink: 0;">
                 {formatCurrency(item.price * item.quantity, order.currency)}
               </div>
             </div>
@@ -162,7 +162,7 @@ const statusColors: Record<string, string> = {
             <span>Tax</span>
             <span>{formatCurrency(order.tax, order.currency)}</span>
           </div>
-          <div style="display: flex; justify-content: space-between; font-size: 18px; font-weight: 700; color: var(--color-paper); padding-top: 12px; border-top: 1px solid var(--color-slate);">
+          <div style="display: flex; justify-content: space-between; font-size: 18px; font-weight: 700; color: var(--color-espresso); padding-top: 12px; border-top: 1px solid var(--color-slate);">
             <span>Total</span>
             <span style="color: var(--color-lime);">{formatCurrency(order.total, order.currency)}</span>
           </div>
@@ -172,7 +172,7 @@ const statusColors: Record<string, string> = {
       <!-- Shipping address -->
       {order.shipping_address && (
         <section style="background: var(--color-charcoal); border-radius: var(--radius-xl); border: 1px solid var(--color-slate); padding: 28px 32px;">
-          <h2 style="font-size: 16px; font-weight: 700; color: var(--color-paper); margin-bottom: 16px; letter-spacing: -0.01em;">Shipping address</h2>
+          <h2 style="font-size: 16px; font-weight: 700; color: var(--color-espresso); margin-bottom: 16px; letter-spacing: -0.01em;">Shipping address</h2>
           <address style="font-style: normal; font-size: 15px; color: var(--color-muted); line-height: 1.8;">
             {order.shipping_address.first_name} {order.shipping_address.last_name}<br />
             {order.shipping_address.address_1}<br />
@@ -185,7 +185,7 @@ const statusColors: Record<string, string> = {
     </div>
 
     <!-- Help -->
-    <div style="margin-top: 32px; padding: 20px 24px; background: rgba(123,92,255,0.08); border-radius: var(--radius-lg); border: 1px solid rgba(123,92,255,0.2);">
+    <div style="margin-top: 32px; padding: 20px 24px; background: rgba(111,123,95,0.08); border-radius: var(--radius-lg); border: 1px solid rgba(111,123,95,0.2);">
       <p style="font-size: 14px; color: var(--color-muted); line-height: 1.6;">
         Need help with this order? Email us at
         <a href="mailto:hello@pieceofstass.com" style="color: var(--color-violet); font-weight: 600; text-decoration: none;">hello@pieceofstass.com</a>

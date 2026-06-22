@@ -76,7 +76,7 @@ export default function CartDrawer() {
         style={{
           position: 'fixed',
           inset: 0,
-          background: 'rgba(10,10,11,0.6)',
+          background: 'rgba(42,33,28,0.6)',
           backdropFilter: 'blur(4px)',
           zIndex: 300,
           animation: 'fadeIn 240ms var(--ease-expo-out)',
@@ -227,7 +227,7 @@ export default function CartDrawer() {
                 display: 'block',
                 width: '100%',
                 background: checkoutLoading ? 'var(--color-muted)' : 'var(--color-lime)',
-                color: 'var(--color-ink)',
+                color: 'var(--color-cream)',
                 border: 'none',
                 borderRadius: '999px',
                 padding: '16px',

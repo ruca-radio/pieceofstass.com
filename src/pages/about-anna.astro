@@ -30,8 +30,8 @@ const breadcrumbJsonLd = {
   jsonLd={[personJsonLd, breadcrumbJsonLd]}
 >
   <!-- Hero -->
-  <section style="padding: 80px 0; background: var(--color-ink); position: relative; overflow: hidden;">
-    <div style="position: absolute; top: 0; right: 0; width: 40%; height: 100%; background: radial-gradient(ellipse at 80% 50%, rgba(198,255,58,0.05) 0%, transparent 70%); pointer-events: none;"/>
+  <section style="padding: 80px 0; background: var(--color-surface); position: relative; overflow: hidden;">
+    <div style="position: absolute; top: 0; right: 0; width: 40%; height: 100%; background: radial-gradient(ellipse at 80% 50%, rgba(178,94,107,0.05) 0%, transparent 70%); pointer-events: none;"/>
     <div style="max-width: 1280px; margin: 0 auto; padding: 0 16px; display: grid; grid-template-columns: 1fr; gap: 48px; align-items: center;" class="about-hero">
       <div>
         <p style="font-family: var(--font-family-mono); font-size: 11px; letter-spacing: 0.12em; color: var(--color-lime); text-transform: uppercase; margin: 0 0 16px;">Founder's story</p>
@@ -76,7 +76,7 @@ const breadcrumbJsonLd = {
           { icon: '⚡', title: 'Move at the speed of the feed', desc: 'Trends move in days, not seasons. We ship the moment, not the catalog.' },
           { icon: '✋', title: 'Honest hype', desc: 'Confident, never deceptive. We sell the vibe, openly. The look for less — stated plainly.' },
         ].map(({ icon, title, desc }) => (
-          <div style="padding: 24px; background: var(--color-ink); border-radius: var(--radius-xl); border: 1px solid var(--color-slate);">
+          <div style="padding: 24px; background: var(--color-surface); border-radius: var(--radius-xl); border: 1px solid var(--color-slate);">
             <span style="font-size: 28px; display: block; margin-bottom: 12px;" aria-hidden="true">{icon}</span>
             <h3 style="font-family: var(--font-family-display); font-weight: 700; font-size: 18px; margin: 0 0 8px; color: var(--color-espresso);">{title}</h3>
             <p style="font-size: 14px; color: var(--color-muted); margin: 0; line-height: 1.6;">{desc}</p>

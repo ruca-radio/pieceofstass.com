@@ -1,0 +1,171 @@
+---
+export const prerender = false;
+
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import { requireAdmin } from '../../../lib/admin-auth';
+import { getProduct } from '../../../lib/products-server';
+import { getOrdersKVFromEnv } from '../../../lib/orders-server';
+
+const env = await requireAdmin(Astro);
+if (!env) return Astro.redirect('/admin/sign-in?error=session');
+
+const { id } = Astro.params;
+if (!id) return Astro.redirect('/admin/products');
+
+const runtimeEnv = ((Astro.locals as Record<string, unknown>)?.runtime as Record<string, unknown>)?.env as Record<string, unknown> | undefined;
+const kv = getOrdersKVFromEnv(runtimeEnv);
+
+// Load base product
+const base = getProduct(id);
+if (!base) return new Response('Product not found', { status: 404 });
+
+// Load override if exists
+const overrideRaw = await kv.get(`product_override:${id}`);
+const override = overrideRaw ? JSON.parse(overrideRaw) : {};
+const product = {
+  ...base,
+  price: override.price ?? base.price,
+  compare_at_price: override.compare_at_price ?? base.compare_at_price,
+  description: override.description ?? base.description,
+  status: override.status ?? 'active',
+};
+
+const saved = Astro.url.searchParams.get('saved') === '1';
+---
+<AdminLayout title="Edit Product" activeNav="products">
+
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+    <a href="/admin/products" style="color:var(--adm-muted);text-decoration:none;font-size:13px;">← Products</a>
+    <span class={`adm-badge ${product.status === 'active' ? 'adm-badge-active' : 'adm-badge-draft'}`}>
+      {product.status}
+    </span>
+    {saved && (
+      <span style="background:rgba(47,168,102,0.15);color:var(--adm-success);padding:3px 10px;border-radius:4px;font-size:12px;font-weight:600;">
+        ✓ Saved
+      </span>
+    )}
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 300px;gap:16px;align-items:start;">
+
+    <!-- Edit form -->
+    <div>
+      <form
+        id="product-form"
+        onsubmit={`
+          event.preventDefault();
+          const fd = new FormData(this);
+          const data = {
+            price: parseFloat(fd.get('price')),
+            compare_at_price: fd.get('compare_at_price') ? parseFloat(fd.get('compare_at_price')) : null,
+            description: fd.get('description'),
+            status: fd.get('status'),
+          };
+          if (data.compare_at_price === null) delete data.compare_at_price;
+          fetch('/api/admin/products/${id}', {
+            method: 'PATCH',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data),
+          }).then(r => r.ok ? location.href = '/admin/products/${id}?saved=1' : alert('Save failed'));
+        `}
+        style="display:flex;flex-direction:column;gap:16px;"
+      >
+        <div class="adm-card">
+          <div style="font-weight:600;font-size:13px;margin-bottom:14px;">Pricing</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <div>
+              <label class="adm-label" for="price">Price ($)</label>
+              <input type="number" id="price" name="price" value={product.price} step="1" min="0" class="adm-input" required />
+              <div style="font-size:11px;color:var(--adm-muted);margin-top:4px;">Store display price in USD</div>
+            </div>
+            <div>
+              <label class="adm-label" for="compare_at_price">Compare At Price ($)</label>
+              <input type="number" id="compare_at_price" name="compare_at_price" value={product.compare_at_price ?? ''} step="1" min="0" class="adm-input" />
+              <div style="font-size:11px;color:var(--adm-muted);margin-top:4px;">Leave blank to hide sale badge</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="adm-card">
+          <div style="font-weight:600;font-size:13px;margin-bottom:14px;">Description</div>
+          <label class="adm-label" for="description">Product Description</label>
+          <textarea id="description" name="description" class="adm-textarea" style="min-height:120px;">{product.description}</textarea>
+          <div style="font-size:11px;color:var(--adm-muted);margin-top:4px;">Displayed on product page. Plain text or simple HTML.</div>
+        </div>
+
+        <div class="adm-card">
+          <div style="font-weight:600;font-size:13px;margin-bottom:14px;">Visibility</div>
+          <label class="adm-label" for="status">Status</label>
+          <select id="status" name="status" class="adm-select">
+            <option value="active" selected={product.status === 'active'}>Active — visible on storefront</option>
+            <option value="draft" selected={product.status === 'draft'}>Draft — hidden from storefront</option>
+          </select>
+        </div>
+
+        <div style="display:flex;gap:8px;">
+          <button type="submit" class="adm-btn adm-btn-primary">Save Changes</button>
+          <a href="/admin/products" class="adm-btn adm-btn-secondary">Cancel</a>
+          {override && Object.keys(override).length > 0 && (
+            <button
+              type="button"
+              class="adm-btn adm-btn-danger"
+              style="margin-left:auto;"
+              onclick={`
+                if (confirm('Reset to catalog defaults? This will discard all edits.')) {
+                  fetch('/api/admin/products/${id}', {
+                    method: 'PATCH',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({price: null, compare_at_price: null, description: null, status: 'active', _reset: true}),
+                  }).then(r => r.ok ? location.href = '/admin/products/${id}' : alert('Reset failed'));
+                }
+              `}
+            >
+              Reset to Defaults
+            </button>
+          )}
+        </div>
+      </form>
+    </div>
+
+    <!-- Product preview -->
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <div class="adm-card">
+        <div style="font-weight:600;font-size:13px;margin-bottom:10px;">Product Info</div>
+        {product.images[0] && (
+          <img src={product.images[0]} alt="" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:6px;margin-bottom:12px;" loading="lazy" />
+        )}
+        <div style="font-size:14px;font-weight:600;margin-bottom:4px;">{product.title}</div>
+        <div style="font-size:11px;color:var(--adm-muted);margin-bottom:6px;" class="adm-mono">{product.id}</div>
+        <div style="font-size:12px;color:var(--adm-muted);margin-bottom:6px;">Category: {product.category}</div>
+        <div style="font-size:12px;color:var(--adm-muted);">{product.variants.length} variant{product.variants.length !== 1 ? 's' : ''}</div>
+      </div>
+
+      <div class="adm-card">
+        <div style="font-weight:600;font-size:13px;margin-bottom:10px;">Override status</div>
+        {Object.keys(override).length === 0 ? (
+          <div style="font-size:12px;color:var(--adm-muted);">No overrides — using catalog defaults.</div>
+        ) : (
+          <div style="font-size:12px;color:var(--adm-lime);">
+            Active overrides: {Object.keys(override).filter(k => k !== 'updated_at').join(', ')}
+          </div>
+        )}
+        {override.updated_at && (
+          <div style="font-size:11px;color:var(--adm-muted);margin-top:4px;" class="adm-mono">
+            Last saved: {new Date(override.updated_at).toLocaleString()}
+          </div>
+        )}
+      </div>
+
+      <a
+        href={`/shop/${product.category}/${product.handle}`}
+        target="_blank"
+        class="adm-btn adm-btn-secondary"
+        style="justify-content:center;"
+      >
+        View on Storefront ↗
+      </a>
+    </div>
+
+  </div>
+
+</AdminLayout>

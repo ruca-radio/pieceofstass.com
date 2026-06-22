@@ -107,7 +107,7 @@ export default function CheckoutPage({ checkoutUrl }: Props) {
                   { label: 'Apple Pay', color: '#000' },
                   { label: 'Google Pay', color: '#fff' },
                 ].map(({ label, color }) => (
-                  <button key={label} type="button" style={{ flex: 1, minWidth: '100px', padding: '12px', background: color, border: color === '#fff' ? '1px solid var(--color-slate)' : 'none', borderRadius: 'var(--radius-md)', color: color === '#fff' ? 'var(--color-ink)' : '#fff', fontWeight: 700, fontSize: '14px', cursor: 'pointer', fontFamily: 'var(--font-family-display)' }}>
+                  <button key={label} type="button" style={{ flex: 1, minWidth: '100px', padding: '12px', background: color, border: color === '#fff' ? '1px solid var(--color-slate)' : 'none', borderRadius: 'var(--radius-md)', color: color === '#fff' ? 'var(--color-espresso)' : '#fff', fontWeight: 700, fontSize: '14px', cursor: 'pointer', fontFamily: 'var(--font-family-display)' }}>
                     {label}
                   </button>
                 ))}
@@ -153,7 +153,7 @@ export default function CheckoutPage({ checkoutUrl }: Props) {
                 { id: 'standard', label: 'Standard (10–20 business days)', price: subtotal >= 50 ? 'Free' : '$5.99' },
                 { id: 'priority', label: 'Priority (7–12 business days)', price: '$9.99' },
               ].map(({ id, label, price }) => (
-                <label key={id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 16px', background: form.shippingMethod === id ? 'rgba(198,255,58,0.06)' : 'var(--color-charcoal)', border: `1.5px solid ${form.shippingMethod === id ? 'var(--color-lime)' : 'var(--color-slate)'}`, borderRadius: 'var(--radius-md)', cursor: 'pointer', marginBottom: '8px', transition: 'all 150ms' }}>
+                <label key={id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 16px', background: form.shippingMethod === id ? 'rgba(178,94,107,0.06)' : 'var(--color-charcoal)', border: `1.5px solid ${form.shippingMethod === id ? 'var(--color-lime)' : 'var(--color-slate)'}`, borderRadius: 'var(--radius-md)', cursor: 'pointer', marginBottom: '8px', transition: 'all 150ms' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                     <input type="radio" name="shipping" value={id} checked={form.shippingMethod === id} onChange={() => setForm({ ...form, shippingMethod: id })} style={{ accentColor: 'var(--color-lime)' }} />
                     <span style={{ fontSize: '14px', color: 'var(--color-espresso)' }}>{label}</span>

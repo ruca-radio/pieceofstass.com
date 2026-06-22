@@ -1,0 +1,169 @@
+---
+export const prerender = false;
+
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+if (!Astro.locals.user) {
+  return Astro.redirect('/account/sign-in');
+}
+
+const user = Astro.locals.user;
+---
+
+<BaseLayout
+  title="Edit Profile — Piece of Stass"
+  description="Update your name, phone number, and communication preferences."
+  noindex
+>
+  <div style="max-width: 640px; margin: 0 auto; padding: 48px 16px 96px;">
+    <!-- Breadcrumb -->
+    <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--color-muted); margin-bottom: 32px;">
+      <a href="/account" style="color: var(--color-muted); text-decoration: none;">Account</a>
+      <span>›</span>
+      <span style="color: var(--color-espresso);">Profile</span>
+    </div>
+
+    <h1 style="font-family: var(--font-family-display); font-size: 28px; font-weight: 700; color: var(--color-espresso); letter-spacing: -0.03em; margin-bottom: 32px;">
+      Edit profile
+    </h1>
+
+    <form id="profile-form" novalidate>
+      <div style="background: var(--color-charcoal); border-radius: var(--radius-xl); border: 1px solid var(--color-slate); padding: 32px; margin-bottom: 24px;">
+        <h2 style="font-size: 16px; font-weight: 700; color: var(--color-espresso); margin-bottom: 24px;">Personal info</h2>
+
+        <!-- Email (read-only) -->
+        <div style="margin-bottom: 20px;">
+          <label style="display: block; font-size: 13px; font-weight: 600; color: var(--color-muted); margin-bottom: 8px; letter-spacing: 0.02em; text-transform: uppercase;">Email</label>
+          <div style="background: var(--color-surface); border: 1.5px solid var(--color-slate); border-radius: var(--radius-md); padding: 12px 16px; font-size: 15px; color: var(--color-muted);">
+            {user.email}
+          </div>
+          <p style="font-size: 12px; color: var(--color-muted); margin-top: 6px; opacity: 0.7;">Email cannot be changed.</p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
+          <div>
+            <label for="first_name" style="display: block; font-size: 13px; font-weight: 600; color: var(--color-espresso); margin-bottom: 8px; letter-spacing: 0.02em; text-transform: uppercase;">First name</label>
+            <input
+              id="first_name"
+              name="first_name"
+              type="text"
+              value={user.first_name ?? ''}
+              placeholder="Anna"
+              autocomplete="given-name"
+              maxlength="100"
+              style="width: 100%; background: var(--color-surface); border: 1.5px solid var(--color-slate); border-radius: var(--radius-md); padding: 12px 16px; font-size: 15px; color: var(--color-espresso); outline: none; transition: border-color 150ms; box-sizing: border-box;"
+              onfocus="this.style.borderColor='var(--color-lime)'"
+              onblur="this.style.borderColor='var(--color-slate)'"
+            />
+          </div>
+          <div>
+            <label for="last_name" style="display: block; font-size: 13px; font-weight: 600; color: var(--color-espresso); margin-bottom: 8px; letter-spacing: 0.02em; text-transform: uppercase;">Last name</label>
+            <input
+              id="last_name"
+              name="last_name"
+              type="text"
+              value={user.last_name ?? ''}
+              placeholder="Stass"
+              autocomplete="family-name"
+              maxlength="100"
+              style="width: 100%; background: var(--color-surface); border: 1.5px solid var(--color-slate); border-radius: var(--radius-md); padding: 12px 16px; font-size: 15px; color: var(--color-espresso); outline: none; transition: border-color 150ms; box-sizing: border-box;"
+              onfocus="this.style.borderColor='var(--color-lime)'"
+              onblur="this.style.borderColor='var(--color-slate)'"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label for="phone" style="display: block; font-size: 13px; font-weight: 600; color: var(--color-espresso); margin-bottom: 8px; letter-spacing: 0.02em; text-transform: uppercase;">Phone <span style="color: var(--color-muted); font-weight: 400; text-transform: none;">(optional)</span></label>
+          <input
+            id="phone"
+            name="phone"
+            type="tel"
+            value={user.phone ?? ''}
+            placeholder="+1 555 000 0000"
+            autocomplete="tel"
+            maxlength="20"
+            style="width: 100%; background: var(--color-surface); border: 1.5px solid var(--color-slate); border-radius: var(--radius-md); padding: 12px 16px; font-size: 15px; color: var(--color-espresso); outline: none; transition: border-color 150ms; box-sizing: border-box;"
+            onfocus="this.style.borderColor='var(--color-lime)'"
+            onblur="this.style.borderColor='var(--color-slate)'"
+          />
+        </div>
+      </div>
+
+      <!-- Communication preferences -->
+      <div style="background: var(--color-charcoal); border-radius: var(--radius-xl); border: 1px solid var(--color-slate); padding: 32px; margin-bottom: 24px;">
+        <h2 style="font-size: 16px; font-weight: 700; color: var(--color-espresso); margin-bottom: 24px;">Communication</h2>
+
+        <label style="display: flex; align-items: flex-start; gap: 14px; cursor: pointer;">
+          <input
+            id="marketing_opt_in"
+            name="marketing_opt_in"
+            type="checkbox"
+            checked={user.marketing_opt_in}
+            style="width: 18px; height: 18px; margin-top: 2px; accent-color: var(--color-lime); flex-shrink: 0;"
+          />
+          <div>
+            <div style="font-size: 15px; font-weight: 600; color: var(--color-espresso); margin-bottom: 2px;">Marketing emails & SMS</div>
+            <div style="font-size: 13px; color: var(--color-muted); line-height: 1.5;">New drops, exclusive offers, and early access. Unsubscribe anytime.</div>
+          </div>
+        </label>
+      </div>
+
+      <!-- Action bar -->
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+        <span id="save-status" style="font-size: 14px; color: var(--color-muted); min-height: 20px;"></span>
+        <button
+          type="submit"
+          id="save-btn"
+          style="background: var(--color-lime); color: var(--color-cream); border: none; border-radius: var(--radius-pill); padding: 13px 32px; font-size: 15px; font-weight: 700; cursor: pointer; transition: opacity 200ms; flex-shrink: 0;"
+        >
+          Save changes
+        </button>
+      </div>
+    </form>
+  </div>
+</BaseLayout>
+
+<script>
+  const form = document.getElementById('profile-form') as HTMLFormElement;
+  const btn = document.getElementById('save-btn') as HTMLButtonElement;
+  const status = document.getElementById('save-status') as HTMLSpanElement;
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    btn.disabled = true;
+    btn.textContent = 'Saving…';
+    status.textContent = '';
+
+    const data = {
+      first_name: (document.getElementById('first_name') as HTMLInputElement).value,
+      last_name: (document.getElementById('last_name') as HTMLInputElement).value,
+      phone: (document.getElementById('phone') as HTMLInputElement).value,
+      marketing_opt_in: (document.getElementById('marketing_opt_in') as HTMLInputElement).checked,
+    };
+
+    try {
+      const res = await fetch('/api/account/profile', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+
+      if (res.ok) {
+        status.textContent = 'Changes saved ✓';
+        status.style.color = 'var(--color-success)';
+        setTimeout(() => { status.textContent = ''; }, 3000);
+      } else {
+        const err = await res.json() as Record<string, string>;
+        status.textContent = err.error ?? 'Failed to save changes';
+        status.style.color = 'var(--color-error)';
+      }
+    } catch {
+      status.textContent = 'Network error. Please try again.';
+      status.style.color = 'var(--color-error)';
+    }
+
+    btn.disabled = false;
+    btn.textContent = 'Save changes';
+  });
+</script>

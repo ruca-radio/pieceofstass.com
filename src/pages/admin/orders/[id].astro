@@ -1,0 +1,273 @@
+---
+export const prerender = false;
+
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import { requireAdmin } from '../../../lib/admin-auth';
+import { getOrder, getOrdersKVFromEnv, generateSupplierEmailText } from '../../../lib/orders-server';
+import { getSupplierForCategory } from '../../../lib/supplier-routing';
+
+const env = await requireAdmin(Astro);
+if (!env) return Astro.redirect('/admin/sign-in?error=session');
+
+const { id } = Astro.params;
+if (!id) return Astro.redirect('/admin/orders');
+
+const runtimeEnv = ((Astro.locals as Record<string, unknown>)?.runtime as Record<string, unknown>)?.env as Record<string, unknown> | undefined;
+const kv = getOrdersKVFromEnv(runtimeEnv);
+
+const order = await getOrder(kv, id);
+if (!order) return new Response('Order not found', { status: 404 });
+
+// Determine supplier(s) for this order (by categories of items)
+const categories = [...new Set(order.items.map((i) => i.category).filter(Boolean))] as string[];
+const suppliers = categories.map((c) => getSupplierForCategory(c)).filter(Boolean);
+const primarySupplier = suppliers[0];
+
+const supplierEmail = generateSupplierEmailText(order);
+
+function formatMoney(n: number) {
+  return `$${n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+}
+function formatDate(iso: string) {
+  return new Date(iso).toLocaleString('en-US', {
+    month: 'long', day: 'numeric', year: 'numeric',
+    hour: '2-digit', minute: '2-digit'
+  });
+}
+
+const statusBadgeClass: Record<string, string> = {
+  pending: 'adm-badge-pending',
+  payment_captured: 'adm-badge-captured',
+  sent_to_supplier: 'adm-badge-supplier',
+  shipped: 'adm-badge-shipped',
+  delivered: 'adm-badge-delivered',
+  refunded: 'adm-badge-refunded',
+  cancelled: 'adm-badge-cancelled',
+};
+const statusLabel: Record<string, string> = {
+  pending: 'Pending', payment_captured: 'Paid', sent_to_supplier: 'Sent to Supplier',
+  shipped: 'Shipped', delivered: 'Delivered', refunded: 'Refunded', cancelled: 'Cancelled',
+};
+
+// Status transition options based on current status
+const transitions: Record<string, Array<{ status: string; label: string }>> = {
+  pending: [{ status: 'payment_captured', label: 'Mark as Paid' }],
+  payment_captured: [
+    { status: 'sent_to_supplier', label: 'Mark as Sent to Supplier' },
+    { status: 'cancelled', label: 'Cancel Order' },
+  ],
+  sent_to_supplier: [
+    { status: 'shipped', label: 'Mark as Shipped' },
+    { status: 'cancelled', label: 'Cancel Order' },
+  ],
+  shipped: [
+    { status: 'delivered', label: 'Mark as Delivered' },
+    { status: 'refunded', label: 'Refund' },
+  ],
+  delivered: [{ status: 'refunded', label: 'Refund' }],
+  refunded: [],
+  cancelled: [],
+};
+
+const availableTransitions = transitions[order.status] ?? [];
+---
+<AdminLayout title={`Order ${order.id}`} activeNav="orders">
+
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+    <a href="/admin/orders" style="color:var(--adm-muted);text-decoration:none;font-size:13px;">← Orders</a>
+    <span class={`adm-badge ${statusBadgeClass[order.status]}`}>{statusLabel[order.status]}</span>
+    {order.tracking_number && (
+      <span class="adm-mono" style="font-size:12px;color:var(--adm-muted);">
+        Tracking: {order.tracking_number} {order.shipping_carrier ? `(${order.shipping_carrier})` : ''}
+      </span>
+    )}
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 320px;gap:16px;align-items:start;">
+
+    <!-- Left column -->
+    <div style="display:flex;flex-direction:column;gap:16px;">
+
+      <!-- Items -->
+      <div class="adm-card" style="padding:0;overflow:hidden;">
+        <div style="padding:14px 16px;border-bottom:1px solid var(--adm-border);font-weight:600;font-size:13px;">Items ({order.items.length})</div>
+        {order.items.map((item) => (
+          <div style="display:flex;gap:12px;align-items:center;padding:12px 16px;border-bottom:1px solid var(--adm-border);">
+            {item.image && (
+              <img src={item.image} alt="" style="width:52px;height:52px;object-fit:cover;border-radius:6px;flex-shrink:0;background:#242427;" loading="lazy" />
+            )}
+            <div style="flex:1;min-width:0;">
+              <div style="font-size:13px;font-weight:500;margin-bottom:2px;">{item.title}</div>
+              <div style="font-size:11px;color:var(--adm-muted);">
+                {item.color && <span>Color: {item.color}</span>}
+                {item.size && <span style="margin-left:8px;">Size: {item.size}</span>}
+                {item.supplier_sku && <span style="margin-left:8px;" class="adm-mono">SKU: {item.supplier_sku}</span>}
+              </div>
+            </div>
+            <div style="text-align:right;flex-shrink:0;">
+              <div class="adm-mono" style="font-size:13px;">{formatMoney(item.unit_price)}</div>
+              <div style="font-size:11px;color:var(--adm-muted);">× {item.qty}</div>
+            </div>
+          </div>
+        ))}
+        <!-- Totals -->
+        <div style="padding:12px 16px;">
+          <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--adm-muted);margin-bottom:4px;">
+            <span>Subtotal</span><span class="adm-mono">{formatMoney(order.subtotal)}</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--adm-muted);margin-bottom:4px;">
+            <span>Shipping</span><span class="adm-mono">{order.shipping === 0 ? 'FREE' : formatMoney(order.shipping)}</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--adm-muted);margin-bottom:8px;">
+            <span>Tax</span><span class="adm-mono">{formatMoney(order.tax)}</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:15px;font-weight:700;border-top:1px solid var(--adm-border);padding-top:8px;">
+            <span>Total</span><span class="adm-mono">{formatMoney(order.total)}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Supplier email template -->
+      {primarySupplier && (
+        <div class="adm-card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+            <div style="font-weight:600;font-size:13px;">Supplier Order Email</div>
+            <button
+              type="button"
+              id="copy-email-btn"
+              class="adm-btn adm-btn-secondary"
+              style="padding:5px 10px;font-size:12px;"
+              onclick="navigator.clipboard.writeText(document.getElementById('supplier-email-text').textContent).then(()=>{this.textContent='Copied!';setTimeout(()=>{this.textContent='Copy'},2000)})"
+            >Copy</button>
+          </div>
+          <div style="font-size:11px;color:var(--adm-muted);margin-bottom:6px;">
+            To: {primarySupplier.supplier_name} ({primarySupplier.platform})
+          </div>
+          <pre id="supplier-email-text" style="background:var(--adm-surface2);border:1px solid var(--adm-border);border-radius:6px;padding:12px;font-family:var(--adm-mono);font-size:11px;line-height:1.6;white-space:pre-wrap;word-break:break-word;color:var(--adm-text);overflow:auto;max-height:280px;">{supplierEmail}</pre>
+          <div style="margin-top:8px;font-size:11px;color:var(--adm-muted);">
+            Est. delivery: {primarySupplier.est_days_min}–{primarySupplier.est_days_max} days from {primarySupplier.ship_from}
+          </div>
+        </div>
+      )}
+
+    </div>
+
+    <!-- Right column -->
+    <div style="display:flex;flex-direction:column;gap:16px;">
+
+      <!-- Order meta -->
+      <div class="adm-card">
+        <div style="font-weight:600;font-size:13px;margin-bottom:12px;">Order Details</div>
+        <div style="display:flex;flex-direction:column;gap:8px;font-size:12px;">
+          <div>
+            <div class="adm-label">Order ID</div>
+            <div class="adm-mono" style="font-size:11px;">{order.id}</div>
+          </div>
+          <div>
+            <div class="adm-label">Date</div>
+            <div>{formatDate(order.created_at)}</div>
+          </div>
+          {order.stripe_session_id && (
+            <div>
+              <div class="adm-label">Stripe Session</div>
+              <div class="adm-mono" style="font-size:11px;">{order.stripe_session_id}</div>
+            </div>
+          )}
+          {order.notes && (
+            <div>
+              <div class="adm-label">Notes</div>
+              <div style="color:var(--adm-muted);">{order.notes}</div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <!-- Customer info -->
+      <div class="adm-card">
+        <div style="font-weight:600;font-size:13px;margin-bottom:12px;">Customer</div>
+        <div style="display:flex;flex-direction:column;gap:6px;font-size:12px;">
+          <div style="font-weight:500;">{order.customer_name ?? '—'}</div>
+          <div>
+            <a href={`/admin/customers?q=${encodeURIComponent(order.customer_email)}`} style="color:var(--adm-violet);text-decoration:none;">{order.customer_email}</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Shipping address -->
+      {order.shipping_address && (
+        <div class="adm-card">
+          <div style="font-weight:600;font-size:13px;margin-bottom:12px;">Ship To</div>
+          <div style="font-size:12px;line-height:1.8;color:var(--adm-text);">
+            <div style="font-weight:500;">{order.shipping_address.name}</div>
+            <div>{order.shipping_address.line1}</div>
+            {order.shipping_address.line2 && <div>{order.shipping_address.line2}</div>}
+            <div>{order.shipping_address.city}, {order.shipping_address.state} {order.shipping_address.postal_code}</div>
+            <div>{order.shipping_address.country}</div>
+          </div>
+        </div>
+      )}
+
+      <!-- Actions -->
+      {availableTransitions.length > 0 && (
+        <div class="adm-card">
+          <div style="font-weight:600;font-size:13px;margin-bottom:12px;">Actions</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+
+            {availableTransitions.map((t) => (
+              t.status === 'shipped' ? (
+                <!-- Shipped form needs tracking # -->
+                <form
+                  onsubmit={`
+                    event.preventDefault();
+                    const data = Object.fromEntries(new FormData(this));
+                    fetch('/api/admin/orders/${order.id}', {
+                      method:'PATCH',
+                      headers:{'Content-Type':'application/json'},
+                      body:JSON.stringify({status:'shipped',...data})
+                    }).then(r=>r.ok?location.reload():alert('Error updating order'));
+                  `}
+                >
+                  <input type="text" name="tracking_number" placeholder="Tracking number" class="adm-input" style="margin-bottom:6px;" required />
+                  <input type="text" name="shipping_carrier" placeholder="Carrier (e.g. UPS, USPS)" class="adm-input" style="margin-bottom:6px;" />
+                  <button type="submit" class="adm-btn adm-btn-primary" style="width:100%;">{t.label}</button>
+                </form>
+              ) : (
+                <button
+                  type="button"
+                  class={`adm-btn ${t.status === 'cancelled' || t.status === 'refunded' ? 'adm-btn-danger' : 'adm-btn-secondary'}`}
+                  style="width:100%;justify-content:center;"
+                  onclick={`
+                    if (confirm('Are you sure you want to update status to "${t.label}"?')) {
+                      fetch('/api/admin/orders/${order.id}', {
+                        method:'PATCH',
+                        headers:{'Content-Type':'application/json'},
+                        body:JSON.stringify({status:'${t.status}'})
+                      }).then(r=>r.ok?location.reload():alert('Error updating order'));
+                    }
+                  `}
+                >
+                  {t.label}
+                </button>
+              )
+            ))}
+          </div>
+        </div>
+      )}
+
+      <!-- Supplier CSV download -->
+      <div class="adm-card">
+        <div style="font-weight:600;font-size:13px;margin-bottom:8px;">Export</div>
+        <a
+          href={`/api/admin/orders/${order.id}/supplier-csv`}
+          class="adm-btn adm-btn-secondary"
+          style="width:100%;justify-content:center;"
+          download
+        >
+          ↓ Download Supplier CSV
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+</AdminLayout>

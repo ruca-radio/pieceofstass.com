@@ -61,7 +61,7 @@ export default function EmailSignup({ compact = false }: { compact?: boolean }) 
         data-testid="button-email-signup"
         style={{
           background: 'var(--color-lime)',
-          color: 'var(--color-ink)',
+          color: 'var(--color-cream)',
           border: 'none',
           borderRadius: '999px',
           padding: '12px 24px',

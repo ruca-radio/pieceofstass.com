@@ -51,7 +51,7 @@ export default function MobileMenu({ categories }: Props) {
             style={{
               position: 'absolute',
               inset: 0,
-              background: 'rgba(10,10,11,0.7)',
+              background: 'rgba(42,33,28,0.7)',
               backdropFilter: 'blur(4px)',
             }}
           />
@@ -95,7 +95,7 @@ export default function MobileMenu({ categories }: Props) {
                   key={cat.slug}
                   href={`/shop/${cat.slug}`}
                   onClick={() => setOpen(false)}
-                  style={{ display: 'block', padding: '12px 0', color: 'var(--color-espresso)', fontSize: '16px', textDecoration: 'none', borderBottom: '1px solid rgba(58,58,62,0.5)' }}
+                  style={{ display: 'block', padding: '12px 0', color: 'var(--color-espresso)', fontSize: '16px', textDecoration: 'none', borderBottom: '1px solid rgba(230,220,207,0.5)' }}
                 >
                   {cat.title}
                 </a>

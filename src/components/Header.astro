@@ -12,6 +12,7 @@ const { transparent = false } = Astro.props;
 
 const navCategories = allCategories.sort((a, b) => a.sort_order - b.sort_order);
 const currentPath = Astro.url.pathname;
+const isSignedIn = !!Astro.locals.user;
 ---
 
 <header
@@ -21,8 +22,10 @@ const currentPath = Astro.url.pathname;
     position: sticky;
     top: 0;
     z-index: 100;
-    background-color: ${transparent ? 'transparent' : 'var(--color-ink)'};
-    border-bottom: 1px solid ${transparent ? 'transparent' : 'var(--color-charcoal)'};
+    background-color: ${transparent ? 'transparent' : 'rgba(246,240,232,0.85)'};
+    backdrop-filter: ${transparent ? 'none' : 'saturate(140%) blur(12px)'};
+    -webkit-backdrop-filter: ${transparent ? 'none' : 'saturate(140%) blur(12px)'};
+    border-bottom: 1px solid ${transparent ? 'transparent' : 'var(--color-line)'};
     transition: background-color 240ms, border-color 240ms;
   `}
 >
@@ -44,13 +47,13 @@ const currentPath = Astro.url.pathname;
           aria-hidden="true"
           style="flex-shrink: 0;"
         >
-          <!-- P mark: stylized P with lime accent -->
-          <rect width="32" height="32" rx="6" fill="var(--color-lime)" />
+          <!-- P mark: stylized P with Stass Rose accent -->
+          <rect width="32" height="32" rx="6" fill="var(--color-rose)" />
           <path
             d="M9 7h8c2.761 0 5 2.239 5 5s-2.239 5-5 5H9V7z"
-            fill="var(--color-ink)"
+            fill="var(--color-cream)"
           />
-          <path d="M9 17v8" stroke="var(--color-ink)" stroke-width="3" stroke-linecap="round" />
+          <path d="M9 17v8" stroke="var(--color-cream)" stroke-width="3" stroke-linecap="round" />
         </svg>
         <span
           style="font-family: var(--font-family-display); font-weight: 700; font-size: 18px; color: var(--color-espresso); letter-spacing: -0.02em; line-height: 1;"
@@ -85,6 +88,29 @@ const currentPath = Astro.url.pathname;
     <!-- Actions -->
     <div style="display: flex; align-items: center; gap: 8px; flex-shrink: 0;">
       <SearchButton client:load />
+      <!-- Account link -->
+      {isSignedIn ? (
+        <a
+          href="/account"
+          aria-label="My account"
+          style={`display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background: var(--color-charcoal); border: 1px solid var(--color-slate); text-decoration: none; transition: border-color 150ms, box-shadow 150ms; flex-shrink: 0;`}
+          title="My account"
+          class="account-icon-btn"
+        >
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <circle cx="8" cy="5.5" r="2.5" fill="var(--color-paper)" />
+            <path d="M2 13c0-3.314 2.686-5 6-5s6 1.686 6 5" stroke="var(--color-paper)" stroke-width="1.5" stroke-linecap="round" />
+          </svg>
+        </a>
+      ) : (
+        <a
+          href="/account/sign-in"
+          style={`font-size: 13px; font-weight: 600; color: var(--color-espresso); text-decoration: none; padding: 7px 14px; border-radius: var(--radius-pill); border: 1px solid var(--color-slate); transition: border-color 150ms, color 150ms; flex-shrink: 0; white-space: nowrap;`}
+          class="sign-in-btn"
+        >
+          Sign in
+        </a>
+      )}
       <CartButton client:load />
     </div>
   </div>
@@ -100,6 +126,13 @@ const currentPath = Astro.url.pathname;
   .site-header a:hover {
     color: var(--color-lime) !important;
   }
+  .account-icon-btn:hover {
+    border-color: var(--color-lime) !important;
+  }
+  .sign-in-btn:hover {
+    border-color: var(--color-lime) !important;
+    color: var(--color-lime) !important;
+  }
 </style>
 
 <script>
@@ -108,10 +141,14 @@ const currentPath = Astro.url.pathname;
   if (header && header.classList.contains('transparent')) {
     window.addEventListener('scroll', () => {
       if (window.scrollY > 60) {
-        header.style.backgroundColor = 'var(--color-ink)';
-        header.style.borderBottomColor = 'var(--color-charcoal)';
+        header.style.backgroundColor = 'rgba(246,240,232,0.85)';
+        header.style.backdropFilter = 'saturate(140%) blur(12px)';
+        header.style.setProperty('-webkit-backdrop-filter', 'saturate(140%) blur(12px)');
+        header.style.borderBottomColor = 'var(--color-line)';
       } else {
         header.style.backgroundColor = 'transparent';
+        header.style.backdropFilter = 'none';
+        header.style.setProperty('-webkit-backdrop-filter', 'none');
         header.style.borderBottomColor = 'transparent';
       }
     }, { passive: true });

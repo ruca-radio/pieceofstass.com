@@ -167,14 +167,14 @@ export default function CookieBanner({ country: initialCountry = '' }: Props) {
         left: '50%',
         transform: 'translateX(-50%)',
         width: 'min(640px, calc(100vw - 32px))',
-        background: 'var(--color-charcoal, #1a1a1c)',
-        border: '1px solid var(--color-slate, #2c2c2e)',
+        background: 'var(--color-charcoal, #FBF7F1)',
+        border: '1px solid var(--color-line, #E6DCCF)',
         borderRadius: '16px',
         padding: '24px',
         zIndex: 9999,
-        boxShadow: '0 8px 40px rgba(0,0,0,0.6)',
+        boxShadow: '0 12px 40px rgba(42,33,28,0.16)',
         fontFamily: 'var(--font-family-sans, system-ui, sans-serif)',
-        color: 'var(--color-paper, #f5f5f0)',
+        color: 'var(--color-espresso, #2A211C)',
       }}
     >
       {/* Header */}
@@ -182,9 +182,9 @@ export default function CookieBanner({ country: initialCountry = '' }: Props) {
         <p style={{ margin: 0, fontWeight: 700, fontSize: '15px' }}>
           We use cookies
         </p>
-        <p style={{ margin: '6px 0 0', fontSize: '13px', color: 'var(--color-muted, #888)', lineHeight: 1.5 }}>
+        <p style={{ margin: '6px 0 0', fontSize: '13px', color: 'var(--color-muted, #726558)', lineHeight: 1.5 }}>
           We use cookies to improve your experience, measure site performance, and serve relevant ads.
-          You can manage your preferences below. <a href="/cookies" style={{ color: 'var(--color-lime, #c8f135)', textDecoration: 'underline' }}>Cookie policy</a>
+          You can manage your preferences below. <a href="/cookies" style={{ color: 'var(--color-rose-deep, #8B434C)', textDecoration: 'underline' }}>Cookie policy</a>
         </p>
       </div>
 
@@ -194,7 +194,7 @@ export default function CookieBanner({ country: initialCountry = '' }: Props) {
           style={{
             margin: '16px 0',
             padding: '16px',
-            background: 'rgba(255,255,255,0.04)',
+            background: 'var(--color-surface, #F0E7DA)',
             borderRadius: '10px',
             display: 'flex',
             flexDirection: 'column',
@@ -205,10 +205,10 @@ export default function CookieBanner({ country: initialCountry = '' }: Props) {
         >
           {/* Necessary */}
           <label style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', cursor: 'default' }}>
-            <input type="checkbox" checked disabled aria-disabled="true" style={{ marginTop: '2px', accentColor: 'var(--color-lime, #c8f135)' }} />
+            <input type="checkbox" checked disabled aria-disabled="true" style={{ marginTop: '2px', accentColor: 'var(--color-rose, #A14C58)' }} />
             <div>
               <p style={{ margin: 0, fontSize: '13px', fontWeight: 600 }}>Necessary</p>
-              <p style={{ margin: '2px 0 0', fontSize: '12px', color: 'var(--color-muted, #888)' }}>
+              <p style={{ margin: '2px 0 0', fontSize: '12px', color: 'var(--color-muted, #726558)' }}>
                 Required for the site to function. Cannot be disabled.
               </p>
             </div>
@@ -221,11 +221,11 @@ export default function CookieBanner({ country: initialCountry = '' }: Props) {
               checked={analytics}
               onChange={(e) => setAnalytics(e.target.checked)}
               aria-label="Analytics cookies"
-              style={{ marginTop: '2px', accentColor: 'var(--color-lime, #c8f135)', cursor: 'pointer' }}
+              style={{ marginTop: '2px', accentColor: 'var(--color-rose, #A14C58)', cursor: 'pointer' }}
             />
             <div>
               <p style={{ margin: 0, fontSize: '13px', fontWeight: 600 }}>Analytics</p>
-              <p style={{ margin: '2px 0 0', fontSize: '12px', color: 'var(--color-muted, #888)' }}>
+              <p style={{ margin: '2px 0 0', fontSize: '12px', color: 'var(--color-muted, #726558)' }}>
                 Help us understand how visitors use the site (GA4, Cloudflare Analytics).
               </p>
             </div>
@@ -238,11 +238,11 @@ export default function CookieBanner({ country: initialCountry = '' }: Props) {
               checked={marketing}
               onChange={(e) => setMarketing(e.target.checked)}
               aria-label="Marketing cookies"
-              style={{ marginTop: '2px', accentColor: 'var(--color-lime, #c8f135)', cursor: 'pointer' }}
+              style={{ marginTop: '2px', accentColor: 'var(--color-rose, #A14C58)', cursor: 'pointer' }}
             />
             <div>
               <p style={{ margin: 0, fontSize: '13px', fontWeight: 600 }}>Marketing</p>
-              <p style={{ margin: '2px 0 0', fontSize: '12px', color: 'var(--color-muted, #888)' }}>
+              <p style={{ margin: '2px 0 0', fontSize: '12px', color: 'var(--color-muted, #726558)' }}>
                 Used to deliver relevant ads and measure campaign performance (Meta Pixel, TikTok Pixel).
               </p>
             </div>
@@ -267,9 +267,9 @@ export default function CookieBanner({ country: initialCountry = '' }: Props) {
             flex: '1 1 auto',
             padding: '12px 20px',
             borderRadius: '999px',
-            border: '1.5px solid var(--color-slate, #2c2c2e)',
+            border: '1.5px solid var(--color-line, #E6DCCF)',
             background: 'transparent',
-            color: 'var(--color-paper, #f5f5f0)',
+            color: 'var(--color-espresso, #2A211C)',
             fontSize: '13px',
             fontWeight: 600,
             cursor: 'pointer',
@@ -288,9 +288,9 @@ export default function CookieBanner({ country: initialCountry = '' }: Props) {
             flex: '1 1 auto',
             padding: '12px 20px',
             borderRadius: '999px',
-            border: '1.5px solid var(--color-slate, #2c2c2e)',
+            border: '1.5px solid var(--color-line, #E6DCCF)',
             background: 'transparent',
-            color: 'var(--color-muted, #888)',
+            color: 'var(--color-muted, #726558)',
             fontSize: '13px',
             fontWeight: 600,
             cursor: 'pointer',
@@ -309,9 +309,9 @@ export default function CookieBanner({ country: initialCountry = '' }: Props) {
               flex: '1 1 auto',
               padding: '12px 20px',
               borderRadius: '999px',
-              border: '1.5px solid var(--color-lime, #c8f135)',
+              border: '1.5px solid var(--color-rose, #A14C58)',
               background: 'transparent',
-              color: 'var(--color-lime, #c8f135)',
+              color: 'var(--color-rose-deep, #8B434C)',
               fontSize: '13px',
               fontWeight: 600,
               cursor: 'pointer',
@@ -330,9 +330,9 @@ export default function CookieBanner({ country: initialCountry = '' }: Props) {
             flex: '1 1 auto',
             padding: '12px 20px',
             borderRadius: '999px',
-            border: '1.5px solid var(--color-lime, #c8f135)',
-            background: 'var(--color-lime, #c8f135)',
-            color: 'var(--color-ink, #0a0a0b)',
+            border: '1.5px solid var(--color-rose, #A14C58)',
+            background: 'var(--color-rose, #A14C58)',
+            color: 'var(--color-cream, #F6F0E8)',
             fontSize: '13px',
             fontWeight: 700,
             cursor: 'pointer',

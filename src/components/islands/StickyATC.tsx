@@ -93,7 +93,7 @@ export default function StickyATC({ product, selectedVariantSku, selectedOptions
         data-testid="button-sticky-atc"
         style={{
           background: 'var(--color-lime)',
-          color: 'var(--color-ink)',
+          color: 'var(--color-cream)',
           border: 'none',
           borderRadius: '999px',
           padding: '12px 20px',

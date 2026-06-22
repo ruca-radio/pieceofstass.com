@@ -46,7 +46,7 @@ export default function PLPFilters({ products, categoryTitle }: Props) {
           marginBottom: '24px',
           position: 'sticky',
           top: '100px',
-          background: 'var(--color-ink)',
+          background: 'var(--color-surface)',
           zIndex: 10,
         }}
       >
@@ -121,7 +121,7 @@ export default function PLPFilters({ products, categoryTitle }: Props) {
       {/* Filter drawer */}
       {filterDrawerOpen && (
         <>
-          <div onClick={() => setFilterDrawerOpen(false)} style={{ position: 'fixed', inset: 0, background: 'rgba(10,10,11,0.6)', zIndex: 300, backdropFilter: 'blur(4px)' }} aria-hidden="true" />
+          <div onClick={() => setFilterDrawerOpen(false)} style={{ position: 'fixed', inset: 0, background: 'rgba(42,33,28,0.6)', zIndex: 300, backdropFilter: 'blur(4px)' }} aria-hidden="true" />
           <aside
             role="dialog"
             aria-modal="true"

@@ -110,7 +110,7 @@ export default function AddToCart({ product }: Props) {
                     cursor: outOfStock ? 'not-allowed' : 'pointer',
                     border: `1.5px solid ${isSelected ? 'var(--color-lime)' : 'var(--color-slate)'}`,
                     background: isSelected ? 'var(--color-lime)' : 'transparent',
-                    color: isSelected ? 'var(--color-ink)' : outOfStock ? 'var(--color-muted)' : 'var(--color-espresso)',
+                    color: isSelected ? 'var(--color-cream)' : outOfStock ? 'var(--color-muted)' : 'var(--color-espresso)',
                     opacity: outOfStock ? 0.4 : 1,
                     textDecoration: outOfStock ? 'line-through' : 'none',
                     transition: 'background 150ms, border-color 150ms, color 150ms',
@@ -148,7 +148,7 @@ export default function AddToCart({ product }: Props) {
         data-testid="button-add-to-cart"
         style={{
           background: 'var(--color-lime)',
-          color: 'var(--color-ink)',
+          color: 'var(--color-cream)',
           border: 'none',
           borderRadius: '999px',
           padding: '18px 32px',

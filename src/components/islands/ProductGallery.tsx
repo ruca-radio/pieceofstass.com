@@ -34,7 +34,7 @@ export default function ProductGallery({ images, title }: Props) {
                   width: i === active ? '20px' : '6px',
                   height: '6px',
                   borderRadius: '999px',
-                  background: i === active ? 'var(--color-lime)' : 'rgba(250,250,247,0.4)',
+                  background: i === active ? 'var(--color-lime)' : 'rgba(246,240,232,0.4)',
                   border: 'none',
                   cursor: 'pointer',
                   padding: 0,
@@ -50,14 +50,14 @@ export default function ProductGallery({ images, title }: Props) {
             <button
               onClick={() => setActive((active - 1 + images.length) % images.length)}
               aria-label="Previous image"
-              style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', background: 'rgba(10,10,11,0.6)', border: 'none', borderRadius: '999px', width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: 'var(--color-espresso)' }}
+              style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', background: 'rgba(42,33,28,0.6)', border: 'none', borderRadius: '999px', width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: 'var(--color-espresso)' }}
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="m15 18-6-6 6-6"/></svg>
             </button>
             <button
               onClick={() => setActive((active + 1) % images.length)}
               aria-label="Next image"
-              style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', background: 'rgba(10,10,11,0.6)', border: 'none', borderRadius: '999px', width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: 'var(--color-espresso)' }}
+              style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', background: 'rgba(42,33,28,0.6)', border: 'none', borderRadius: '999px', width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: 'var(--color-espresso)' }}
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="m9 18 6-6-6-6"/></svg>
             </button>

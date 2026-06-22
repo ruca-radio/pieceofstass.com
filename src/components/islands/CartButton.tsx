@@ -35,7 +35,7 @@ export default function CartButton() {
             top: '2px',
             right: '2px',
             background: 'var(--color-lime)',
-            color: 'var(--color-ink)',
+            color: 'var(--color-cream)',
             fontSize: '10px',
             fontWeight: 700,
             fontFamily: 'var(--font-family-mono)',
