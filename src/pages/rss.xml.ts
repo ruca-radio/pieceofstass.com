@@ -25,7 +25,7 @@ export const GET: APIRoute = async ({ site }) => {
     <atom:link href="${siteUrl}/rss.xml" rel="self" type="application/rss+xml"/>
     <language>en-us</language>
     <image>
-      <url>${siteUrl}/favicon.svg</url>
+      <url>${siteUrl}/favicon.ico</url>
       <title>Piece of Stass</title>
       <link>${siteUrl}</link>
     </image>

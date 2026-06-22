@@ -117,9 +117,16 @@ export function magicLinkEmail(
 <body>
   <div class="wrapper">
     <!-- Logo -->
-    <div class="logo">
-      <span class="logo-mark"></span>
-      <span class="logo-text">STASS</span>
+    <div class="logo" style="text-align:center;padding:8px 0 24px;">
+      <a href="https://pieceofstass.com" style="text-decoration:none;display:inline-block;">
+        <img
+          src="https://pieceofstass.com/brand/logo-nav.png"
+          width="178"
+          height="48"
+          alt="Piece of Stass"
+          style="display:inline-block;border:0;outline:none;height:48px;width:auto;max-width:200px;"
+        />
+      </a>
     </div>
 
     <!-- Card -->

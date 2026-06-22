@@ -81,11 +81,17 @@ ${preview}
 // ── Logo row ──────────────────────────────────────────────────────────────────
 
 function logoRow(): string {
+  // Inline-safe email logo: hosted PNG with text alt so Gmail/Outlook fallback gracefully.
   return `<tr>
-    <td style="padding:0 0 28px 0;">
+    <td style="padding:0 0 28px 0;text-align:left;">
       <a href="https://pieceofstass.com" style="text-decoration:none;display:inline-block;">
-        <span style="display:inline-block;width:10px;height:24px;background:${BRAND.rose};border-radius:3px;vertical-align:middle;margin-right:8px;"></span>
-        <span style="font-size:17px;font-weight:700;color:${BRAND.espresso};letter-spacing:-0.02em;vertical-align:middle;">Piece of Stass</span>
+        <img
+          src="https://pieceofstass.com/brand/logo-nav.png"
+          width="178"
+          height="48"
+          alt="Piece of Stass"
+          style="display:inline-block;border:0;outline:none;height:48px;width:auto;max-width:200px;"
+        />
       </a>
     </td>
   </tr>`;

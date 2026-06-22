@@ -17,13 +17,19 @@ import { SOCIAL_LINKS } from '../lib/social-links';
     <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 40px; margin-bottom: 48px;">
       <!-- Brand col -->
       <div>
-        <a href="/" style="display: flex; align-items: center; gap: 8px; text-decoration: none; margin-bottom: 16px;">
-          <svg width="28" height="28" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-            <rect width="32" height="32" rx="6" fill="var(--color-rose)" />
-            <path d="M9 7h8c2.761 0 5 2.239 5 5s-2.239 5-5 5H9V7z" fill="var(--color-cream)" />
-            <path d="M9 17v8" stroke="var(--color-cream)" stroke-width="3" stroke-linecap="round" />
-          </svg>
-          <span style="font-family: var(--font-family-display); font-weight: 700; font-size: 16px; color: var(--color-cream);">STASS</span>
+        <a href="/" aria-label="Piece of Stass — home" style="display: inline-flex; align-items: center; text-decoration: none; margin-bottom: 16px;">
+          <picture>
+            <source srcset="/brand/logo-nav.webp" type="image/webp" />
+            <img
+              src="/brand/logo-nav.png"
+              alt="Piece of Stass"
+              width="178"
+              height="48"
+              loading="lazy"
+              decoding="async"
+              style="height: 48px; width: auto; display: block; filter: brightness(1.05) saturate(1.05);"
+            />
+          </picture>
         </a>
         <p style="color: #B8A795; font-size: 13px; line-height: 1.6; max-width: 260px;">We don't sell everything. We sell the edit. Trend-driven finds across 8 categories, dropped daily.</p>
         <!-- Social links — sourced from social-links.ts -->
@@ -89,7 +95,7 @@ import { SOCIAL_LINKS } from '../lib/social-links';
 
     <!-- Bottom bar -->
     <div style="border-top: 1px solid rgba(246,240,232,0.10); padding-top: 24px; display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between; align-items: center;">
-      <p style="color: #B8A795; font-size: 12px; margin: 0;">&copy; 2025 Piece of Stass. All rights reserved.</p>
+      <p style="color: #B8A795; font-size: 12px; margin: 0;">&copy; 2026 Piece of Stass. All rights reserved.</p>
       <p style="color: #B8A795; font-size: 12px; margin: 0; font-family: var(--font-family-mono);">#RaidTheStash</p>
     </div>
   </div>

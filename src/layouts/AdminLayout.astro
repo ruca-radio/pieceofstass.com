@@ -565,10 +565,20 @@ const nav = [
   <div class="adm-shell">
     <!-- Left Rail Navigation -->
     <nav class="adm-rail">
-      <div class="adm-brand">
-        <div class="adm-brand-name">Piece of Stass</div>
-        <div class="adm-brand-sub">Admin</div>
-      </div>
+      <a href="/admin" class="adm-brand" style="text-decoration:none;display:flex;align-items:center;gap:10px;">
+        <img
+          src="/brand/icon-192.png"
+          alt=""
+          width="36"
+          height="36"
+          decoding="async"
+          style="width:36px;height:36px;border-radius:8px;flex-shrink:0;"
+        />
+        <div>
+          <div class="adm-brand-name">Piece of Stass</div>
+          <div class="adm-brand-sub">Admin</div>
+        </div>
+      </a>
       <div class="adm-nav">
         <div class="adm-nav-section">Operations</div>
         {nav.slice(0, 5).map((item) => (

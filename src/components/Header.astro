@@ -37,29 +37,21 @@ const isSignedIn = !!Astro.locals.user;
       <a
         href="/"
         aria-label="Piece of Stass — home"
-        style="display: flex; align-items: center; text-decoration: none; gap: 8px; flex-shrink: 0;"
+        style="display: flex; align-items: center; text-decoration: none; flex-shrink: 0;"
       >
-        <svg
-          width="32"
-          height="32"
-          viewBox="0 0 32 32"
-          fill="none"
-          aria-hidden="true"
-          style="flex-shrink: 0;"
-        >
-          <!-- P mark: stylized P with Stass Rose accent -->
-          <rect width="32" height="32" rx="6" fill="var(--color-rose)" />
-          <path
-            d="M9 7h8c2.761 0 5 2.239 5 5s-2.239 5-5 5H9V7z"
-            fill="var(--color-cream)"
+        <picture>
+          <source srcset="/brand/logo-nav.webp" type="image/webp" />
+          <img
+            src="/brand/logo-nav.png"
+            srcset="/brand/logo-nav.png 1x, /brand/logo@2x.png 2x"
+            alt="Piece of Stass"
+            width="148"
+            height="40"
+            decoding="async"
+            fetchpriority="high"
+            style="height: 40px; width: auto; display: block;"
           />
-          <path d="M9 17v8" stroke="var(--color-cream)" stroke-width="3" stroke-linecap="round" />
-        </svg>
-        <span
-          style="font-family: var(--font-family-display); font-weight: 700; font-size: 18px; color: var(--color-espresso); letter-spacing: -0.02em; line-height: 1;"
-        >
-          STASS
-        </span>
+        </picture>
       </a>
     </div>
 
