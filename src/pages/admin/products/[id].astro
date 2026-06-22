@@ -28,13 +28,24 @@ const product = {
   compare_at_price: override.compare_at_price ?? base.compare_at_price,
   description: override.description ?? base.description,
   status: override.status ?? 'active',
+  seo: override.seo ?? {},
+  images_alt: override.images_alt ?? [],
+  variant_price_overrides: override.variant_price_overrides ?? {},
 };
 
 const saved = Astro.url.searchParams.get('saved') === '1';
----
-<AdminLayout title="Edit Product" activeNav="products">
+const shopUrl = `/shop/${product.category}/${product.handle}`;
 
-  <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+// Serialize to pass into inline scripts safely
+const variantPriceOverridesJson = JSON.stringify(product.variant_price_overrides);
+const imagesAltJson = JSON.stringify(product.images_alt);
+const variantsJson = JSON.stringify(base.variants);
+const imagesJson = JSON.stringify(base.images);
+---
+<AdminLayout title={`Edit: ${product.title}`} activeNav="products">
+
+  <!-- Header -->
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap;">
     <a href="/admin/products" style="color:var(--adm-muted);text-decoration:none;font-size:13px;">← Products</a>
     <span class={`adm-badge ${product.status === 'active' ? 'adm-badge-active' : 'adm-badge-draft'}`}>
       {product.status}
@@ -44,109 +55,221 @@ const saved = Astro.url.searchParams.get('saved') === '1';
         ✓ Saved
       </span>
     )}
+    <span style="margin-left:auto;display:flex;gap:8px;">
+      <a href={shopUrl} target="_blank" class="adm-btn adm-btn-secondary" style="font-size:12px;">View on Storefront ↗</a>
+    </span>
   </div>
 
   <div style="display:grid;grid-template-columns:1fr 300px;gap:16px;align-items:start;">
 
-    <!-- Edit form -->
-    <div>
-      <form
-        id="product-form"
-        onsubmit={`
-          event.preventDefault();
-          const fd = new FormData(this);
-          const data = {
-            price: parseFloat(fd.get('price')),
-            compare_at_price: fd.get('compare_at_price') ? parseFloat(fd.get('compare_at_price')) : null,
-            description: fd.get('description'),
-            status: fd.get('status'),
-          };
-          if (data.compare_at_price === null) delete data.compare_at_price;
-          fetch('/api/admin/products/${id}', {
-            method: 'PATCH',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(data),
-          }).then(r => r.ok ? location.href = '/admin/products/${id}?saved=1' : alert('Save failed'));
-        `}
-        style="display:flex;flex-direction:column;gap:16px;"
-      >
-        <div class="adm-card">
-          <div style="font-weight:600;font-size:13px;margin-bottom:14px;">Pricing</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-            <div>
-              <label class="adm-label" for="price">Price ($)</label>
-              <input type="number" id="price" name="price" value={product.price} step="1" min="0" class="adm-input" required />
-              <div style="font-size:11px;color:var(--adm-muted);margin-top:4px;">Store display price in USD</div>
-            </div>
-            <div>
-              <label class="adm-label" for="compare_at_price">Compare At Price ($)</label>
-              <input type="number" id="compare_at_price" name="compare_at_price" value={product.compare_at_price ?? ''} step="1" min="0" class="adm-input" />
-              <div style="font-size:11px;color:var(--adm-muted);margin-top:4px;">Leave blank to hide sale badge</div>
-            </div>
+    <!-- ── Left column: all editable sections ── -->
+    <div style="display:flex;flex-direction:column;gap:16px;">
+
+      <!-- Pricing -->
+      <div class="adm-card">
+        <div style="font-weight:600;font-size:13px;margin-bottom:14px;">Pricing</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div>
+            <label class="adm-label" for="price">Price ($)</label>
+            <input type="number" id="price" name="price" value={product.price} step="1" min="0" class="adm-input" required />
+            <div style="font-size:11px;color:var(--adm-muted);margin-top:4px;">Store display price in USD</div>
+          </div>
+          <div>
+            <label class="adm-label" for="compare_at_price">Compare At Price ($)</label>
+            <input type="number" id="compare_at_price" name="compare_at_price" value={product.compare_at_price ?? ''} step="1" min="0" class="adm-input" />
+            <div style="font-size:11px;color:var(--adm-muted);margin-top:4px;">Leave blank to hide sale badge</div>
           </div>
         </div>
+      </div>
 
+      <!-- Description -->
+      <div class="adm-card">
+        <div style="font-weight:600;font-size:13px;margin-bottom:14px;">Description</div>
+        <label class="adm-label" for="description">Product Description</label>
+        <textarea id="description" name="description" class="adm-textarea" style="min-height:120px;">{product.description}</textarea>
+        <div style="font-size:11px;color:var(--adm-muted);margin-top:4px;">Displayed on product page. Plain text or simple HTML.</div>
+      </div>
+
+      <!-- Variant Price Overrides -->
+      {base.variants.length > 0 && (
+        <div class="adm-card" id="variant-editor">
+          <div style="font-weight:600;font-size:13px;margin-bottom:4px;">Variant Price Overrides</div>
+          <div style="font-size:12px;color:var(--adm-muted);margin-bottom:14px;">
+            Override price per variant. Leave blank to use the base product price above.
+          </div>
+          <div style="overflow-x:auto;">
+            <table class="adm-table" style="width:100%;">
+              <thead>
+                <tr>
+                  <th>SKU</th>
+                  <th>Title</th>
+                  <th>Options</th>
+                  <th style="width:130px;">Price Override ($)</th>
+                  <th style="width:50px;">Inv.</th>
+                </tr>
+              </thead>
+              <tbody id="variant-tbody">
+                {base.variants.map((v) => (
+                  <tr>
+                    <td class="adm-mono" style="font-size:11px;">{v.sku}</td>
+                    <td style="font-size:12px;">{v.title}</td>
+                    <td style="font-size:11px;color:var(--adm-muted);">
+                      {Object.entries(v.options).map(([k, val]) => `${k}: ${val}`).join(', ')}
+                    </td>
+                    <td>
+                      <input
+                        type="number"
+                        class="adm-input variant-price-input"
+                        data-sku={v.sku}
+                        value={product.variant_price_overrides[v.sku] ?? ''}
+                        step="1"
+                        min="0"
+                        placeholder={String(product.price)}
+                        style="width:100%;padding:4px 8px;font-size:12px;"
+                      />
+                    </td>
+                    <td style="font-size:12px;text-align:center;">{v.inventory_quantity}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      <!-- SEO Overrides -->
+      <div class="adm-card">
+        <div style="font-weight:600;font-size:13px;margin-bottom:4px;">SEO Overrides</div>
+        <div style="font-size:12px;color:var(--adm-muted);margin-bottom:14px;">
+          Override the default SEO title and description for this product's page.
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div>
+            <label class="adm-label" for="seo_title">SEO Title</label>
+            <input
+              type="text"
+              id="seo_title"
+              name="seo_title"
+              value={product.seo?.title ?? ''}
+              class="adm-input"
+              maxlength="70"
+              placeholder={`${product.title} | Piece of Stass`}
+            />
+            <div style="font-size:11px;color:var(--adm-muted);margin-top:4px;">
+              Recommended 50–60 chars. Leave blank to use product title.
+            </div>
+          </div>
+          <div>
+            <label class="adm-label" for="seo_description">SEO Description</label>
+            <textarea
+              id="seo_description"
+              name="seo_description"
+              class="adm-textarea"
+              maxlength="160"
+              style="min-height:70px;"
+              placeholder="Brief description for search engines..."
+            >{product.seo?.description ?? ''}</textarea>
+            <div style="font-size:11px;color:var(--adm-muted);margin-top:4px;">
+              Recommended 150–160 chars. Leave blank to use product description.
+            </div>
+          </div>
+          <!-- Live char counters -->
+          <div style="display:flex;gap:16px;font-size:11px;color:var(--adm-muted);">
+            <span>Title: <span id="seo-title-count">0</span>/70</span>
+            <span>Desc: <span id="seo-desc-count">0</span>/160</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Image Alt Text -->
+      {base.images.length > 0 && (
         <div class="adm-card">
-          <div style="font-weight:600;font-size:13px;margin-bottom:14px;">Description</div>
-          <label class="adm-label" for="description">Product Description</label>
-          <textarea id="description" name="description" class="adm-textarea" style="min-height:120px;">{product.description}</textarea>
-          <div style="font-size:11px;color:var(--adm-muted);margin-top:4px;">Displayed on product page. Plain text or simple HTML.</div>
+          <div style="font-weight:600;font-size:13px;margin-bottom:4px;">Image Alt Text</div>
+          <div style="font-size:12px;color:var(--adm-muted);margin-bottom:14px;">
+            Describe each image for accessibility and SEO.
+          </div>
+          <div style="display:flex;flex-direction:column;gap:12px;" id="alt-text-list">
+            {base.images.map((img, idx) => (
+              <div style="display:flex;gap:12px;align-items:center;">
+                <img
+                  src={img}
+                  alt=""
+                  style="width:56px;height:56px;object-fit:cover;border-radius:4px;flex-shrink:0;border:1px solid var(--adm-border);"
+                  loading="lazy"
+                />
+                <div style="flex:1;">
+                  <input
+                    type="text"
+                    class="adm-input image-alt-input"
+                    data-idx={idx}
+                    value={product.images_alt[idx] ?? ''}
+                    placeholder={`Alt text for image ${idx + 1}…`}
+                    maxlength="125"
+                    style="width:100%;"
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
+      )}
 
-        <div class="adm-card">
-          <div style="font-weight:600;font-size:13px;margin-bottom:14px;">Visibility</div>
-          <label class="adm-label" for="status">Status</label>
-          <select id="status" name="status" class="adm-select">
-            <option value="active" selected={product.status === 'active'}>Active — visible on storefront</option>
-            <option value="draft" selected={product.status === 'draft'}>Draft — hidden from storefront</option>
-          </select>
-        </div>
+      <!-- Visibility -->
+      <div class="adm-card">
+        <div style="font-weight:600;font-size:13px;margin-bottom:14px;">Visibility</div>
+        <label class="adm-label" for="status">Status</label>
+        <select id="status" name="status" class="adm-select">
+          <option value="active" selected={product.status === 'active'}>Active — visible on storefront</option>
+          <option value="draft" selected={product.status === 'draft'}>Draft — hidden from storefront</option>
+        </select>
+      </div>
 
-        <div style="display:flex;gap:8px;">
-          <button type="submit" class="adm-btn adm-btn-primary">Save Changes</button>
-          <a href="/admin/products" class="adm-btn adm-btn-secondary">Cancel</a>
-          {override && Object.keys(override).length > 0 && (
-            <button
-              type="button"
-              class="adm-btn adm-btn-danger"
-              style="margin-left:auto;"
-              onclick={`
-                if (confirm('Reset to catalog defaults? This will discard all edits.')) {
-                  fetch('/api/admin/products/${id}', {
-                    method: 'PATCH',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({price: null, compare_at_price: null, description: null, status: 'active', _reset: true}),
-                  }).then(r => r.ok ? location.href = '/admin/products/${id}' : alert('Reset failed'));
-                }
-              `}
-            >
-              Reset to Defaults
-            </button>
-          )}
-        </div>
-      </form>
+      <!-- Action buttons -->
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button type="button" id="save-btn" class="adm-btn adm-btn-primary">Save Changes</button>
+        <a href="/admin/products" class="adm-btn adm-btn-secondary">Cancel</a>
+        {override && Object.keys(override).length > 0 && (
+          <button
+            type="button"
+            id="reset-btn"
+            class="adm-btn adm-btn-danger"
+            style="margin-left:auto;"
+          >
+            Reset to Defaults
+          </button>
+        )}
+      </div>
+
     </div>
 
-    <!-- Product preview -->
+    <!-- ── Right column: info sidebar ── -->
     <div style="display:flex;flex-direction:column;gap:12px;">
       <div class="adm-card">
         <div style="font-weight:600;font-size:13px;margin-bottom:10px;">Product Info</div>
-        {product.images[0] && (
-          <img src={product.images[0]} alt="" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:6px;margin-bottom:12px;" loading="lazy" />
+        {base.images[0] && (
+          <img src={base.images[0]} alt="" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:6px;margin-bottom:12px;" loading="lazy" />
         )}
         <div style="font-size:14px;font-weight:600;margin-bottom:4px;">{product.title}</div>
         <div style="font-size:11px;color:var(--adm-muted);margin-bottom:6px;" class="adm-mono">{product.id}</div>
-        <div style="font-size:12px;color:var(--adm-muted);margin-bottom:6px;">Category: {product.category}</div>
-        <div style="font-size:12px;color:var(--adm-muted);">{product.variants.length} variant{product.variants.length !== 1 ? 's' : ''}</div>
+        <div style="font-size:12px;color:var(--adm-muted);margin-bottom:2px;">Category: {product.category}</div>
+        <div style="font-size:12px;color:var(--adm-muted);margin-bottom:2px;">Handle: {product.handle}</div>
+        <div style="font-size:12px;color:var(--adm-muted);">{base.variants.length} variant{base.variants.length !== 1 ? 's' : ''} · {base.images.length} image{base.images.length !== 1 ? 's' : ''}</div>
+        {base.tags.length > 0 && (
+          <div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:4px;">
+            {base.tags.slice(0, 6).map((t) => (
+              <span style="background:var(--adm-hover);color:var(--adm-muted);border-radius:4px;padding:2px 6px;font-size:10px;">{t}</span>
+            ))}
+          </div>
+        )}
       </div>
 
       <div class="adm-card">
-        <div style="font-weight:600;font-size:13px;margin-bottom:10px;">Override status</div>
+        <div style="font-weight:600;font-size:13px;margin-bottom:10px;">Override Status</div>
         {Object.keys(override).length === 0 ? (
           <div style="font-size:12px;color:var(--adm-muted);">No overrides — using catalog defaults.</div>
         ) : (
           <div style="font-size:12px;color:var(--adm-lime);">
-            Active overrides: {Object.keys(override).filter(k => k !== 'updated_at').join(', ')}
+            Active overrides: {Object.keys(override).filter((k) => k !== 'updated_at').join(', ')}
           </div>
         )}
         {override.updated_at && (
@@ -156,16 +279,138 @@ const saved = Astro.url.searchParams.get('saved') === '1';
         )}
       </div>
 
-      <a
-        href={`/shop/${product.category}/${product.handle}`}
-        target="_blank"
-        class="adm-btn adm-btn-secondary"
-        style="justify-content:center;"
-      >
-        View on Storefront ↗
-      </a>
+      <!-- SEO Preview -->
+      <div class="adm-card" id="seo-preview-card">
+        <div style="font-weight:600;font-size:13px;margin-bottom:10px;">SEO Preview</div>
+        <div style="border:1px solid var(--adm-border);border-radius:6px;padding:12px;font-family:Arial,sans-serif;">
+          <div id="preview-title" style="color:#1a0dab;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:2px;">
+            {product.seo?.title || `${product.title} | Piece of Stass`}
+          </div>
+          <div style="color:#006621;font-size:11px;margin-bottom:4px;">pieceofstass.com{shopUrl}</div>
+          <div id="preview-desc" style="color:#545454;font-size:12px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">
+            {product.seo?.description || product.description}
+          </div>
+        </div>
+      </div>
     </div>
 
   </div>
 
 </AdminLayout>
+
+<script define:vars={{ id, variantPriceOverridesJson, imagesAltJson, variantsJson, imagesJson }}>
+  // Parse server-side data
+  let variantPriceOverrides = JSON.parse(variantPriceOverridesJson);
+
+  // ── SEO char counters ────────────────────────────────────────────────────────
+  const seoTitleEl = document.getElementById('seo_title');
+  const seoDescEl = document.getElementById('seo_description');
+  const titleCount = document.getElementById('seo-title-count');
+  const descCount = document.getElementById('seo-desc-count');
+
+  function updateCounts() {
+    if (titleCount) titleCount.textContent = (seoTitleEl?.value || '').length;
+    if (descCount) descCount.textContent = (seoDescEl?.value || '').length;
+  }
+  seoTitleEl?.addEventListener('input', updateCounts);
+  seoDescEl?.addEventListener('input', updateCounts);
+  updateCounts();
+
+  // ── SEO live preview ─────────────────────────────────────────────────────────
+  const previewTitle = document.getElementById('preview-title');
+  const previewDesc = document.getElementById('preview-desc');
+  const descriptionEl = document.getElementById('description');
+
+  function updatePreview() {
+    if (previewTitle && seoTitleEl) {
+      const titleVal = seoTitleEl.value.trim();
+      previewTitle.textContent = titleVal || (document.title.replace('Edit: ', '') + ' | Piece of Stass');
+    }
+    if (previewDesc) {
+      const descVal = seoDescEl?.value.trim() || descriptionEl?.value.trim() || '';
+      previewDesc.textContent = descVal;
+    }
+  }
+  seoTitleEl?.addEventListener('input', updatePreview);
+  seoDescEl?.addEventListener('input', updatePreview);
+  descriptionEl?.addEventListener('input', updatePreview);
+
+  // ── Save handler ─────────────────────────────────────────────────────────────
+  document.getElementById('save-btn')?.addEventListener('click', async () => {
+    const priceEl = document.getElementById('price');
+    const compareEl = document.getElementById('compare_at_price');
+    const statusEl = document.getElementById('status');
+
+    // Collect variant price overrides
+    const variantOverrides = {};
+    document.querySelectorAll('.variant-price-input').forEach((input) => {
+      const sku = input.dataset.sku;
+      const val = input.value.trim();
+      if (sku && val !== '') {
+        const parsed = parseFloat(val);
+        if (!isNaN(parsed) && parsed >= 0) variantOverrides[sku] = parsed;
+      }
+    });
+
+    // Collect alt texts
+    const altTexts = [];
+    document.querySelectorAll('.image-alt-input').forEach((input) => {
+      altTexts[parseInt(input.dataset.idx, 10)] = input.value.trim();
+    });
+
+    const data = {
+      price: priceEl ? parseFloat(priceEl.value) : undefined,
+      compare_at_price: compareEl && compareEl.value ? parseFloat(compareEl.value) : null,
+      description: descriptionEl ? descriptionEl.value : undefined,
+      status: statusEl ? statusEl.value : 'active',
+      seo: {
+        title: (seoTitleEl?.value || '').trim() || null,
+        description: (seoDescEl?.value || '').trim() || null,
+      },
+      images_alt: altTexts,
+      variant_price_overrides: Object.keys(variantOverrides).length > 0 ? variantOverrides : null,
+    };
+
+    // Clean nulls from seo
+    if (!data.seo.title && !data.seo.description) data.seo = null;
+
+    try {
+      const res = await fetch(`/api/admin/products/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      if (res.ok) {
+        if (window.adminToast) window.adminToast('Product saved', 'success');
+        setTimeout(() => location.href = `/admin/products/${id}?saved=1`, 600);
+      } else {
+        const err = await res.json().catch(() => ({}));
+        if (window.adminToast) window.adminToast(err.error || 'Save failed', 'error');
+        else alert('Save failed: ' + (err.error || 'Unknown error'));
+      }
+    } catch (e) {
+      if (window.adminToast) window.adminToast('Network error', 'error');
+      else alert('Network error');
+    }
+  });
+
+  // ── Reset handler ────────────────────────────────────────────────────────────
+  document.getElementById('reset-btn')?.addEventListener('click', async () => {
+    if (!confirm('Reset to catalog defaults? This will discard all overrides including SEO and variant prices.')) return;
+    try {
+      const res = await fetch(`/api/admin/products/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ _reset: true }),
+      });
+      if (res.ok) {
+        if (window.adminToast) window.adminToast('Reset to defaults', 'info');
+        setTimeout(() => location.href = `/admin/products/${id}`, 600);
+      } else {
+        alert('Reset failed');
+      }
+    } catch {
+      alert('Network error');
+    }
+  });
+</script>
