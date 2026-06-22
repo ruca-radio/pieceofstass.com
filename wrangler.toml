@@ -27,7 +27,10 @@ main = "./dist/_worker.js/index.js"
 [assets]
 directory = "./dist"
 binding = "ASSETS"
-not_found_handling = "single-page-application"
+# Default `"none"` (omitted) is correct: any path not in dist/ falls through
+# to the Worker, which handles SSR routes (/api/*, /shop/[cat]/[handle], etc.).
+# Setting this to "single-page-application" would serve a static 404 for every
+# unmatched path — breaking every /api/* endpoint.
 
 # ─── Smart Placement ────────────────────────────────────────
 # Cloudflare automatically places the Worker in the region
