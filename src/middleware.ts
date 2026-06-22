@@ -41,6 +41,7 @@ const CSP = [
     "blob:",
     "https://cdn.pieceofstass.com",
     "https://*.r2.cloudflarestorage.com",
+    "https://images.unsplash.com",
     "https://photo.yupoo.com",
     "https://*.yupoo.com",
     "https://*.stripe.com",
