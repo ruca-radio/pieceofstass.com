@@ -51,8 +51,8 @@ bucket_name = "pieceofstass-images"
 # Paste the returned id below.
 [[kv_namespaces]]
 binding = "CART_KV"
-id = "4347e3f6bef84b9aaf92a0959ae5ebfb"
-preview_id = "4347e3f6bef84b9aaf92a0959ae5ebfb"
+id = "c3f6463167794d4ba7e9edb181bcd795"
+preview_id = "8bba58524cd643b1a1915a24b4454472"
 
 # ─── KV: User accounts, auth, addresses ─────────────────────
 # Auth & CX: stores user profiles, magic-link rate limits, saved addresses.
@@ -134,7 +134,7 @@ bucket_name = "pieceofstass-images"
 # KV binding — production namespace
 [[env.production.kv_namespaces]]
 binding = "CART_KV"
-id = "4347e3f6bef84b9aaf92a0959ae5ebfb"
+id = "c3f6463167794d4ba7e9edb181bcd795"
 
 # KV: User accounts — production
 [[env.production.kv_namespaces]]
