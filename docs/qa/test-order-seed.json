@@ -1,0 +1,49 @@
+{
+  "order": {
+    "id": "order_smoke_test_001",
+    "customer_email": "smoketest@example.com",
+    "customer_name": "Smoke Test User",
+    "stripe_session_id": "cs_test_smoke001",
+    "items": [
+      {
+        "product_id": "pos-footwear-001-white-cement-high-top-court-sneaker",
+        "variant_sku": "POS-FOO-001-01",
+        "title": "White cement high-top court sneaker",
+        "image": "https://photo.yupoo.com/chenyico/52ac704f/medium.jpeg",
+        "color": "White/Grey",
+        "size": "EU 38",
+        "qty": 1,
+        "unit_price": 149
+      },
+      {
+        "product_id": "pos-women-003",
+        "variant_sku": "POS-WOM-003-02",
+        "title": "Floral wrap midi dress",
+        "image": "",
+        "color": "Rose",
+        "size": "M",
+        "qty": 2,
+        "unit_price": 89
+      }
+    ],
+    "subtotal": 327,
+    "shipping": 0,
+    "tax": 26.16,
+    "total": 353.16,
+    "currency": "usd",
+    "status": "payment_captured",
+    "shipping_address": {
+      "name": "Smoke Test User",
+      "line1": "123 Test Street",
+      "line2": "Apt 4B",
+      "city": "Brooklyn",
+      "state": "NY",
+      "postal_code": "11201",
+      "country": "US"
+    },
+    "created_at": "2026-06-22T09:03:59.105Z",
+    "updated_at": "2026-06-22T09:03:59.105Z"
+  },
+  "receipt_token": "eyJhbGciOiJIUzI1NiJ9.eyJvcmRlcl9pZCI6Im9yZGVyX3Ntb2tlX3Rlc3RfMDAxIiwidHlwZSI6InJlY2VpcHQiLCJpYXQiOjE3ODIxMTkwMzksImV4cCI6MTc4NDcxMTAzOX0.v2KWfZwU8_uICnPrNBfx3obBAutbDc-DuE5DEDiYnN4",
+  "generated_at": "2026-06-22T09:03:59.145Z"
+}

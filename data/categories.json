@@ -71,6 +71,24 @@
       "seo_description": "Everyday tech accessories for charging, listening, travel, and device protection.",
       "sort_order": 8,
       "parent": null
+    },
+    {
+      "slug": "jewelry",
+      "title": "Jewelry",
+      "hero_copy": "Dainty everyday gold-fill and sterling pieces — chains, studs, and stacking rings that work harder than they cost.",
+      "seo_title": "Jewelry | Piece of Stass",
+      "seo_description": "Dainty gold-fill necklaces, earrings, rings, and bracelets. Everyday jewelry that looks expensive without the price tag.",
+      "sort_order": 9,
+      "parent": null
+    },
+    {
+      "slug": "home",
+      "title": "Home",
+      "hero_copy": "Soy candles, mirrors, and throws for the space that deserves as much care as your wardrobe.",
+      "seo_title": "Home & Lifestyle | Piece of Stass",
+      "seo_description": "Curated home lifestyle picks — soy candles, arch mirrors, waffle throws, and decor that makes every room feel considered.",
+      "sort_order": 10,
+      "parent": null
     }
   ]
 }

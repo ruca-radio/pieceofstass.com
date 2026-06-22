@@ -23,7 +23,6 @@ if (!id) return Astro.redirect('/account/orders');
 const kv = getOrdersKVFromEnv(runtimeEnv);
 const order = await getOrder(kv, id);
 
-// Only show orders belonging to this user
 if (!order || order.customer_email !== user.email) {
   return Astro.redirect('/account/orders');
 }
@@ -37,10 +36,9 @@ try {
     authSecret
   );
 } catch {
-  // Non-fatal — PDF will fall back to auth-gated check
+  // Non-fatal
 }
 
-// Carrier info
 const carrierInfo = order.tracking_number ? resolveCarrier(order.tracking_number) : null;
 
 function formatCurrency(amount: number): string {
@@ -58,61 +56,48 @@ function addBizDays(d: Date, n: number): Date {
   return r;
 }
 
-// Status timeline definition (full state machine)
-type StatusStep = { key: string; label: string };
-const STEPS: StatusStep[] = [
-  { key: 'payment_captured', label: 'Paid' },
-  { key: 'sent_to_supplier', label: 'Processing' },
-  { key: 'shipped',          label: 'Shipped' },
-  { key: 'out_for_delivery', label: 'Out for Delivery' },
-  { key: 'delivered',        label: 'Delivered' },
-];
+type StepInfo = { key: string; label: string; done: boolean; active: boolean };
+const STEP_KEYS = ['payment_captured', 'sent_to_supplier', 'shipped', 'out_for_delivery', 'delivered'];
+const STEP_LABELS: Record<string, string> = {
+  payment_captured: 'Paid',
+  sent_to_supplier: 'Processing',
+  shipped: 'Shipped',
+  out_for_delivery: 'Out for Delivery',
+  delivered: 'Delivered',
+};
+const STEP_INDEX: Record<string, number> = {
+  pending: -1, payment_captured: 0, sent_to_supplier: 1,
+  shipped: 2, out_for_delivery: 3, delivered: 4, completed: 4,
+};
+const currentStepIdx = STEP_INDEX[order.status] ?? -1;
 
-const COMPLETED_STEPS = new Set([
-  'payment_captured', 'sent_to_supplier', 'shipped', 'out_for_delivery', 'delivered', 'completed'
-]);
+const steps: StepInfo[] = STEP_KEYS.map((key, i) => ({
+  key,
+  label: STEP_LABELS[key],
+  done: i <= currentStepIdx,
+  active: i === currentStepIdx,
+}));
 
-function getStepIndex(status: string): number {
-  const map: Record<string, number> = {
-    pending: -1,
-    payment_captured: 0,
-    sent_to_supplier: 1,
-    shipped: 2,
-    out_for_delivery: 3,
-    delivered: 4,
-    completed: 4,
-  };
-  return map[status] ?? -1;
-}
-
-const currentStepIdx = getStepIndex(order.status);
 const isCancelled = order.status === 'cancelled';
 const isRefunded = order.status === 'refunded';
 
 const statusColors: Record<string, string> = {
-  pending:          '#9C6A22',
+  pending: '#9C6A22',
   payment_captured: '#6F7B5F',
   sent_to_supplier: '#6F7B5F',
-  shipped:          '#A14C58',
+  shipped: '#A14C58',
   out_for_delivery: '#A14C58',
-  delivered:        '#3F6A44',
-  completed:        '#3F6A44',
-  cancelled:        '#B23A33',
-  refunded:         '#726558',
+  delivered: '#3F6A44',
+  completed: '#3F6A44',
+  cancelled: '#B23A33',
+  refunded: '#726558',
 };
 const statusLabels: Record<string, string> = {
-  pending:          'Pending',
-  payment_captured: 'Paid',
-  sent_to_supplier: 'Processing',
-  shipped:          'Shipped',
-  out_for_delivery: 'Out for Delivery',
-  delivered:        'Delivered',
-  completed:        'Complete',
-  cancelled:        'Cancelled',
-  refunded:         'Refunded',
+  pending: 'Pending', payment_captured: 'Paid', sent_to_supplier: 'Processing',
+  shipped: 'Shipped', out_for_delivery: 'Out for Delivery', delivered: 'Delivered',
+  completed: 'Complete', cancelled: 'Cancelled', refunded: 'Refunded',
 };
 
-const now = new Date();
 const etaMin = addBizDays(new Date(order.created_at), 15);
 const etaMax = addBizDays(new Date(order.created_at), 20);
 const etaStr = `${etaMin.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} – ${etaMax.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`;
@@ -120,6 +105,8 @@ const etaStr = `${etaMin.toLocaleDateString('en-US', { month: 'short', day: 'num
 const orderNum = order.id.slice(-8).toUpperCase();
 const receiptUrl = `/api/orders/${order.id}/invoice.pdf?token=${encodeURIComponent(receiptToken)}`;
 const helpEmail = `mailto:help@pieceofstass.com?subject=Order%20${orderNum}`;
+const statusColor = statusColors[order.status] ?? '#726558';
+const statusLabel = statusLabels[order.status] ?? order.status;
 ---
 
 <BaseLayout
@@ -147,8 +134,8 @@ const helpEmail = `mailto:help@pieceofstass.com?subject=Order%20${orderNum}`;
         <p style="font-size: 13px; color: var(--color-muted); margin: 0;">Placed {formatDate(order.created_at)}</p>
       </div>
       <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
-        <span style={`font-size: 12px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: ${statusColors[order.status] ?? '#726558'}; background: rgba(42,33,28,0.04); padding: 6px 14px; border-radius: 999px; border: 1px solid currentColor;`}>
-          {statusLabels[order.status] ?? order.status}
+        <span style={`font-size: 12px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: ${statusColor}; background: rgba(42,33,28,0.04); padding: 6px 14px; border-radius: 999px; border: 1px solid currentColor;`}>
+          {statusLabel}
         </span>
         {receiptToken && (
           <a href={receiptUrl} style="font-size: 13px; font-weight: 600; color: var(--color-rose); text-decoration: none; padding: 6px 14px; border: 1.5px solid var(--color-rose); border-radius: 999px; white-space: nowrap;">
@@ -165,23 +152,19 @@ const helpEmail = `mailto:help@pieceofstass.com?subject=Order%20${orderNum}`;
 
         <!-- Timeline steps -->
         <div style="display: flex; align-items: flex-start; position: relative;">
-          {STEPS.map((step, i) => {
-            const done = i <= currentStepIdx;
-            const active = i === currentStepIdx;
-            return (
-              <div style="flex: 1; display: flex; flex-direction: column; align-items: center; position: relative; z-index: 1;">
-                {i > 0 && (
-                  <div style={`position: absolute; top: 13px; right: 50%; left: -50%; height: 2px; background: ${i <= currentStepIdx ? 'var(--color-rose)' : 'var(--color-slate)'}; z-index: 0;`}></div>
-                )}
-                <div style={`width: 26px; height: 26px; border-radius: 50%; border: 2px solid ${done ? 'var(--color-rose)' : 'var(--color-slate)'}; background: ${done ? 'var(--color-rose)' : 'var(--color-charcoal)'}; display: flex; align-items: center; justify-content: center; margin-bottom: 8px; flex-shrink: 0; z-index: 1; position: relative;`}>
-                  {done && <span style="color: #F6F0E8; font-size: 11px; font-weight: 700;">✓</span>}
-                </div>
-                <span style={`font-size: 11px; font-weight: 600; letter-spacing: 0.03em; text-transform: uppercase; color: ${active ? 'var(--color-espresso)' : done ? 'var(--color-muted)' : 'var(--color-faint)'}; text-align: center; line-height: 1.3;`}>
-                  {step.label}
-                </span>
+          {steps.map((step, i) => (
+            <div style="flex: 1; display: flex; flex-direction: column; align-items: center; position: relative; z-index: 1;">
+              {i > 0 && (
+                <div style={`position: absolute; top: 13px; right: 50%; left: -50%; height: 2px; background: ${step.done ? 'var(--color-rose)' : 'var(--color-slate)'}; z-index: 0;`}></div>
+              )}
+              <div style={`width: 26px; height: 26px; border-radius: 50%; border: 2px solid ${step.done ? 'var(--color-rose)' : 'var(--color-slate)'}; background: ${step.done ? 'var(--color-rose)' : 'var(--color-charcoal)'}; display: flex; align-items: center; justify-content: center; margin-bottom: 8px; flex-shrink: 0; z-index: 1; position: relative;`}>
+                {step.done && <span style="color: #F6F0E8; font-size: 11px; font-weight: 700;">✓</span>}
               </div>
-            );
-          })}
+              <span style={`font-size: 11px; font-weight: 600; letter-spacing: 0.03em; text-transform: uppercase; color: ${step.active ? 'var(--color-espresso)' : step.done ? 'var(--color-muted)' : 'var(--color-faint)'}; text-align: center; line-height: 1.3;`}>
+                {step.label}
+              </span>
+            </div>
+          ))}
         </div>
 
         <!-- Tracking info -->
@@ -189,8 +172,12 @@ const helpEmail = `mailto:help@pieceofstass.com?subject=Order%20${orderNum}`;
           <div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--color-slate);">
             <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
               <div>
-                <p style="font-size: 12px; color: var(--color-muted); margin: 0 0 3px 0;">Carrier: <strong style="color: var(--color-espresso);">{carrierInfo.name}</strong></p>
-                <p style="font-size: 12px; color: var(--color-muted); margin: 0;">Tracking: <span style="font-family: var(--font-family-mono); color: var(--color-espresso);">{order.tracking_number}</span></p>
+                <p style="font-size: 12px; color: var(--color-muted); margin: 0 0 3px 0;">
+                  Carrier: <strong style="color: var(--color-espresso);">{carrierInfo.name}</strong>
+                </p>
+                <p style="font-size: 12px; color: var(--color-muted); margin: 0;">
+                  Tracking: <span style="font-family: var(--font-family-mono); color: var(--color-espresso);">{order.tracking_number}</span>
+                </p>
               </div>
               <a href={carrierInfo.url} target="_blank" rel="noopener noreferrer"
                 style="display: inline-block; font-size: 14px; font-weight: 700; color: #F6F0E8; background: var(--color-rose); text-decoration: none; padding: 10px 22px; border-radius: 999px; white-space: nowrap;">
@@ -201,7 +188,7 @@ const helpEmail = `mailto:help@pieceofstass.com?subject=Order%20${orderNum}`;
         )}
 
         <!-- ETA when not yet shipped -->
-        {!order.tracking_number && !isCancelled && !isRefunded && (
+        {!order.tracking_number && (
           <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--color-slate);">
             <p style="font-size: 13px; color: var(--color-muted); margin: 0; line-height: 1.6;">
               <strong style="color: var(--color-espresso);">Estimated delivery:</strong> {etaStr}
@@ -213,15 +200,16 @@ const helpEmail = `mailto:help@pieceofstass.com?subject=Order%20${orderNum}`;
     )}
 
     <!-- Cancelled / Refunded notice -->
-    {(isCancelled || isRefunded) && (
+    {isCancelled && (
       <div style="background: rgba(178,58,51,0.06); border: 1px solid rgba(178,58,51,0.2); border-radius: 12px; padding: 18px 22px; margin-bottom: 20px;">
-        <p style="font-size: 14px; font-weight: 600; color: #B23A33; margin: 0 0 4px 0;">
-          {isCancelled ? 'This order was cancelled.' : 'Refund processed.'}
-        </p>
-        <p style="font-size: 13px; color: var(--color-muted); margin: 0; line-height: 1.6;">
-          {isRefunded && 'Your refund should appear on your original payment method within 3–7 business days.'}
-          {isCancelled && 'If you have questions, reach out to us below.'}
-        </p>
+        <p style="font-size: 14px; font-weight: 600; color: #B23A33; margin: 0 0 4px 0;">This order was cancelled.</p>
+        <p style="font-size: 13px; color: var(--color-muted); margin: 0; line-height: 1.6;">If you have questions, reach out to us below.</p>
+      </div>
+    )}
+    {isRefunded && (
+      <div style="background: rgba(178,58,51,0.06); border: 1px solid rgba(178,58,51,0.2); border-radius: 12px; padding: 18px 22px; margin-bottom: 20px;">
+        <p style="font-size: 14px; font-weight: 600; color: #B23A33; margin: 0 0 4px 0;">Refund processed.</p>
+        <p style="font-size: 13px; color: var(--color-muted); margin: 0; line-height: 1.6;">Your refund should appear on your original payment method within 3–7 business days.</p>
       </div>
     )}
 
@@ -288,8 +276,7 @@ const helpEmail = `mailto:help@pieceofstass.com?subject=Order%20${orderNum}`;
 
       <!-- Actions row -->
       <section style="display: flex; gap: 12px; flex-wrap: wrap;">
-        <!-- Reorder -->
-        <form method="POST" action="/api/cart/reorder" id="reorder-form-{orderNum}" style="margin: 0;">
+        <form method="POST" action="/api/cart/reorder" style="margin: 0;">
           <input type="hidden" name="order_id" value={order.id} />
           <button type="submit"
             style="font-size: 14px; font-weight: 700; color: #F6F0E8; background: var(--color-rose); border: none; border-radius: 999px; padding: 11px 24px; cursor: pointer; font-family: var(--font-family-display);">
@@ -297,7 +284,6 @@ const helpEmail = `mailto:help@pieceofstass.com?subject=Order%20${orderNum}`;
           </button>
         </form>
 
-        <!-- Receipt PDF -->
         {receiptToken && (
           <a href={receiptUrl}
             style="font-size: 14px; font-weight: 700; color: var(--color-rose); border: 2px solid var(--color-rose); background: transparent; border-radius: 999px; padding: 9px 22px; text-decoration: none;">

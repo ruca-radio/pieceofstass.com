@@ -1,0 +1,193 @@
+---
+export const prerender = false;
+
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import { requireAdmin } from '../../lib/admin-auth';
+
+const env = await requireAdmin(Astro);
+if (!env) return Astro.redirect('/admin/sign-in?error=session');
+---
+<AdminLayout title="Analytics" activeNav="analytics">
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+    <!-- Revenue chart -->
+    <div class="adm-card" style="grid-column:span 2;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+        <div style="font-weight:700;font-size:14px;">Revenue — Last 30 Days</div>
+        <div style="font-size:12px;color:var(--adm-muted);" id="revenue-total"></div>
+      </div>
+      <div style="position:relative;height:200px;">
+        <canvas id="revenue-chart"></canvas>
+      </div>
+    </div>
+
+    <!-- Orders by status pie -->
+    <div class="adm-card">
+      <div style="font-weight:700;font-size:14px;margin-bottom:16px;">Orders by Status</div>
+      <div style="display:flex;gap:16px;align-items:center;justify-content:center;">
+        <div style="position:relative;width:160px;height:160px;">
+          <canvas id="status-chart"></canvas>
+        </div>
+        <div id="status-legend" style="font-size:12px;display:flex;flex-direction:column;gap:6px;"></div>
+      </div>
+    </div>
+
+    <!-- Top products bar -->
+    <div class="adm-card">
+      <div style="font-weight:700;font-size:14px;margin-bottom:16px;">Top 10 Products (30d Revenue)</div>
+      <div style="position:relative;height:200px;">
+        <canvas id="products-chart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Traffic placeholder -->
+  <div class="adm-card">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div style="font-size:24px;">📊</div>
+      <div>
+        <div style="font-weight:700;font-size:14px;margin-bottom:4px;">Traffic Source Mix</div>
+        <div style="font-size:13px;color:var(--adm-muted);">Connect GA4 to populate traffic analytics.
+          Add <code class="adm-mono">GA4_MEASUREMENT_ID</code> to your environment and enable the GA4 data stream.</div>
+      </div>
+      <a
+        href="https://analytics.google.com/"
+        target="_blank"
+        class="adm-btn adm-btn-secondary"
+        style="margin-left:auto;white-space:nowrap;font-size:12px;"
+      >
+        Open GA4 ↗
+      </a>
+    </div>
+  </div>
+
+  <!-- Load Chart.js from CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js" defer></script>
+
+  <script>
+    const STATUS_COLORS = {
+      pending: '#E8A33D',
+      payment_captured: '#a388ff',
+      sent_to_supplier: '#C6FF3A',
+      shipped: '#2FA866',
+      delivered: '#2FA866',
+      refunded: '#E5484D',
+      cancelled: '#4a4a4e',
+    };
+
+    async function loadAnalytics() {
+      try {
+        const r = await fetch('/api/admin/analytics/summary');
+        if (!r.ok) return;
+        const data = await r.json();
+
+        // Wait for Chart.js
+        const Chart = window.Chart;
+        if (!Chart) { setTimeout(loadAnalytics, 200); return; }
+
+        const chartOpts = {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#8a8a8e', font: { size: 10 } } },
+            y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#8a8a8e', font: { size: 10 } } },
+          },
+        };
+
+        // Revenue line chart
+        const revDays = data.revenue_by_day ?? [];
+        const totalRev = revDays.reduce((s, d) => s + d.revenue, 0);
+        document.getElementById('revenue-total').textContent = `Total: $${totalRev.toLocaleString('en-US', { maximumFractionDigits: 0 })}`;
+
+        const revCtx = document.getElementById('revenue-chart').getContext('2d');
+        new Chart(revCtx, {
+          type: 'line',
+          data: {
+            labels: revDays.map(d => {
+              const dt = new Date(d.date);
+              return `${dt.getMonth()+1}/${dt.getDate()}`;
+            }),
+            datasets: [{
+              data: revDays.map(d => d.revenue),
+              borderColor: '#C6FF3A',
+              backgroundColor: 'rgba(198,255,58,0.08)',
+              borderWidth: 2,
+              fill: true,
+              tension: 0.3,
+              pointRadius: 2,
+              pointHoverRadius: 5,
+            }],
+          },
+          options: chartOpts,
+        });
+
+        // Status pie
+        const statusData = data.orders_by_status ?? [];
+        const statusCtx = document.getElementById('status-chart').getContext('2d');
+        new Chart(statusCtx, {
+          type: 'doughnut',
+          data: {
+            labels: statusData.map(s => s.status),
+            datasets: [{
+              data: statusData.map(s => s.count),
+              backgroundColor: statusData.map(s => STATUS_COLORS[s.status] ?? '#4a4a4e'),
+              borderWidth: 1,
+              borderColor: '#1c1c1f',
+            }],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            cutout: '60%',
+          },
+        });
+
+        // Status legend
+        const legendEl = document.getElementById('status-legend');
+        statusData.sort((a,b) => b.count - a.count).slice(0,6).forEach(s => {
+          const el = document.createElement('div');
+          el.style.display = 'flex';
+          el.style.alignItems = 'center';
+          el.style.gap = '6px';
+          el.innerHTML = `<span style="width:10px;height:10px;border-radius:2px;background:${STATUS_COLORS[s.status]??'#4a4a4e'};flex-shrink:0;display:inline-block;"></span><span style="color:#8a8a8e;">${s.status.replace('_',' ')}</span><span style="margin-left:auto;font-weight:600;">${s.count}</span>`;
+          legendEl.appendChild(el);
+        });
+
+        // Top products bar
+        const prods = (data.top_products ?? []).slice(0, 10);
+        const prodCtx = document.getElementById('products-chart').getContext('2d');
+        new Chart(prodCtx, {
+          type: 'bar',
+          data: {
+            labels: prods.map(p => p.title.length > 20 ? p.title.slice(0, 18) + '…' : p.title),
+            datasets: [{
+              data: prods.map(p => p.revenue),
+              backgroundColor: '#7B5CFF',
+              borderRadius: 4,
+            }],
+          },
+          options: {
+            ...chartOpts,
+            indexAxis: 'y',
+            plugins: { legend: { display: false } },
+            scales: {
+              x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#8a8a8e', font: { size: 10 } } },
+              y: { grid: { display: false }, ticks: { color: '#8a8a8e', font: { size: 10 } } },
+            },
+          },
+        });
+
+      } catch(e) {
+        console.error('Analytics load error:', e);
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', loadAnalytics);
+    } else {
+      loadAnalytics();
+    }
+  </script>
+</AdminLayout>

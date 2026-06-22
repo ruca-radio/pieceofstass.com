@@ -1,0 +1,189 @@
+---
+export const prerender = false;
+
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import { requireAdmin } from '../../lib/admin-auth';
+import { listProductsWithOverrides } from '../../lib/products-server';
+import { getOrdersKVFromEnv } from '../../lib/orders-server';
+
+const env = await requireAdmin(Astro);
+if (!env) return Astro.redirect('/admin/sign-in?error=session');
+
+const runtimeEnv = ((Astro.locals as Record<string, unknown>)?.runtime as Record<string, unknown>)?.env as Record<string, unknown> | undefined;
+const kv = getOrdersKVFromEnv(runtimeEnv);
+
+const products = await listProductsWithOverrides(kv);
+
+const url = Astro.url;
+const searchQuery = url.searchParams.get('q') ?? '';
+const categoryFilter = url.searchParams.get('category') ?? 'all';
+
+let filtered = products;
+if (searchQuery) {
+  const q = searchQuery.toLowerCase();
+  filtered = filtered.filter(p => p.title.toLowerCase().includes(q) || p.id.toLowerCase().includes(q));
+}
+if (categoryFilter !== 'all') {
+  filtered = filtered.filter(p => p.category === categoryFilter);
+}
+
+const categories = [...new Set(products.map(p => p.category))].sort();
+const saved = Astro.url.searchParams.get('saved') === '1';
+---
+<AdminLayout title="Inventory" activeNav="inventory">
+
+  {saved && (
+    <div style="background:rgba(47,168,102,0.12);border:1px solid rgba(47,168,102,0.3);border-radius:6px;padding:10px 14px;margin-bottom:14px;font-size:13px;color:var(--adm-success);">
+      ✓ Changes saved successfully.
+    </div>
+  )}
+
+  <div class="adm-card" style="margin-bottom:16px;background:rgba(198,255,58,0.04);border-color:rgba(198,255,58,0.2);">
+    <div style="font-size:12px;color:var(--adm-muted);line-height:1.6;">
+      <strong style="color:var(--adm-lime);">Inventory layer</strong> — stock levels are placeholder fields (dropship model has no warehouse inventory).
+      Use this view to configure "restock alert" thresholds and quickly edit price/status per SKU.
+      For live inventory sync, connect a supplier API (CJ Dropshipping, Spocket).
+    </div>
+  </div>
+
+  <div class="adm-filters">
+    <form method="GET" style="display:contents;">
+      <div>
+        <label class="adm-label">Search</label>
+        <input type="text" name="q" value={searchQuery} class="adm-input" placeholder="Title or SKU…" style="width:220px;" />
+      </div>
+      <div>
+        <label class="adm-label">Category</label>
+        <select name="category" class="adm-select" style="width:150px;">
+          <option value="all">All</option>
+          {categories.map(c => <option value={c} selected={categoryFilter === c}>{c}</option>)}
+        </select>
+      </div>
+      <div style="padding-top:18px;">
+        <button type="submit" class="adm-btn adm-btn-primary">Filter</button>
+      </div>
+    </form>
+  </div>
+
+  <div style="font-size:13px;color:var(--adm-muted);margin-bottom:12px;">
+    {filtered.length} SKU{filtered.length !== 1 ? 's' : ''}
+  </div>
+
+  <div class="adm-card" style="padding:0;overflow:hidden;">
+    <table class="adm-table" id="inventory-table">
+      <thead>
+        <tr>
+          <th>Image</th>
+          <th>Product / SKU</th>
+          <th>Category</th>
+          <th>Price</th>
+          <th>Status</th>
+          <th>Stock (placeholder)</th>
+          <th>Restock Alert</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {filtered.map((p) => {
+          const totalInventory = p.variants.reduce((sum, v) => sum + (v.inventory_quantity ?? 0), 0);
+          const isLowStock = 5 >= totalInventory;
+          return (
+            <tr data-product-id={p.id}>
+              <td style="width:48px;padding:8px 8px 8px 12px;">
+                {p.images[0] ? (
+                  <img src={p.images[0]} alt="" style="width:40px;height:40px;object-fit:cover;border-radius:4px;" loading="lazy" />
+                ) : (
+                  <div style="width:40px;height:40px;border-radius:4px;background:var(--adm-surface2);"></div>
+                )}
+              </td>
+              <td>
+                <a href={`/admin/products/${p.id}`} style="font-size:12px;font-weight:500;">{p.title}</a>
+                <div class="adm-mono" style="font-size:10px;color:var(--adm-muted);">{p.id.slice(0, 30)}…</div>
+                <div style="font-size:11px;color:var(--adm-muted);">{p.variants.length} variant{p.variants.length !== 1 ? 's' : ''}</div>
+              </td>
+              <td style="font-size:12px;color:var(--adm-muted);">{p.category}</td>
+              <td>
+                <input
+                  type="number"
+                  class="adm-input inv-price-input"
+                  style="width:80px;font-size:12px;padding:4px 6px;"
+                  value={p.price}
+                  min="0"
+                  step="1"
+                  data-product-id={p.id}
+                />
+              </td>
+              <td>
+                <select class="adm-select inv-status-select" style="width:90px;font-size:12px;padding:4px 6px;" data-product-id={p.id}>
+                  <option value="active" selected={p.status === 'active'}>Active</option>
+                  <option value="draft" selected={p.status === 'draft'}>Draft</option>
+                </select>
+              </td>
+              <td>
+                <span class={`adm-badge ${isLowStock && totalInventory > 0 ? 'adm-badge-warning' : totalInventory === 0 ? 'adm-badge-refunded' : 'adm-badge-active'}`}>
+                  {totalInventory === 0 ? 'N/A' : isLowStock ? `Low (${totalInventory})` : `OK (${totalInventory})`}
+                </span>
+              </td>
+              <td>
+                <input
+                  type="number"
+                  class="adm-input inv-alert-input"
+                  style="width:70px;font-size:12px;padding:4px 6px;"
+                  placeholder="≥ units"
+                  min="0"
+                  step="1"
+                  data-product-id={p.id}
+                />
+              </td>
+              <td>
+                <button
+                  type="button"
+                  class="adm-btn adm-btn-secondary"
+                  style="padding:4px 10px;font-size:12px;"
+                  onclick={`saveInventoryRow('${p.id}', this)`}
+                >
+                  Save
+                </button>
+              </td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
+  </div>
+
+</AdminLayout>
+
+<script>
+  async function saveInventoryRow(productId, btn) {
+    const row = btn.closest('tr');
+    const price = parseFloat(row.querySelector('.inv-price-input').value);
+    const status = row.querySelector('.inv-status-select').value;
+    const alertQty = parseInt(row.querySelector('.inv-alert-input').value || '0', 10);
+
+    if (isNaN(price) || price < 0) { window.adminToast('Invalid price', 'warning'); return; }
+
+    btn.textContent = '…';
+    btn.disabled = true;
+
+    try {
+      const r = await fetch(`/api/admin/products/${productId}`, {
+        method: 'PATCH',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ price, status }),
+      });
+      const data = await r.json();
+      if (data.ok) {
+        window.adminToast('Saved', 'success');
+        btn.textContent = '✓';
+        setTimeout(() => { btn.textContent = 'Save'; btn.disabled = false; }, 2000);
+      } else {
+        window.adminToast(data.error || 'Save failed', 'error');
+        btn.textContent = 'Save'; btn.disabled = false;
+      }
+    } catch (e) {
+      window.adminToast('Network error', 'error');
+      btn.textContent = 'Save'; btn.disabled = false;
+    }
+  }
+</script>

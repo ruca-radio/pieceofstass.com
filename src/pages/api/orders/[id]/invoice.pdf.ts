@@ -113,7 +113,7 @@ async function buildInvoicePDF(order: {
     size: 11,
     font: bold,
     color: ROSE,
-    letterSpacing: 1.5,
+    
   });
   page.drawText('pieceofstass.com', {
     x: width - margin - 110,
@@ -143,7 +143,7 @@ async function buildInvoicePDF(order: {
   y -= 20;
 
   // ── Bill To ──────────────────────────────────────────────────────────────────
-  page.drawText('BILL TO', { x: margin, y, size: 8, font: bold, color: MUTED, letterSpacing: 1 });
+  page.drawText('BILL TO', { x: margin, y, size: 8, font: bold, color: MUTED });
   y -= 16;
 
   const addr = order.shipping_address;
@@ -178,10 +178,10 @@ async function buildInvoicePDF(order: {
     total: margin + contentWidth * 0.89,
   };
 
-  page.drawText('ITEM', { x: col.item, y: y + 5, size: 8, font: bold, color: CREAM, letterSpacing: 0.8 });
-  page.drawText('QTY', { x: col.qty, y: y + 5, size: 8, font: bold, color: CREAM, letterSpacing: 0.8 });
-  page.drawText('UNIT', { x: col.price, y: y + 5, size: 8, font: bold, color: CREAM, letterSpacing: 0.8 });
-  page.drawText('TOTAL', { x: col.total, y: y + 5, size: 8, font: bold, color: CREAM, letterSpacing: 0.8 });
+  page.drawText('ITEM', { x: col.item, y: y + 5, size: 8, font: bold, color: CREAM });
+  page.drawText('QTY', { x: col.qty, y: y + 5, size: 8, font: bold, color: CREAM });
+  page.drawText('UNIT', { x: col.price, y: y + 5, size: 8, font: bold, color: CREAM });
+  page.drawText('TOTAL', { x: col.total, y: y + 5, size: 8, font: bold, color: CREAM });
 
   y -= 24;
 
@@ -329,7 +329,7 @@ export const GET: APIRoute = async (context) => {
     const pdfBytes = await buildInvoicePDF(order);
     const orderNum = order.id.slice(-8).toUpperCase();
 
-    return new Response(pdfBytes, {
+    return new Response(pdfBytes.buffer as ArrayBuffer, {
       status: 200,
       headers: {
         'Content-Type': 'application/pdf',

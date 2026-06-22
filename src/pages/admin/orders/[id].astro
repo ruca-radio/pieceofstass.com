@@ -3,7 +3,7 @@ export const prerender = false;
 
 import AdminLayout from '../../../layouts/AdminLayout.astro';
 import { requireAdmin } from '../../../lib/admin-auth';
-import { getOrder, getOrdersKVFromEnv, generateSupplierEmailText } from '../../../lib/orders-server';
+import { getOrder, getOrdersKVFromEnv, generateSupplierEmailText, generateSupplierCSV } from '../../../lib/orders-server';
 import { getSupplierForCategory } from '../../../lib/supplier-routing';
 
 const env = await requireAdmin(Astro);
@@ -18,12 +18,13 @@ const kv = getOrdersKVFromEnv(runtimeEnv);
 const order = await getOrder(kv, id);
 if (!order) return new Response('Order not found', { status: 404 });
 
-// Determine supplier(s) for this order (by categories of items)
+// Determine supplier(s) for this order
 const categories = [...new Set(order.items.map((i) => i.category).filter(Boolean))] as string[];
 const suppliers = categories.map((c) => getSupplierForCategory(c)).filter(Boolean);
 const primarySupplier = suppliers[0];
 
 const supplierEmail = generateSupplierEmailText(order);
+const supplierEmailSubject = `Order ${order.id} — New Shipment Request`;
 
 function formatMoney(n: number) {
   return `$${n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
@@ -31,6 +32,12 @@ function formatMoney(n: number) {
 function formatDate(iso: string) {
   return new Date(iso).toLocaleString('en-US', {
     month: 'long', day: 'numeric', year: 'numeric',
+    hour: '2-digit', minute: '2-digit'
+  });
+}
+function formatDateShort(iso: string) {
+  return new Date(iso).toLocaleString('en-US', {
+    month: 'short', day: 'numeric',
     hour: '2-digit', minute: '2-digit'
   });
 }
@@ -49,36 +56,38 @@ const statusLabel: Record<string, string> = {
   shipped: 'Shipped', delivered: 'Delivered', refunded: 'Refunded', cancelled: 'Cancelled',
 };
 
-// Status transition options based on current status
-const transitions: Record<string, Array<{ status: string; label: string }>> = {
+// Status transition options
+const transitions: Record<string, Array<{ status: string; label: string; style?: string }>> = {
   pending: [{ status: 'payment_captured', label: 'Mark as Paid' }],
   payment_captured: [
-    { status: 'sent_to_supplier', label: 'Mark as Sent to Supplier' },
-    { status: 'cancelled', label: 'Cancel Order' },
+    { status: 'sent_to_supplier', label: 'Mark Sent to Supplier' },
+    { status: 'cancelled', label: 'Cancel Order', style: 'danger' },
   ],
   sent_to_supplier: [
-    { status: 'shipped', label: 'Mark as Shipped' },
-    { status: 'cancelled', label: 'Cancel Order' },
+    { status: 'shipped', label: 'Mark Shipped' },
+    { status: 'cancelled', label: 'Cancel Order', style: 'danger' },
   ],
   shipped: [
-    { status: 'delivered', label: 'Mark as Delivered' },
-    { status: 'refunded', label: 'Refund' },
+    { status: 'delivered', label: 'Mark Delivered' },
+    { status: 'refunded', label: 'Refund', style: 'danger' },
   ],
-  delivered: [{ status: 'refunded', label: 'Refund' }],
+  delivered: [{ status: 'refunded', label: 'Refund', style: 'danger' }],
   refunded: [],
   cancelled: [],
 };
 
 const availableTransitions = transitions[order.status] ?? [];
+const timeline = [...(order.timeline ?? [])].reverse(); // newest first
 ---
-<AdminLayout title={`Order ${order.id}`} activeNav="orders">
+<AdminLayout title={`Order ${order.id.slice(-8).toUpperCase()}`} activeNav="orders">
 
-  <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap;">
     <a href="/admin/orders" style="color:var(--adm-muted);text-decoration:none;font-size:13px;">← Orders</a>
     <span class={`adm-badge ${statusBadgeClass[order.status]}`}>{statusLabel[order.status]}</span>
+    <span class="adm-mono" style="font-size:12px;color:var(--adm-muted);">{order.id}</span>
     {order.tracking_number && (
       <span class="adm-mono" style="font-size:12px;color:var(--adm-muted);">
-        Tracking: {order.tracking_number} {order.shipping_carrier ? `(${order.shipping_carrier})` : ''}
+        📦 {order.tracking_number} {order.shipping_carrier ? `(${order.shipping_carrier})` : ''}
       </span>
     )}
   </div>
@@ -90,23 +99,36 @@ const availableTransitions = transitions[order.status] ?? [];
 
       <!-- Items -->
       <div class="adm-card" style="padding:0;overflow:hidden;">
-        <div style="padding:14px 16px;border-bottom:1px solid var(--adm-border);font-weight:600;font-size:13px;">Items ({order.items.length})</div>
+        <div style="padding:12px 16px;border-bottom:1px solid var(--adm-border);display:flex;align-items:center;justify-content:space-between;">
+          <div style="font-weight:600;font-size:13px;">Items ({order.items.length})</div>
+          {order.stripe_session_id && (
+            <a
+              href={`https://dashboard.stripe.com/payments/${order.stripe_payment_intent_id ?? order.stripe_session_id}`}
+              target="_blank"
+              style="font-size:11px;color:var(--adm-violet);text-decoration:none;"
+            >
+              Stripe {order.stripe_session_id.slice(0, 20)}… ↗
+            </a>
+          )}
+        </div>
         {order.items.map((item) => (
           <div style="display:flex;gap:12px;align-items:center;padding:12px 16px;border-bottom:1px solid var(--adm-border);">
             {item.image && (
-              <img src={item.image} alt="" style="width:52px;height:52px;object-fit:cover;border-radius:6px;flex-shrink:0;background:#242427;" loading="lazy" />
+              <img src={item.image} alt="" style="width:56px;height:56px;object-fit:cover;border-radius:6px;flex-shrink:0;background:#242427;" loading="lazy" />
             )}
             <div style="flex:1;min-width:0;">
-              <div style="font-size:13px;font-weight:500;margin-bottom:2px;">{item.title}</div>
-              <div style="font-size:11px;color:var(--adm-muted);">
+              <div style="font-size:13px;font-weight:500;margin-bottom:3px;">{item.title}</div>
+              <div style="font-size:11px;color:var(--adm-muted);display:flex;gap:10px;flex-wrap:wrap;">
                 {item.color && <span>Color: {item.color}</span>}
-                {item.size && <span style="margin-left:8px;">Size: {item.size}</span>}
-                {item.supplier_sku && <span style="margin-left:8px;" class="adm-mono">SKU: {item.supplier_sku}</span>}
+                {item.size && <span>Size: {item.size}</span>}
+                {item.supplier_sku && <span class="adm-mono">SKU: {item.supplier_sku}</span>}
+                {item.category && <span>Supplier: {item.category}</span>}
               </div>
             </div>
             <div style="text-align:right;flex-shrink:0;">
               <div class="adm-mono" style="font-size:13px;">{formatMoney(item.unit_price)}</div>
               <div style="font-size:11px;color:var(--adm-muted);">× {item.qty}</div>
+              <div class="adm-mono" style="font-size:12px;color:var(--adm-lime);">{formatMoney(item.unit_price * item.qty)}</div>
             </div>
           </div>
         ))}
@@ -124,31 +146,97 @@ const availableTransitions = transitions[order.status] ?? [];
           <div style="display:flex;justify-content:space-between;font-size:15px;font-weight:700;border-top:1px solid var(--adm-border);padding-top:8px;">
             <span>Total</span><span class="adm-mono">{formatMoney(order.total)}</span>
           </div>
+          {order.refund && (
+            <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--adm-error);margin-top:6px;padding-top:6px;border-top:1px solid rgba(229,72,77,0.2);">
+              <span>Refunded ({order.refund.reason})</span>
+              <span class="adm-mono">-{formatMoney(order.refund.amount)}</span>
+            </div>
+          )}
         </div>
       </div>
 
-      <!-- Supplier email template -->
+      <!-- Supplier ops panel -->
       {primarySupplier && (
         <div class="adm-card">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
-            <div style="font-weight:600;font-size:13px;">Supplier Order Email</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+            <div style="font-weight:700;font-size:13px;">Supplier Ops — {primarySupplier.supplier_name}</div>
+            <div style="display:flex;gap:8px;">
+              <button
+                type="button"
+                id="copy-email-btn"
+                class="adm-btn adm-btn-secondary"
+                style="padding:5px 10px;font-size:12px;"
+                onclick="copySupplierEmail()"
+              >Copy Email</button>
+              <a
+                href={`/api/admin/orders/${order.id}/supplier-csv`}
+                class="adm-btn adm-btn-secondary"
+                style="padding:5px 10px;font-size:12px;"
+                download
+              >↓ CSV</a>
+            </div>
+          </div>
+          <div style="font-size:11px;color:var(--adm-muted);margin-bottom:4px;">
+            Subject: <span class="adm-mono">{supplierEmailSubject}</span>
             <button
               type="button"
-              id="copy-email-btn"
               class="adm-btn adm-btn-secondary"
-              style="padding:5px 10px;font-size:12px;"
-              onclick="navigator.clipboard.writeText(document.getElementById('supplier-email-text').textContent).then(()=>{this.textContent='Copied!';setTimeout(()=>{this.textContent='Copy'},2000)})"
+              style="padding:2px 8px;font-size:11px;margin-left:6px;"
+              onclick="navigator.clipboard.writeText(document.getElementById('supplier-subject').textContent).then(()=>window.adminToast('Subject copied','success'))"
             >Copy</button>
           </div>
-          <div style="font-size:11px;color:var(--adm-muted);margin-bottom:6px;">
-            To: {primarySupplier.supplier_name} ({primarySupplier.platform})
-          </div>
-          <pre id="supplier-email-text" style="background:var(--adm-surface2);border:1px solid var(--adm-border);border-radius:6px;padding:12px;font-family:var(--adm-mono);font-size:11px;line-height:1.6;white-space:pre-wrap;word-break:break-word;color:var(--adm-text);overflow:auto;max-height:280px;">{supplierEmail}</pre>
-          <div style="margin-top:8px;font-size:11px;color:var(--adm-muted);">
-            Est. delivery: {primarySupplier.est_days_min}–{primarySupplier.est_days_max} days from {primarySupplier.ship_from}
+          <pre id="supplier-subject" style="display:none;">{supplierEmailSubject}</pre>
+          <pre id="supplier-email-text" style="background:var(--adm-surface2);border:1px solid var(--adm-border);border-radius:6px;padding:12px;font-family:var(--adm-mono);font-size:11px;line-height:1.6;white-space:pre-wrap;word-break:break-word;color:var(--adm-text);overflow:auto;max-height:240px;">{supplierEmail}</pre>
+          <div style="margin-top:10px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;">
+            <div style="font-size:11px;color:var(--adm-muted);">
+              Ship from: {primarySupplier.ship_from} · Est: {primarySupplier.est_days_min}–{primarySupplier.est_days_max} days
+            </div>
+            <!-- Supplier confirmed field -->
+            <div style="display:flex;align-items:center;gap:8px;margin-left:auto;">
+              <label class="adm-label" style="margin:0;">Supplier Confirmed At</label>
+              <input
+                type="datetime-local"
+                id="supplier-confirmed-input"
+                class="adm-input"
+                style="width:200px;font-size:12px;"
+                value={order.supplier_confirmed_at ? new Date(order.supplier_confirmed_at).toISOString().slice(0,16) : ''}
+              />
+              <button type="button" class="adm-btn adm-btn-secondary" style="padding:5px 10px;font-size:12px;" onclick="saveSupplierConfirmed()">Save</button>
+            </div>
           </div>
         </div>
       )}
+
+      <!-- Admin Notes -->
+      <div class="adm-card">
+        <div style="font-weight:700;font-size:13px;margin-bottom:10px;">Admin Notes (private)</div>
+        <textarea
+          id="admin-notes-input"
+          class="adm-textarea"
+          placeholder="Internal notes about this order…"
+          style="min-height:80px;"
+        >{order.admin_notes ?? order.notes ?? ''}</textarea>
+        <div style="margin-top:8px;display:flex;justify-content:flex-end;">
+          <button type="button" class="adm-btn adm-btn-primary" style="font-size:12px;" onclick="saveAdminNotes()">Save Notes</button>
+        </div>
+      </div>
+
+      <!-- Activity Timeline -->
+      <div class="adm-card">
+        <div style="font-weight:700;font-size:13px;margin-bottom:14px;">Activity Timeline</div>
+        {timeline.length === 0 ? (
+          <div style="font-size:13px;color:var(--adm-muted);">No activity recorded yet.</div>
+        ) : (
+          <div class="adm-timeline">
+            {timeline.map((evt) => (
+              <div class={`adm-timeline-event type-${evt.type}`}>
+                <div class="adm-timeline-msg">{evt.message}</div>
+                <div class="adm-timeline-meta">{evt.actor} · {formatDateShort(evt.ts)}</div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
 
     </div>
 
@@ -167,16 +255,30 @@ const availableTransitions = transitions[order.status] ?? [];
             <div class="adm-label">Date</div>
             <div>{formatDate(order.created_at)}</div>
           </div>
+          <div>
+            <div class="adm-label">Payment Status</div>
+            <span class={`adm-badge ${statusBadgeClass[order.status]}`}>{statusLabel[order.status]}</span>
+          </div>
           {order.stripe_session_id && (
             <div>
               <div class="adm-label">Stripe Session</div>
-              <div class="adm-mono" style="font-size:11px;">{order.stripe_session_id}</div>
+              <a
+                href={`https://dashboard.stripe.com/payments/${order.stripe_payment_intent_id ?? order.stripe_session_id}`}
+                target="_blank"
+                class="adm-mono"
+                style="font-size:10px;color:var(--adm-violet);word-break:break-all;"
+              >
+                {order.stripe_session_id} ↗
+              </a>
             </div>
           )}
-          {order.notes && (
+          {order.tracking_number && (
             <div>
-              <div class="adm-label">Notes</div>
-              <div style="color:var(--adm-muted);">{order.notes}</div>
+              <div class="adm-label">Tracking</div>
+              <div class="adm-mono" style="font-size:11px;">{order.tracking_number}</div>
+              {order.shipping_carrier && (
+                <div style="font-size:11px;color:var(--adm-muted);">{order.shipping_carrier}</div>
+              )}
             </div>
           )}
         </div>
@@ -186,18 +288,21 @@ const availableTransitions = transitions[order.status] ?? [];
       <div class="adm-card">
         <div style="font-weight:600;font-size:13px;margin-bottom:12px;">Customer</div>
         <div style="display:flex;flex-direction:column;gap:6px;font-size:12px;">
-          <div style="font-weight:500;">{order.customer_name ?? '—'}</div>
+          <div style="font-weight:500;font-size:14px;">{order.customer_name ?? '—'}</div>
           <div>
-            <a href={`/admin/customers?q=${encodeURIComponent(order.customer_email)}`} style="color:var(--adm-violet);text-decoration:none;">{order.customer_email}</a>
+            <a href={`/admin/customers/${encodeURIComponent(order.customer_email)}`} style="color:var(--adm-violet);text-decoration:none;">{order.customer_email}</a>
           </div>
+          {order.customer_phone && (
+            <div style="color:var(--adm-muted);">{order.customer_phone}</div>
+          )}
         </div>
       </div>
 
       <!-- Shipping address -->
       {order.shipping_address && (
         <div class="adm-card">
-          <div style="font-weight:600;font-size:13px;margin-bottom:12px;">Ship To</div>
-          <div style="font-size:12px;line-height:1.8;color:var(--adm-text);">
+          <div style="font-weight:600;font-size:13px;margin-bottom:10px;">Ship To</div>
+          <div style="font-size:12px;line-height:1.9;color:var(--adm-text);">
             <div style="font-weight:500;">{order.shipping_address.name}</div>
             <div>{order.shipping_address.line1}</div>
             {order.shipping_address.line2 && <div>{order.shipping_address.line2}</div>}
@@ -209,42 +314,67 @@ const availableTransitions = transitions[order.status] ?? [];
 
       <!-- Actions -->
       {availableTransitions.length > 0 && (
-        <div class="adm-card">
+        <div class="adm-card" id="actions-card">
           <div style="font-weight:600;font-size:13px;margin-bottom:12px;">Actions</div>
           <div style="display:flex;flex-direction:column;gap:8px;">
 
             {availableTransitions.map((t) => (
               t.status === 'shipped' ? (
                 <!-- Shipped form needs tracking # -->
-                <form
-                  onsubmit={`
-                    event.preventDefault();
-                    const data = Object.fromEntries(new FormData(this));
-                    fetch('/api/admin/orders/${order.id}', {
-                      method:'PATCH',
-                      headers:{'Content-Type':'application/json'},
-                      body:JSON.stringify({status:'shipped',...data})
-                    }).then(r=>r.ok?location.reload():alert('Error updating order'));
-                  `}
-                >
-                  <input type="text" name="tracking_number" placeholder="Tracking number" class="adm-input" style="margin-bottom:6px;" required />
-                  <input type="text" name="shipping_carrier" placeholder="Carrier (e.g. UPS, USPS)" class="adm-input" style="margin-bottom:6px;" />
-                  <button type="submit" class="adm-btn adm-btn-primary" style="width:100%;">{t.label}</button>
-                </form>
+                <div>
+                  <div style="font-size:12px;color:var(--adm-muted);margin-bottom:6px;font-weight:500;">Mark Shipped</div>
+                  <input type="text" id="tracking-number" placeholder="Tracking number *" class="adm-input" style="margin-bottom:6px;font-size:12px;" />
+                  <input type="text" id="shipping-carrier" placeholder="Carrier (UPS, USPS, FedEx…)" class="adm-input" style="margin-bottom:6px;font-size:12px;" />
+                  <button type="button" class="adm-btn adm-btn-success" style="width:100%;justify-content:center;font-size:12px;" onclick="markShipped()">
+                    Mark Shipped →
+                  </button>
+                </div>
+              ) : t.status === 'refunded' ? (
+                <!-- Refund form -->
+                <div>
+                  <button
+                    type="button"
+                    class="adm-btn adm-btn-danger"
+                    style="width:100%;justify-content:center;font-size:12px;"
+                    onclick="document.getElementById('refund-panel').style.display=document.getElementById('refund-panel').style.display==='none'?'block':'none'"
+                  >
+                    Refund ▾
+                  </button>
+                  <div id="refund-panel" style="display:none;margin-top:8px;padding:12px;background:rgba(229,72,77,0.05);border:1px solid rgba(229,72,77,0.2);border-radius:6px;">
+                    <div style="font-size:12px;font-weight:600;color:var(--adm-error);margin-bottom:8px;">Issue Refund</div>
+                    <div style="margin-bottom:8px;">
+                      <label class="adm-label">Type</label>
+                      <select id="refund-type" class="adm-select" style="font-size:12px;" onchange="toggleRefundAmount()">
+                        <option value="full">Full refund ({formatMoney(order.total)})</option>
+                        <option value="partial">Partial refund</option>
+                      </select>
+                    </div>
+                    <div id="refund-amount-row" style="display:none;margin-bottom:8px;">
+                      <label class="adm-label">Amount ($)</label>
+                      <input type="number" id="refund-amount" class="adm-input" style="font-size:12px;" step="0.01" min="0.01" max={order.total} placeholder="0.00" />
+                    </div>
+                    <div style="margin-bottom:10px;">
+                      <label class="adm-label">Reason</label>
+                      <select id="refund-reason" class="adm-select" style="font-size:12px;">
+                        <option value="customer_request">Customer request</option>
+                        <option value="duplicate">Duplicate</option>
+                        <option value="fraudulent">Fraudulent</option>
+                        <option value="item_not_received">Item not received</option>
+                        <option value="item_not_as_described">Item not as described</option>
+                      </select>
+                    </div>
+                    <button type="button" class="adm-btn adm-btn-danger" style="width:100%;justify-content:center;font-size:12px;" onclick="processRefund()">
+                      Process Refund
+                    </button>
+                  </div>
+                </div>
               ) : (
                 <button
                   type="button"
-                  class={`adm-btn ${t.status === 'cancelled' || t.status === 'refunded' ? 'adm-btn-danger' : 'adm-btn-secondary'}`}
-                  style="width:100%;justify-content:center;"
-                  onclick={`
-                    if (confirm('Are you sure you want to update status to "${t.label}"?')) {
-                      fetch('/api/admin/orders/${order.id}', {
-                        method:'PATCH',
-                        headers:{'Content-Type':'application/json'},
-                        body:JSON.stringify({status:'${t.status}'})
-                      }).then(r=>r.ok?location.reload():alert('Error updating order'));
-                    }
-                  `}
+                  class={`adm-btn ${t.style === 'danger' ? 'adm-btn-danger' : 'adm-btn-secondary'}`}
+                  style="width:100%;justify-content:center;font-size:12px;"
+                  data-status={t.status}
+                  onclick={`confirmTransition('${t.status}', '${t.label}')`}
                 >
                   {t.label}
                 </button>
@@ -254,16 +384,16 @@ const availableTransitions = transitions[order.status] ?? [];
         </div>
       )}
 
-      <!-- Supplier CSV download -->
+      <!-- Export -->
       <div class="adm-card">
         <div style="font-weight:600;font-size:13px;margin-bottom:8px;">Export</div>
         <a
           href={`/api/admin/orders/${order.id}/supplier-csv`}
           class="adm-btn adm-btn-secondary"
-          style="width:100%;justify-content:center;"
+          style="width:100%;justify-content:center;font-size:12px;"
           download
         >
-          ↓ Download Supplier CSV
+          ↓ Supplier CSV
         </a>
       </div>
 
@@ -271,3 +401,123 @@ const availableTransitions = transitions[order.status] ?? [];
   </div>
 
 </AdminLayout>
+
+<script define:vars={{ orderId: order.id, orderTotal: order.total }}>
+  function confirmTransition(status, label) {
+    if (!confirm(`Mark order as "${label}"? This cannot be undone.`)) return;
+    fetch(`/api/admin/orders/${orderId}`, {
+      method: 'PATCH',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ status }),
+    })
+    .then(r => r.json())
+    .then(data => {
+      if (data.ok) {
+        window.adminToast(`Order updated: ${label}`, 'success');
+        setTimeout(() => location.reload(), 800);
+      } else {
+        window.adminToast(data.error || 'Update failed', 'error');
+      }
+    })
+    .catch(() => window.adminToast('Network error', 'error'));
+  }
+
+  function markShipped() {
+    const trackingNumber = document.getElementById('tracking-number').value.trim();
+    const carrier = document.getElementById('shipping-carrier').value.trim();
+    if (!trackingNumber) { window.adminToast('Tracking number is required', 'warning'); return; }
+    if (!confirm(`Mark as shipped with tracking: ${trackingNumber}?`)) return;
+
+    fetch(`/api/admin/orders/${orderId}`, {
+      method: 'PATCH',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ status: 'shipped', tracking_number: trackingNumber, shipping_carrier: carrier || undefined }),
+    })
+    .then(r => r.json())
+    .then(data => {
+      if (data.ok) {
+        window.adminToast('Order marked as shipped — shipping email triggered', 'success');
+        setTimeout(() => location.reload(), 800);
+      } else {
+        window.adminToast(data.error || 'Update failed', 'error');
+      }
+    })
+    .catch(() => window.adminToast('Network error', 'error'));
+  }
+
+  function toggleRefundAmount() {
+    const type = document.getElementById('refund-type').value;
+    document.getElementById('refund-amount-row').style.display = type === 'partial' ? 'block' : 'none';
+  }
+
+  function processRefund() {
+    const type = document.getElementById('refund-type').value;
+    const reason = document.getElementById('refund-reason').value;
+    let amount = type === 'full' ? orderTotal : parseFloat(document.getElementById('refund-amount').value);
+
+    if (!amount || amount <= 0 || amount > orderTotal) {
+      window.adminToast('Invalid refund amount', 'warning');
+      return;
+    }
+
+    const isPartial = type === 'partial';
+    if (!confirm(`Process ${isPartial ? 'partial' : 'full'} refund of $${amount.toFixed(2)}? This calls Stripe.`)) return;
+
+    fetch(`/api/admin/orders/${orderId}/refund`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ amount: isPartial ? amount : undefined, reason, partial: isPartial }),
+    })
+    .then(r => r.json())
+    .then(data => {
+      if (data.ok) {
+        window.adminToast(`Refund of $${amount.toFixed(2)} processed`, 'success');
+        setTimeout(() => location.reload(), 1000);
+      } else {
+        window.adminToast(data.error || 'Refund failed', 'error');
+      }
+    })
+    .catch(() => window.adminToast('Network error', 'error'));
+  }
+
+  function saveAdminNotes() {
+    const notes = document.getElementById('admin-notes-input').value;
+    fetch(`/api/admin/orders/${orderId}/notes`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ notes }),
+    })
+    .then(r => r.json())
+    .then(data => {
+      if (data.ok) window.adminToast('Notes saved', 'success');
+      else window.adminToast(data.error || 'Save failed', 'error');
+    })
+    .catch(() => window.adminToast('Network error', 'error'));
+  }
+
+  function copySupplierEmail() {
+    const text = document.getElementById('supplier-email-text').textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      window.adminToast('Supplier email copied to clipboard', 'success');
+    });
+  }
+
+  function saveSupplierConfirmed() {
+    const val = document.getElementById('supplier-confirmed-input').value;
+    if (!val) return;
+    const iso = new Date(val).toISOString();
+    fetch(`/api/admin/orders/${orderId}`, {
+      method: 'PATCH',
+      headers: {'Content-Type': 'application/json'},
+      // Note: We're reusing PATCH but sending a meta-only update
+      // The API handles this gracefully if status is omitted
+      body: JSON.stringify({ supplier_confirmed_at: iso }),
+    })
+    .then(r => r.json())
+    .then(data => {
+      if (data.ok) window.adminToast('Supplier confirmed timestamp saved', 'success');
+      else window.adminToast(data.error || 'Save failed', 'error');
+    })
+    .catch(() => window.adminToast('Network error', 'error'));
+  }
+</script>

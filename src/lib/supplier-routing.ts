@@ -150,6 +150,32 @@ export const CATEGORY_SUPPLIER_MAP: Record<string, SupplierRoute> = {
     notes:
       'Source categories contain electronics brand names — keep published names generic. Backup: CJDropshipping US warehouse (filter US-warehouse SKUs, 2–5 days).',
   },
+
+  // ─── NEW CATEGORIES (expansion June 2026) ──────────────────────────────────
+  jewelry: {
+    supplier_id: 'j_goodin',
+    supplier_name: 'J. Goodin Jewelry',
+    supplier_email_env_key: 'SUPPLIER_EMAIL_J_GOODIN',
+    platform: 'J. Goodin (jgoodin.com)',
+    ship_from: 'US',
+    est_days_min: 2,
+    est_days_max: 7,
+    invoice_currency: 'USD',
+    notes:
+      'US-based; blind dropship; twice-daily inventory feeds; 3,000+ dainty/CZ/sterling designs. Backup: MMA Silver (mmasilver.com, same-day dispatch) and Golden Stella (goldenstella.com, Atlanta GA, fashion statement pieces).',
+  },
+  home: {
+    supplier_id: 'candle_builders',
+    supplier_name: 'Candle Builders',
+    supplier_email_env_key: 'SUPPLIER_EMAIL_CANDLE_BUILDERS',
+    platform: 'Candle Builders POD (candlebuilders.com)',
+    ship_from: 'US',
+    est_days_min: 3,
+    est_days_max: 7,
+    invoice_currency: 'USD',
+    notes:
+      'Shopify-native POD soy candle supplier — fully branded, no MOQ, up to 50% margins. Mirrors and throws: CJDropshipping US warehouse (2–5 days). Daniella\'s Candles (daniellascandles.com) as backup for candle SKUs.',
+  },
 };
 
 /**

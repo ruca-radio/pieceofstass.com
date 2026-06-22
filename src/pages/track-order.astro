@@ -1,6 +1,5 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import TrackOrderIsland from '../components/islands/TrackOrder';
 
 const breadcrumbJsonLd = {
   '@context': 'https://schema.org',
@@ -14,16 +13,199 @@ const breadcrumbJsonLd = {
 
 <BaseLayout
   title="Track your order — Piece of Stass"
-  description="Enter your order number and email to track your shipment."
+  description="Enter your order number and email address to track your shipment from Piece of Stass."
   jsonLd={[breadcrumbJsonLd]}
 >
-  <div style="max-width: 560px; margin: 0 auto; padding: 64px 16px;">
-    <h1 style="font-family: var(--font-family-display); font-weight: 700; font-size: 38px; letter-spacing: -0.02em; margin: 0 0 8px; color: var(--color-espresso);">Track your order</h1>
-    <p style="color: var(--color-muted); font-size: 15px; margin: 0 0 40px; line-height: 1.6;">Your items ship from our global warehouse. Tracking info is sent once your order leaves the facility (typically 3–5 days after placing your order).</p>
-    <TrackOrderIsland client:load />
-    <div style="margin-top: 32px; padding: 20px; background: var(--color-charcoal); border-radius: var(--radius-lg); border: 1px solid var(--color-slate);">
-      <p style="font-size: 13px; font-weight: 600; color: var(--color-espresso); margin: 0 0 6px;">Expected delivery</p>
-      <p style="font-size: 13px; color: var(--color-muted); margin: 0; line-height: 1.6;">Standard shipping: 10–20 business days from order date. Priority shipping: 7–12 business days. Need help? <a href="mailto:support@pieceofstass.com" style="color: var(--color-lime); text-decoration: none;">Email support</a></p>
+  <div style="max-width: 600px; margin: 0 auto; padding: 56px 16px 96px;">
+
+    <h1 style="font-family: var(--font-family-display); font-weight: 700; font-size: 36px; letter-spacing: -0.03em; margin: 0 0 8px; color: var(--color-espresso);">Track your order</h1>
+    <p style="color: var(--color-muted); font-size: 15px; margin: 0 0 36px; line-height: 1.6;">Enter your order number and the email you used at checkout. No account needed.</p>
+
+    <!-- Track form -->
+    <div id="track-form-wrapper">
+      <form id="track-form" style="display: flex; flex-direction: column; gap: 16px;">
+        <div>
+          <label for="order-id" style="display: block; font-size: 12px; font-family: var(--font-family-mono); letter-spacing: 0.04em; color: var(--color-muted); text-transform: uppercase; margin-bottom: 6px;">Order number</label>
+          <input id="order-id" type="text" name="order_id" placeholder="e.g. order_abc12345" autocomplete="off" required
+            style="width: 100%; background: var(--color-charcoal); border: 1px solid var(--color-slate); border-radius: 10px; padding: 13px 16px; color: var(--color-espresso); font-size: 15px; font-family: var(--font-family-mono); outline: none; box-sizing: border-box;" />
+        </div>
+        <div>
+          <label for="track-email" style="display: block; font-size: 12px; font-family: var(--font-family-mono); letter-spacing: 0.04em; color: var(--color-muted); text-transform: uppercase; margin-bottom: 6px;">Email address</label>
+          <input id="track-email" type="email" name="email" placeholder="your@email.com" required
+            style="width: 100%; background: var(--color-charcoal); border: 1px solid var(--color-slate); border-radius: 10px; padding: 13px 16px; color: var(--color-espresso); font-size: 15px; font-family: var(--font-family-sans); outline: none; box-sizing: border-box;" />
+        </div>
+        <div id="track-error" style="display: none; background: rgba(178,58,51,0.07); border: 1px solid rgba(178,58,51,0.2); border-radius: 8px; padding: 12px 16px; font-size: 13px; color: #B23A33;"></div>
+        <button type="submit" id="track-btn"
+          style="background: var(--color-rose); color: #F6F0E8; border: none; border-radius: 999px; padding: 14px; font-family: var(--font-family-display); font-weight: 700; font-size: 15px; cursor: pointer; letter-spacing: -0.01em;">
+          Track order
+        </button>
+      </form>
     </div>
+
+    <!-- Results section (hidden until found) -->
+    <div id="track-results" style="display: none; margin-top: 8px;"></div>
+
+    <!-- Info box -->
+    <div style="margin-top: 32px; padding: 18px 20px; background: var(--color-charcoal); border-radius: 12px; border: 1px solid var(--color-slate);">
+      <p style="font-size: 13px; font-weight: 600; color: var(--color-espresso); margin: 0 0 5px;">Expected delivery</p>
+      <p style="font-size: 13px; color: var(--color-muted); margin: 0; line-height: 1.6;">Standard shipping: 15–20 business days from order date. Tracking info is added once your order leaves the warehouse (typically 3–7 business days). Need help? <a href="mailto:help@pieceofstass.com" style="color: var(--color-rose); text-decoration: none; font-weight: 600;">Email support</a></p>
+    </div>
+
   </div>
 </BaseLayout>
+
+<script>
+const STEPS = [
+  { key: 'payment_captured', label: 'Paid' },
+  { key: 'sent_to_supplier', label: 'Processing' },
+  { key: 'shipped',          label: 'Shipped' },
+  { key: 'out_for_delivery', label: 'Out for Delivery' },
+  { key: 'delivered',        label: 'Delivered' },
+];
+const STEP_MAP: Record<string, number> = {
+  pending: -1, payment_captured: 0, sent_to_supplier: 1,
+  shipped: 2, out_for_delivery: 3, delivered: 4, completed: 4,
+};
+
+function fmtMoney(n: number) {
+  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(n);
+}
+
+function renderResults(order: Record<string, unknown>) {
+  const stepIdx = STEP_MAP[order.status as string] ?? -1;
+  const isCancelled = order.status === 'cancelled';
+  const isRefunded = order.status === 'refunded';
+  const addr = order.shipping_address as Record<string, string> | null;
+  const items = order.items as Array<Record<string, unknown>>;
+
+  const stepsHtml = (!isCancelled && !isRefunded) ? `
+    <div style="display:flex;gap:0;position:relative;margin-bottom:20px;">
+      ${STEPS.map((step, i) => {
+        const done = i <= stepIdx;
+        return `<div style="flex:1;display:flex;flex-direction:column;align-items:center;position:relative;z-index:1;">
+          ${i > 0 ? `<div style="position:absolute;top:12px;right:50%;left:-50%;height:2px;background:${done ? '#A14C58' : '#E6DCCF'};z-index:0;"></div>` : ''}
+          <div style="width:24px;height:24px;border-radius:50%;border:2px solid ${done ? '#A14C58' : '#E6DCCF'};background:${done ? '#A14C58' : '#FBF7F1'};display:flex;align-items:center;justify-content:center;margin-bottom:8px;z-index:1;position:relative;">
+            ${done ? '<span style="color:#F6F0E8;font-size:10px;font-weight:700;">✓</span>' : ''}
+          </div>
+          <span style="font-size:10px;font-weight:600;letter-spacing:0.03em;text-transform:uppercase;color:${i === stepIdx ? '#2A211C' : done ? '#726558' : '#94857A'};text-align:center;line-height:1.3;">${step.label}</span>
+        </div>`;
+      }).join('')}
+    </div>
+  ` : `<div style="background:rgba(178,58,51,0.06);border:1px solid rgba(178,58,51,0.2);border-radius:10px;padding:12px 16px;margin-bottom:16px;font-size:14px;font-weight:600;color:#B23A33;">${order.status_label}</div>`;
+
+  const trackingHtml = order.tracking_url ? `
+    <div style="padding:14px 0 0 0;border-top:1px solid #E6DCCF;margin-top:8px;">
+      <p style="font-size:12px;color:#726558;margin:0 0 6px 0;">
+        Carrier: <strong style="color:#2A211C;">${order.carrier}</strong>
+        &nbsp;·&nbsp;Tracking: <span style="font-family:monospace;color:#2A211C;">${order.tracking_number}</span>
+      </p>
+      <a href="${order.tracking_url}" target="_blank" rel="noopener noreferrer"
+        style="display:inline-block;font-size:14px;font-weight:700;color:#F6F0E8;background:#A14C58;text-decoration:none;padding:10px 22px;border-radius:999px;">
+        Track with ${order.carrier}
+      </a>
+    </div>
+  ` : '';
+
+  const itemsHtml = items.map(item => `
+    <div style="display:flex;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid #E6DCCF;">
+      ${item.image ? `<img src="${item.image}" alt="${item.title}" style="width:52px;height:52px;object-fit:cover;border-radius:8px;flex-shrink:0;">` : `<div style="width:52px;height:52px;background:#E6DCCF;border-radius:8px;flex-shrink:0;"></div>`}
+      <div style="flex:1;">
+        <p style="font-size:13px;font-weight:600;color:#2A211C;margin:0 0 2px 0;">${item.title}</p>
+        ${(item.color || item.size) ? `<p style="font-size:11px;color:#726558;margin:0;">${[item.color, item.size].filter(Boolean).join(' · ')}</p>` : ''}
+        <p style="font-size:11px;color:#726558;margin:0;">Qty: ${item.qty}</p>
+      </div>
+      <p style="font-size:13px;font-weight:600;color:#2A211C;margin:0;">${fmtMoney((item.unit_price as number) * (item.qty as number))}</p>
+    </div>
+  `).join('');
+
+  const addrHtml = addr ? `
+    <section style="background:#FBF7F1;border-radius:12px;border:1px solid #E6DCCF;padding:18px 20px;margin-top:12px;">
+      <p style="font-size:11px;font-weight:700;color:#726558;letter-spacing:0.06em;text-transform:uppercase;margin:0 0 8px 0;">Ships to</p>
+      <address style="font-style:normal;font-size:13px;color:#726558;line-height:1.8;">
+        <strong style="color:#2A211C;">${addr.name}</strong><br>
+        ${addr.line1}${addr.line2 ? '<br>' + addr.line2 : ''}<br>
+        ${addr.city}, ${addr.state} ${addr.postal_code}<br>
+        ${addr.country}
+      </address>
+    </section>
+  ` : '';
+
+  return `
+    <div style="background:#FBF7F1;border-radius:16px;border:1px solid #E6DCCF;padding:24px 22px;margin-bottom:12px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:8px;">
+        <div>
+          <p style="font-size:11px;font-family:monospace;color:#726558;margin:0 0 2px 0;">ORDER</p>
+          <p style="font-size:16px;font-weight:700;color:#2A211C;margin:0;font-family:monospace;">#${order.order_number}</p>
+        </div>
+        <span style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#A14C58;background:rgba(161,76,88,0.08);padding:5px 12px;border-radius:999px;border:1px solid rgba(161,76,88,0.25);">${order.status_label}</span>
+      </div>
+      ${stepsHtml}
+      ${trackingHtml}
+    </div>
+
+    <section style="background:#FBF7F1;border-radius:12px;border:1px solid #E6DCCF;padding:18px 20px;margin-top:12px;">
+      <p style="font-size:11px;font-weight:700;color:#726558;letter-spacing:0.06em;text-transform:uppercase;margin:0 0 10px 0;">Items</p>
+      ${itemsHtml}
+      <div style="margin-top:12px;padding-top:10px;border-top:1px solid #E6DCCF;">
+        <div style="display:flex;justify-content:space-between;font-size:12px;color:#726558;margin-bottom:4px;"><span>Subtotal</span><span>${fmtMoney(order.subtotal as number)}</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;color:#726558;margin-bottom:4px;"><span>Shipping</span><span>${(order.shipping as number) === 0 ? 'Free' : fmtMoney(order.shipping as number)}</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;color:#726558;margin-bottom:8px;"><span>Tax</span><span>${fmtMoney(order.tax as number)}</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:15px;font-weight:700;color:#2A211C;padding-top:8px;border-top:1px solid #E6DCCF;"><span>Total</span><span style="color:#A14C58;">${fmtMoney(order.total as number)}</span></div>
+      </div>
+    </section>
+
+    ${addrHtml}
+
+    <button id="track-again" style="margin-top:16px;background:none;border:none;cursor:pointer;color:#A14C58;font-size:13px;font-weight:600;padding:0;font-family:inherit;">← Track another order</button>
+  `;
+}
+
+const form = document.getElementById('track-form') as HTMLFormElement;
+const btn = document.getElementById('track-btn') as HTMLButtonElement;
+const errorBox = document.getElementById('track-error') as HTMLDivElement;
+const resultsEl = document.getElementById('track-results') as HTMLDivElement;
+const formWrapper = document.getElementById('track-form-wrapper') as HTMLDivElement;
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  errorBox.style.display = 'none';
+  btn.textContent = 'Looking up…';
+  btn.disabled = true;
+
+  const fd = new FormData(form);
+  const order_id = (fd.get('order_id') as string).trim();
+  const email = (fd.get('email') as string).trim();
+
+  try {
+    const res = await fetch('/api/track-order', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ order_id, email }),
+    });
+    const data = await res.json() as { ok?: boolean; order?: Record<string, unknown>; error?: string };
+
+    if (!res.ok || !data.ok) {
+      errorBox.textContent = data.error ?? 'No order found. Double-check your order number and email.';
+      errorBox.style.display = 'block';
+    } else {
+      formWrapper.style.display = 'none';
+      resultsEl.innerHTML = renderResults(data.order!);
+      resultsEl.style.display = 'block';
+
+      // Wire up "track another" button
+      document.getElementById('track-again')?.addEventListener('click', () => {
+        formWrapper.style.display = 'block';
+        resultsEl.style.display = 'none';
+        resultsEl.innerHTML = '';
+        form.reset();
+      });
+    }
+  } catch {
+    errorBox.textContent = 'Something went wrong. Please try again.';
+    errorBox.style.display = 'block';
+  } finally {
+    btn.textContent = 'Track order';
+    btn.disabled = false;
+  }
+});
+</script>
