@@ -3,8 +3,19 @@
  * Falls back to in-memory Map when USERS_KV is not bound (local dev).
  */
 
-import { createHash, randomUUID } from 'node:crypto';
 import type { User } from './auth';
+
+// ─── Web Crypto helpers (Workers + Node 20+ compatible) ─────────────────────
+function randomUUID(): string {
+  return crypto.randomUUID();
+}
+
+async function sha256Hex(input: string): Promise<string> {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(input));
+  return Array.from(new Uint8Array(buf))
+    .map((b) => b.toString(16).padStart(2, '0'))
+    .join('');
+}
 
 // ─── Extended types ──────────────────────────────────────────────────────────
 export interface Address {
@@ -75,8 +86,8 @@ function getKV(env?: Record<string, unknown>): KVStore {
 }
 
 // ─── SHA-256 email hash ───────────────────────────────────────────────────
-export function hashEmail(email: string): string {
-  return createHash('sha256').update(email.toLowerCase().trim()).digest('hex');
+export async function hashEmail(email: string): Promise<string> {
+  return sha256Hex(email.toLowerCase().trim());
 }
 
 // ─── User CRUD ────────────────────────────────────────────────────────────
@@ -85,7 +96,7 @@ export async function getUserByEmail(
   env?: Record<string, unknown>
 ): Promise<User | null> {
   const kv = getKV(env);
-  const hash = hashEmail(email);
+  const hash = await hashEmail(email);
   const raw = await kv.get(`user:${hash}`);
   if (!raw) return null;
   return JSON.parse(raw) as User;
@@ -109,7 +120,7 @@ export async function upsertUser(
   env?: Record<string, unknown>
 ): Promise<User> {
   const kv = getKV(env);
-  const hash = hashEmail(email);
+  const hash = await hashEmail(email);
   const existing = await getUserByEmail(email, env);
   const now = new Date().toISOString();
 

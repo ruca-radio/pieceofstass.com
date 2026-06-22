@@ -9,7 +9,13 @@ import { getSessionFromRequest } from './lib/auth';
 import { getUserById } from './lib/users-server';
 
 export const onRequest = defineMiddleware(async (context, next) => {
-  const { request, locals } = context;
+  const { request, locals, isPrerendered } = context;
+
+  // Prerendered pages run at build time with synthetic requests — there are
+  // no real cookies/headers to read. Skip session lookup entirely.
+  if (isPrerendered) {
+    return next();
+  }
 
   // Extract env for KV access (available via Cloudflare adapter or platformProxy)
   const env = (context.locals as Record<string, unknown>).runtime?.env as
