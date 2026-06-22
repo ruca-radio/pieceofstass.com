@@ -51,8 +51,15 @@ const {
 const siteUrl = import.meta.env.PUBLIC_SITE_URL || 'https://pieceofstass.com';
 const canonicalUrl = canonical ? canonical : `${siteUrl}${Astro.url.pathname}`;
 
+// Force-disable dynamic OG endpoints in production until we verify the WASM
+// renderer is stable on Cloudflare Workers. Static /og-default.png is the safe
+// fallback. Flip DYNAMIC_OG_ENABLED to true once /api/og/*.png is verified live.
+const DYNAMIC_OG_ENABLED = false;
+const resolvedOgImage =
+  !DYNAMIC_OG_ENABLED && ogImage.startsWith('/api/og/') ? '/og-default.png' : ogImage;
+
 // Ensure absolute URLs
-const ogImageFull = ogImage.startsWith('http') ? ogImage : `${siteUrl}${ogImage}`;
+const ogImageFull = resolvedOgImage.startsWith('http') ? resolvedOgImage : `${siteUrl}${resolvedOgImage}`;
 const ogSquareImageFull = ogSquareImage
   ? (ogSquareImage.startsWith('http') ? ogSquareImage : `${siteUrl}${ogSquareImage}`)
   : null;
