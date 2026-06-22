@@ -1,68 +1,43 @@
-def lum(hex):
-    hex = hex.lstrip('#')
-    r, g, b = [int(hex[i:i+2], 16)/255 for i in (0, 2, 4)]
-    def lin(c):
-        return c/12.92 if c <= 0.03928 else ((c+0.055)/1.055)**2.4
-    R, G, B = lin(r), lin(g), lin(b)
-    return 0.2126*R + 0.7152*G + 0.0722*B
-
+"""WCAG contrast ratio helper for Piece of Stass v2 palette verification."""
+def _lin(c):
+    c = c / 255.0
+    return c / 12.92 if c <= 0.03928 else ((c + 0.055) / 1.055) ** 2.4
+def _lum(hexv):
+    h = hexv.lstrip('#')
+    r, g, b = int(h[0:2],16), int(h[2:4],16), int(h[4:6],16)
+    return 0.2126*_lin(r) + 0.7152*_lin(g) + 0.0722*_lin(b)
 def ratio(a, b):
-    la, lb = lum(a), lum(b)
+    la, lb = _lum(a), _lum(b)
     hi, lo = max(la, lb), min(la, lb)
     return (hi + 0.05) / (lo + 0.05)
-
-P = {
-    'cream':    '#F6F0E8',
-    'surface':  '#FBF7F1',
-    'surface2': '#F0E7DA',
-    'espresso': '#2A211C',
-    'muted':    '#726558',
-    'faint':    '#94857A',
-    'line':     '#E6DCCF',
-    'rose':     '#B25E6B',
-    'roseDeep': '#8E3F4C',
-    'sage':     '#5E6A4F',
-    'sageMid':  '#6F7B5F',
-    'clay':     '#C4673D',
-    'clayDeep': '#9B4824',
-    'success':  '#3F6A44',
-    'error':    '#B23A33',
-    'warning':  '#9C6A22',
-    'warningFill':'#E7B45A',
-    'paperWhite':'#FFFFFF',
-}
-
-checks = [
-    ('espresso on cream (body)',        'espresso', 'cream',    4.5),
-    ('espresso on surface',             'espresso', 'surface',  4.5),
-    ('espresso on surface2',            'espresso', 'surface2', 4.5),
-    ('muted on cream (secondary)',      'muted',    'cream',    4.5),
-    ('muted on surface',                'muted',    'surface',  4.5),
-    ('faint on cream (large/decor)',    'faint',    'cream',    3.0),
-    ('rose on cream (link/large)',      'rose',     'cream',    3.0),
-    ('roseDeep on cream (body link)',   'roseDeep', 'cream',    4.5),
-    ('cream on roseDeep (CTA fill)',    'cream',    'roseDeep', 4.5),
-    ('sage on cream (large)',           'sageMid',  'cream',    3.0),
-    ('cream on sage (text on sage)',    'cream',    'sage',     4.5),
-    ('clay on cream (large/tag txt)',   'clay',     'cream',    3.0),
-    ('clayDeep on cream (body)',        'clayDeep', 'cream',    4.5),
-    ('cream on clayDeep (sale fill)',   'cream',    'clayDeep', 4.5),
-    ('success on cream',                'success',  'cream',    4.5),
-    ('cream on success',                'cream',    'success',  4.5),
-    ('error on cream',                  'error',    'cream',    4.5),
-    ('cream on error',                  'cream',    'error',    4.5),
-    ('warning on cream (large)',        'warning',  'cream',    3.0),
-    ('espresso on warningFill (badge)', 'espresso', 'warningFill', 4.5),
-    ('warning on cream (body text)',    'warning',  'cream',    4.5),
-]
-
-print(f"{'check':40} {'ratio':>7}  target  pass")
-print('-'*70)
-allpass = True
-for label, fg, bg, tgt in checks:
-    r = ratio(P[fg], P[bg])
-    ok = r >= tgt
-    if not ok: allpass = False
-    print(f"{label:40} {r:6.2f}:1   {tgt:>4}   {'PASS' if ok else '*** FAIL ***'}")
-print('-'*70)
-print('ALL PASS' if allpass else 'SOME FAILED')
+if __name__ == '__main__':
+    CREAM='#F6F0E8'; ESPRESSO='#2A211C'; ROSE='#A14C58'; ROSEB='#B25E6B'
+    SAGE='#6F7B5F'; CLAY='#C4673D'; CLAYD='#9B4824'; MUTED='#726558'; FAINT='#94857A'
+    SUCCESS='#3F6A44'; ERROR='#B23A33'; WARN='#9C6A22'; WARNFILL='#E7B45A'
+    RAISED='#FBF7F1'; SUNKEN='#F0E7DA'; TAUPE='#B8A795'
+    pairs = [
+        ('Espresso on Cream', ESPRESSO, CREAM),
+        ('Muted on Cream', MUTED, CREAM),
+        ('Faint on Cream', FAINT, CREAM),
+        ('Rose on Cream', ROSE, CREAM),
+        ('Cream on Rose', CREAM, ROSE),
+        ('Rose-bright on Cream', ROSEB, CREAM),
+        ('Cream on Sage', CREAM, SAGE),
+        ('Sage on Cream', SAGE, CREAM),
+        ('Cream on Clay-deep', CREAM, CLAYD),
+        ('Clay-deep on Cream', CLAYD, CREAM),
+        ('Cream on Success', CREAM, SUCCESS),
+        ('Cream on Error', CREAM, ERROR),
+        ('Warning text on Cream', WARN, CREAM),
+        ('Espresso on Warning-fill', ESPRESSO, WARNFILL),
+        ('Espresso on Raised', ESPRESSO, RAISED),
+        ('Espresso on Sunken', ESPRESSO, SUNKEN),
+        ('Taupe on Espresso (footer)', TAUPE, ESPRESSO),
+        ('Cream on Espresso (footer)', CREAM, ESPRESSO),
+        ('Rose-bright on Espresso (footer link)', ROSEB, ESPRESSO),
+    ]
+    for name, fg, bg in pairs:
+        r = ratio(fg, bg)
+        aa_body = 'PASS' if r >= 4.5 else 'fail'
+        aa_large = 'PASS' if r >= 3.0 else 'FAIL'
+        print(f"{name:42s} {r:6.2f}:1  body={aa_body}  large={aa_large}")

@@ -34,12 +34,12 @@ const statusSteps = ['pending', 'processing', 'shipped', 'delivered'];
 const currentStep = statusSteps.indexOf(order.status);
 
 const statusColors: Record<string, string> = {
-  pending:    '#E8A33D',
-  processing: '#7B5CFF',
-  shipped:    '#C6FF3A',
-  delivered:  '#2FA866',
-  cancelled:  '#E5484D',
-  refunded:   '#6B6B6E',
+  pending:    '#9C6A22',
+  processing: '#6F7B5F',
+  shipped:    '#A14C58',
+  delivered:  '#3F6A44',
+  cancelled:  '#B23A33',
+  refunded:   '#726558',
 };
 ---
 
@@ -66,7 +66,7 @@ const statusColors: Record<string, string> = {
         </h1>
         <p style="font-size: 13px; color: var(--color-muted);">Placed {formatDate(order.created_at)}</p>
       </div>
-      <span style={`font-size: 13px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: ${statusColors[order.status] ?? '#6B6B6E'}; background: rgba(255,255,255,0.05); padding: 6px 14px; border-radius: var(--radius-pill); border: 1px solid currentColor;`}>
+      <span style={`font-size: 13px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: ${statusColors[order.status] ?? '#726558'}; background: rgba(42,33,28,0.04); padding: 6px 14px; border-radius: var(--radius-pill); border: 1px solid currentColor;`}>
         {order.status}
       </span>
     </div>
