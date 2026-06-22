@@ -16,6 +16,8 @@ export default function ProductGallery({ images, title }: Props) {
           src={images[active]}
           alt={`${title} — image ${active + 1}`}
           loading="eager"
+          fetchpriority="high"
+          decoding="async"
           width={600}
           height={800}
           style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'opacity 200ms' }}
@@ -48,14 +50,14 @@ export default function ProductGallery({ images, title }: Props) {
             <button
               onClick={() => setActive((active - 1 + images.length) % images.length)}
               aria-label="Previous image"
-              style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', background: 'rgba(10,10,11,0.6)', border: 'none', borderRadius: '999px', width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: 'var(--color-paper)' }}
+              style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', background: 'rgba(10,10,11,0.6)', border: 'none', borderRadius: '999px', width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: 'var(--color-espresso)' }}
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="m15 18-6-6 6-6"/></svg>
             </button>
             <button
               onClick={() => setActive((active + 1) % images.length)}
               aria-label="Next image"
-              style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', background: 'rgba(10,10,11,0.6)', border: 'none', borderRadius: '999px', width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: 'var(--color-paper)' }}
+              style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', background: 'rgba(10,10,11,0.6)', border: 'none', borderRadius: '999px', width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: 'var(--color-espresso)' }}
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="m9 18 6-6-6-6"/></svg>
             </button>
@@ -84,7 +86,7 @@ export default function ProductGallery({ images, title }: Props) {
                 background: 'var(--color-charcoal)',
               }}
             >
-              <img src={img} alt="" loading="lazy" width={64} height={64} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <img src={img} alt="" loading="lazy" decoding="async" width={64} height={64} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             </button>
           ))}
         </div>

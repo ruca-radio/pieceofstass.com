@@ -78,7 +78,7 @@ export default function SearchOverlay() {
                 background: 'none',
                 border: 'none',
                 outline: 'none',
-                color: 'var(--color-paper)',
+                color: 'var(--color-espresso)',
                 fontSize: '16px',
                 padding: '14px 0',
                 fontFamily: 'var(--font-family-sans)',
@@ -103,7 +103,7 @@ export default function SearchOverlay() {
                   <button
                     key={term}
                     onClick={() => { setQuery(term); }}
-                    style={{ background: 'var(--color-slate)', border: 'none', borderRadius: '999px', padding: '8px 14px', color: 'var(--color-paper)', fontSize: '13px', cursor: 'pointer', fontFamily: 'var(--font-family-sans)' }}
+                    style={{ background: 'var(--color-slate)', border: 'none', borderRadius: '999px', padding: '8px 14px', color: 'var(--color-espresso)', fontSize: '13px', cursor: 'pointer', fontFamily: 'var(--font-family-sans)' }}
                   >
                     {term}
                   </button>
@@ -125,10 +125,10 @@ export default function SearchOverlay() {
                   >
                     <img src={product.images[0]} alt={product.title} loading="lazy" width={40} height={40} style={{ width: '40px', height: '40px', objectFit: 'cover', borderRadius: 'var(--radius-sm)', flexShrink: 0, background: 'var(--color-slate)' }} />
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      <p style={{ fontSize: '14px', fontWeight: 600, color: 'var(--color-paper)', margin: 0 }} className="line-clamp-1">{product.title}</p>
+                      <p style={{ fontSize: '14px', fontWeight: 600, color: 'var(--color-espresso)', margin: 0 }} className="line-clamp-1">{product.title}</p>
                       <p style={{ fontSize: '12px', color: 'var(--color-muted)', margin: 0, textTransform: 'capitalize' }}>{product.category}</p>
                     </div>
-                    <span style={{ fontFamily: 'var(--font-family-mono)', fontSize: '13px', fontWeight: 700, color: 'var(--color-paper)', flexShrink: 0 }}>{formatPriceDollars(product.price)}</span>
+                    <span style={{ fontFamily: 'var(--font-family-mono)', fontSize: '13px', fontWeight: 700, color: 'var(--color-espresso)', flexShrink: 0 }}>{formatPriceDollars(product.price)}</span>
                   </a>
                 </li>
               ))}

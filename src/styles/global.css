@@ -9,20 +9,43 @@
 @import "@fontsource/space-mono/400.css";
 
 @theme {
-  /* Brand colors */
-  --color-lime: #C6FF3A;
-  --color-ink: #0A0A0B;
-  --color-paper: #FAFAF7;
-  --color-violet: #7B5CFF;
-  --color-pink: #FF4D8D;
-  --color-charcoal: #1C1C1F;
-  --color-slate: #3A3A3E;
-  --color-muted: #6B6B6E;
-  --color-line: #E4E4DE;
-  --color-surface: #F2F1EC;
-  --color-success: #2FA866;
-  --color-error: #E5484D;
-  --color-warning: #E8A33D;
+  /* =========================================================
+     Brand colors — v2 'Atelier' refresh (June 2026)
+     Warm Bone Cream canvas + Espresso text, signature Stass Rose,
+     secondary Sage, terracotta Clay reserved for sale/urgency moments.
+     The v1 keys (lime, ink, paper, charcoal, slate, violet, pink, surface)
+     are RETAINED and remapped to warm values so existing var(--color-*)
+     references flip automatically. Canonical v2 aliases below.
+     ========================================================= */
+
+  /* v1 keys, remapped to v2 roles */
+  --color-lime: #A14C58;     /* was Stass Lime -> now Stass Rose (signature / CTA fill) */
+  --color-ink: #2A211C;      /* was near-black -> now warm Espresso (text / dark UI) */
+  --color-paper: #F6F0E8;    /* was off-white -> now Bone Cream (canvas) */
+  --color-violet: #6F7B5F;   /* was Hype Violet -> now warm Sage (secondary accent) */
+  --color-pink: #C4673D;     /* was Sass Pink -> now terracotta Clay (moment color) */
+  --color-charcoal: #FBF7F1; /* was dark card -> now raised cream surface */
+  --color-slate: #E6DCCF;    /* was dark border -> now warm hairline line */
+  --color-muted: #726558;    /* warm Taupe secondary text (4.99:1 on cream) */
+  --color-line: #E6DCCF;     /* warm hairline border */
+  --color-surface: #F0E7DA;  /* sunken / inset cream surface */
+
+  /* v2 canonical semantic aliases */
+  --color-cream: #F6F0E8;
+  --color-espresso: #2A211C;
+  --color-rose: #A14C58;
+  --color-rose-bright: #B25E6B;
+  --color-rose-deep: #8B434C;
+  --color-sage: #6F7B5F;
+  --color-clay: #C4673D;
+  --color-clay-deep: #9B4824;
+  --color-accent: #A14C58;
+  --color-faint: #94857A;
+
+  --color-success: #3F6A44;
+  --color-error: #B23A33;
+  --color-warning: #9C6A22;
+  --color-warning-fill: #E7B45A;
 
   /* Fonts */
   --font-family-display: "Space Grotesk", Inter, system-ui, sans-serif;
@@ -68,14 +91,15 @@
   --radius-2xl: 32px;
   --radius-pill: 999px;
 
-  /* Shadows */
-  --shadow-xs: 0 1px 2px rgba(10,10,11,0.06);
-  --shadow-sm: 0 2px 6px rgba(10,10,11,0.08);
-  --shadow-md: 0 6px 16px rgba(10,10,11,0.10);
-  --shadow-lg: 0 12px 32px rgba(10,10,11,0.14);
-  --shadow-xl: 0 24px 56px rgba(10,10,11,0.18);
-  --shadow-lime-glow: 0 0 24px rgba(198,255,58,0.45);
-  --shadow-focus-ring: 0 0 0 3px rgba(123,92,255,0.55);
+  /* Shadows — warm, low-spread, tinted with Espresso */
+  --shadow-xs: 0 1px 2px rgba(42,33,28,0.05);
+  --shadow-sm: 0 2px 6px rgba(42,33,28,0.07);
+  --shadow-md: 0 6px 16px rgba(42,33,28,0.09);
+  --shadow-lg: 0 12px 32px rgba(42,33,28,0.12);
+  --shadow-xl: 0 24px 56px rgba(42,33,28,0.16);
+  --shadow-lime-glow: 0 0 24px rgba(161,76,88,0.30); /* retained name -> now Rose glow */
+  --shadow-rose-glow: 0 0 24px rgba(161,76,88,0.30);
+  --shadow-focus-ring: 0 0 0 3px rgba(161,76,88,0.45);
 
   /* Motion */
   --ease-expo-out: cubic-bezier(0.22, 1, 0.36, 1);
@@ -88,7 +112,9 @@
   --duration-hero: 600ms;
 
   /* Backgrounds */
-  --bg-hype-gradient: linear-gradient(135deg, #C6FF3A 0%, #7B5CFF 100%);
+  --bg-hype-gradient: linear-gradient(135deg, #B25E6B 0%, #C4673D 100%); /* retained name -> now Blush gradient */
+  --bg-blush-gradient: linear-gradient(135deg, #B25E6B 0%, #C4673D 100%);
+  --bg-cream-wash: linear-gradient(180deg, #FBF7F1 0%, #F0E7DA 100%);
 
   /* Breakpoints */
   --breakpoint-sm: 390px;
@@ -109,8 +135,8 @@ html {
 }
 
 body {
-  background-color: var(--color-ink);
-  color: var(--color-paper);
+  background-color: var(--color-cream);
+  color: var(--color-espresso);
   font-family: var(--font-family-sans);
   font-size: var(--font-size-base);
   line-height: 1.5;
@@ -130,17 +156,20 @@ body {
   height: 4px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--color-charcoal);
+  background: var(--color-surface);
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--color-slate);
+  background: var(--color-line);
   border-radius: var(--radius-pill);
 }
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-faint);
+}
 
-/* Selection */
+/* Selection — Stass Rose with Cream text */
 ::selection {
-  background: var(--color-lime);
-  color: var(--color-ink);
+  background: var(--color-rose);
+  color: var(--color-cream);
 }
 
 /* Reduced motion */
@@ -151,9 +180,10 @@ body {
   }
 }
 
-/* Utility: hype gradient text */
-.text-hype {
-  background: var(--bg-hype-gradient);
+/* Utility: signature gradient text (Blush). .text-hype retained for back-compat. */
+.text-hype,
+.text-blush {
+  background: var(--bg-blush-gradient);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -195,9 +225,9 @@ body {
 .skeleton {
   background: linear-gradient(
     90deg,
-    var(--color-charcoal) 25%,
-    var(--color-slate) 50%,
-    var(--color-charcoal) 75%
+    var(--color-surface) 25%,
+    var(--color-line) 50%,
+    var(--color-surface) 75%
   );
   background-size: 200% 100%;
   animation: shimmer 1.8s ease-in-out infinite;

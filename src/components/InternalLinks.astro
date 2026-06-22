@@ -1,0 +1,86 @@
+---
+import { allCategories, allProducts } from '../lib/products';
+
+interface Props {
+  type: 'home' | 'category' | 'product' | 'blog' | 'footer';
+  currentCategory?: string;
+  currentProductHandle?: string;
+  tags?: string[];
+}
+
+const { type, currentCategory, currentProductHandle, tags } = Astro.props;
+
+let isHome = type === 'home';
+let isCategory = type === 'category';
+let isProduct = type === 'product';
+let isFooter = type === 'footer';
+
+const featuredCategories = allCategories.slice(0, 4);
+const heroProducts = allProducts.slice(0, 12);
+
+const otherCategories = allCategories.filter(c => c.slug !== currentCategory);
+const alsoLookedAt = allProducts.filter(p => p.category !== currentCategory).slice(0, 6);
+
+const related = allProducts.filter(p => p.category === currentCategory && p.handle !== currentProductHandle).slice(0, 6);
+const catInfo = allCategories.find(c => c.slug === currentCategory);
+---
+
+{isHome && (
+  <div class="internal-links home-links" style="margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--color-slate);">
+    <h3 style="font-size: 14px; margin-bottom: 12px; color: var(--color-espresso);">Explore Piece of Stass</h3>
+    <div style="display: flex; flex-wrap: wrap; gap: 12px; font-size: 13px;">
+      {featuredCategories.map(c => (
+          <a href={`/shop/${c.slug}`} style="color: var(--color-muted); text-decoration: underline;">Shop {c.title}</a>
+      ))}
+      {heroProducts.slice(0, 6).map(p => (
+          <a href={`/shop/${p.category}/${p.handle}`} style="color: var(--color-muted); text-decoration: underline;">{p.title}</a>
+      ))}
+    </div>
+  </div>
+)}
+
+{isCategory && (
+  <div class="internal-links category-links" style="margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--color-slate);">
+      <h3 style="font-size: 14px; margin-bottom: 12px; color: var(--color-espresso);">More Aesthetics to Explore</h3>
+      <div style="display: flex; flex-wrap: wrap; gap: 12px; font-size: 13px;">
+        {otherCategories.map(c => (
+          <a href={`/shop/${c.slug}`} style="color: var(--color-muted); text-decoration: underline;">Aesthetic {c.title}</a>
+        ))}
+      </div>
+      <h3 style="font-size: 14px; margin-bottom: 12px; margin-top: 24px; color: var(--color-espresso);">People Also Looked At</h3>
+      <div style="display: flex; flex-wrap: wrap; gap: 12px; font-size: 13px;">
+        {alsoLookedAt.map(p => (
+          <a href={`/shop/${p.category}/${p.handle}`} style="color: var(--color-muted); text-decoration: underline;">{p.title}</a>
+        ))}
+      </div>
+  </div>
+)}
+
+{isProduct && (
+  <div class="internal-links product-links" style="margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--color-slate);">
+    <h3 style="font-size: 14px; margin-bottom: 12px; color: var(--color-espresso);">Related to this item</h3>
+    <div style="display: flex; flex-wrap: wrap; gap: 12px; font-size: 13px; margin-bottom: 16px;">
+      {related.map(p => (
+        <a href={`/shop/${p.category}/${p.handle}`} style="color: var(--color-muted); text-decoration: underline;">{p.title}</a>
+      ))}
+    </div>
+    {catInfo && (
+      <a href={`/shop/${catInfo.slug}`} style="color: var(--color-lime); text-decoration: none; font-size: 14px; font-weight: 600; display: inline-block; margin-bottom: 16px;">Shop more {catInfo.title} →</a>
+    )}
+    {tags && tags.length > 0 && (
+        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+          {tags.slice(0, 4).map(tag => (
+            <span style="font-size: 11px; padding: 4px 8px; background: var(--color-charcoal); border: 1px solid var(--color-slate); border-radius: 4px; color: var(--color-muted);">#{tag}</span>
+          ))}
+        </div>
+    )}
+  </div>
+)}
+
+{isFooter && (
+  <div class="internal-links footer-links" style="display: flex; flex-wrap: wrap; gap: 12px; font-size: 12px;">
+    {allCategories.map(c => (
+        <a href={`/shop/${c.slug}`} style="color: var(--color-muted); text-decoration: none; transition: color 0.2s;">{c.title}</a>
+    ))}
+  </div>
+)}

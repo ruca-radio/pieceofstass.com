@@ -71,7 +71,7 @@ export default function CheckoutPage({ checkoutUrl }: Props) {
           border: `1px solid ${errors[name] ? 'var(--color-error)' : 'var(--color-slate)'}`,
           borderRadius: 'var(--radius-md)',
           padding: '12px 16px',
-          color: 'var(--color-paper)',
+          color: 'var(--color-espresso)',
           fontSize: '15px',
           fontFamily: 'var(--font-family-sans)',
           outline: 'none',
@@ -86,7 +86,7 @@ export default function CheckoutPage({ checkoutUrl }: Props) {
   if (items.length === 0) {
     return (
       <div style={{ textAlign: 'center', padding: '80px 16px' }}>
-        <p style={{ fontFamily: 'var(--font-family-display)', fontWeight: 700, fontSize: '20px', color: 'var(--color-paper)', marginBottom: '16px' }}>Your bag is empty</p>
+        <p style={{ fontFamily: 'var(--font-family-display)', fontWeight: 700, fontSize: '20px', color: 'var(--color-espresso)', marginBottom: '16px' }}>Your bag is empty</p>
         <a href="/shop" style={{ color: 'var(--color-lime)', textDecoration: 'none', fontWeight: 600 }}>Go shopping →</a>
       </div>
     );
@@ -100,7 +100,7 @@ export default function CheckoutPage({ checkoutUrl }: Props) {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
             {/* Express checkout */}
             <section>
-              <h2 style={{ fontFamily: 'var(--font-family-display)', fontWeight: 700, fontSize: '18px', margin: '0 0 16px', color: 'var(--color-paper)' }}>Express checkout</h2>
+              <h2 style={{ fontFamily: 'var(--font-family-display)', fontWeight: 700, fontSize: '18px', margin: '0 0 16px', color: 'var(--color-espresso)' }}>Express checkout</h2>
               <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
                 {[
                   { label: 'Shop Pay', color: '#5A31F4' },
@@ -121,7 +121,7 @@ export default function CheckoutPage({ checkoutUrl }: Props) {
 
             {/* Contact */}
             <section>
-              <h2 style={{ fontFamily: 'var(--font-family-display)', fontWeight: 700, fontSize: '18px', margin: '0 0 16px', color: 'var(--color-paper)' }}>Contact</h2>
+              <h2 style={{ fontFamily: 'var(--font-family-display)', fontWeight: 700, fontSize: '18px', margin: '0 0 16px', color: 'var(--color-espresso)' }}>Contact</h2>
               <Field name="email" label="Email" type="email" autoComplete="email" />
               <label style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '12px', cursor: 'pointer' }}>
                 <input type="checkbox" checked={form.emailOptIn} onChange={(e) => setForm({ ...form, emailOptIn: e.target.checked })} style={{ accentColor: 'var(--color-lime)', width: '16px', height: '16px' }} />
@@ -131,7 +131,7 @@ export default function CheckoutPage({ checkoutUrl }: Props) {
 
             {/* Shipping address */}
             <section>
-              <h2 style={{ fontFamily: 'var(--font-family-display)', fontWeight: 700, fontSize: '18px', margin: '0 0 16px', color: 'var(--color-paper)' }}>Shipping address</h2>
+              <h2 style={{ fontFamily: 'var(--font-family-display)', fontWeight: 700, fontSize: '18px', margin: '0 0 16px', color: 'var(--color-espresso)' }}>Shipping address</h2>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                 <Field name="firstName" label="First name" autoComplete="given-name" />
                 <Field name="lastName" label="Last name" autoComplete="family-name" />
@@ -148,7 +148,7 @@ export default function CheckoutPage({ checkoutUrl }: Props) {
 
             {/* Shipping method */}
             <section>
-              <h2 style={{ fontFamily: 'var(--font-family-display)', fontWeight: 700, fontSize: '18px', margin: '0 0 16px', color: 'var(--color-paper)' }}>Shipping method</h2>
+              <h2 style={{ fontFamily: 'var(--font-family-display)', fontWeight: 700, fontSize: '18px', margin: '0 0 16px', color: 'var(--color-espresso)' }}>Shipping method</h2>
               {[
                 { id: 'standard', label: 'Standard (10–20 business days)', price: subtotal >= 50 ? 'Free' : '$5.99' },
                 { id: 'priority', label: 'Priority (7–12 business days)', price: '$9.99' },
@@ -156,9 +156,9 @@ export default function CheckoutPage({ checkoutUrl }: Props) {
                 <label key={id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 16px', background: form.shippingMethod === id ? 'rgba(198,255,58,0.06)' : 'var(--color-charcoal)', border: `1.5px solid ${form.shippingMethod === id ? 'var(--color-lime)' : 'var(--color-slate)'}`, borderRadius: 'var(--radius-md)', cursor: 'pointer', marginBottom: '8px', transition: 'all 150ms' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                     <input type="radio" name="shipping" value={id} checked={form.shippingMethod === id} onChange={() => setForm({ ...form, shippingMethod: id })} style={{ accentColor: 'var(--color-lime)' }} />
-                    <span style={{ fontSize: '14px', color: 'var(--color-paper)' }}>{label}</span>
+                    <span style={{ fontSize: '14px', color: 'var(--color-espresso)' }}>{label}</span>
                   </div>
-                  <span style={{ fontFamily: 'var(--font-family-mono)', fontSize: '13px', color: price === 'Free' ? 'var(--color-lime)' : 'var(--color-paper)', fontWeight: 700 }}>{price}</span>
+                  <span style={{ fontFamily: 'var(--font-family-mono)', fontSize: '13px', color: price === 'Free' ? 'var(--color-lime)' : 'var(--color-espresso)', fontWeight: 700 }}>{price}</span>
                 </label>
               ))}
             </section>
@@ -167,33 +167,33 @@ export default function CheckoutPage({ checkoutUrl }: Props) {
           {/* Right: order summary */}
           <div>
             <div style={{ background: 'var(--color-charcoal)', border: '1px solid var(--color-slate)', borderRadius: 'var(--radius-xl)', padding: '24px', position: 'sticky', top: '80px' }}>
-              <h2 style={{ fontFamily: 'var(--font-family-display)', fontWeight: 700, fontSize: '18px', margin: '0 0 20px', color: 'var(--color-paper)' }}>Order summary</h2>
+              <h2 style={{ fontFamily: 'var(--font-family-display)', fontWeight: 700, fontSize: '18px', margin: '0 0 20px', color: 'var(--color-espresso)' }}>Order summary</h2>
               <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 20px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 {items.map((item) => (
                   <li key={item.variantSku} style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
                     <div style={{ position: 'relative', flexShrink: 0 }}>
                       <img src={item.image} alt={item.title} loading="lazy" width={48} height={48} style={{ width: '48px', height: '48px', objectFit: 'cover', borderRadius: 'var(--radius-sm)' }} />
-                      <span style={{ position: 'absolute', top: '-6px', right: '-6px', background: 'var(--color-slate)', color: 'var(--color-paper)', fontSize: '10px', fontWeight: 700, width: '18px', height: '18px', borderRadius: '999px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-family-mono)' }}>{item.quantity}</span>
+                      <span style={{ position: 'absolute', top: '-6px', right: '-6px', background: 'var(--color-slate)', color: 'var(--color-espresso)', fontSize: '10px', fontWeight: 700, width: '18px', height: '18px', borderRadius: '999px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-family-mono)' }}>{item.quantity}</span>
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--color-paper)', margin: 0 }} className="line-clamp-1">{item.title}</p>
+                      <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--color-espresso)', margin: 0 }} className="line-clamp-1">{item.title}</p>
                     </div>
-                    <span style={{ fontFamily: 'var(--font-family-mono)', fontSize: '13px', color: 'var(--color-paper)', flexShrink: 0 }}>${(item.price * item.quantity).toFixed(0)}</span>
+                    <span style={{ fontFamily: 'var(--font-family-mono)', fontSize: '13px', color: 'var(--color-espresso)', flexShrink: 0 }}>${(item.price * item.quantity).toFixed(0)}</span>
                   </li>
                 ))}
               </ul>
               <div style={{ borderTop: '1px solid var(--color-slate)', paddingTop: '16px', display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '20px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                   <span style={{ fontSize: '13px', color: 'var(--color-muted)' }}>Subtotal</span>
-                  <span style={{ fontFamily: 'var(--font-family-mono)', fontSize: '13px', color: 'var(--color-paper)' }}>${subtotal.toFixed(0)}</span>
+                  <span style={{ fontFamily: 'var(--font-family-mono)', fontSize: '13px', color: 'var(--color-espresso)' }}>${subtotal.toFixed(0)}</span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                   <span style={{ fontSize: '13px', color: 'var(--color-muted)' }}>Shipping</span>
-                  <span style={{ fontFamily: 'var(--font-family-mono)', fontSize: '13px', color: shipping === 0 ? 'var(--color-lime)' : 'var(--color-paper)' }}>{shipping === 0 ? 'Free' : `$${shipping.toFixed(2)}`}</span>
+                  <span style={{ fontFamily: 'var(--font-family-mono)', fontSize: '13px', color: shipping === 0 ? 'var(--color-lime)' : 'var(--color-espresso)' }}>{shipping === 0 ? 'Free' : `$${shipping.toFixed(2)}`}</span>
                 </div>
                 <div style={{ borderTop: '1px solid var(--color-slate)', paddingTop: '8px', display: 'flex', justifyContent: 'space-between' }}>
-                  <span style={{ fontSize: '16px', fontWeight: 700, color: 'var(--color-paper)' }}>Total</span>
-                  <span style={{ fontFamily: 'var(--font-family-mono)', fontSize: '18px', fontWeight: 700, color: 'var(--color-paper)' }}>${total.toFixed(2)}</span>
+                  <span style={{ fontSize: '16px', fontWeight: 700, color: 'var(--color-espresso)' }}>Total</span>
+                  <span style={{ fontFamily: 'var(--font-family-mono)', fontSize: '18px', fontWeight: 700, color: 'var(--color-espresso)' }}>${total.toFixed(2)}</span>
                 </div>
               </div>
 
@@ -201,7 +201,7 @@ export default function CheckoutPage({ checkoutUrl }: Props) {
                 type="submit"
                 disabled={submitting}
                 data-testid="button-pay"
-                style={{ width: '100%', background: 'var(--color-lime)', color: 'var(--color-ink)', border: 'none', borderRadius: '999px', padding: '16px', fontFamily: 'var(--font-family-display)', fontWeight: 700, fontSize: '16px', cursor: submitting ? 'wait' : 'pointer', opacity: submitting ? 0.8 : 1, letterSpacing: '-0.01em' }}
+                style={{ width: '100%', background: 'var(--color-lime)', color: 'var(--color-cream)', border: 'none', borderRadius: '999px', padding: '16px', fontFamily: 'var(--font-family-display)', fontWeight: 700, fontSize: '16px', cursor: submitting ? 'wait' : 'pointer', opacity: submitting ? 0.8 : 1, letterSpacing: '-0.01em' }}
               >
                 {submitting ? 'Processing...' : `Pay $${total.toFixed(2)}`}
               </button>

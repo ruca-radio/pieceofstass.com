@@ -44,9 +44,9 @@ export default function SearchResults({ initialQuery = '' }: Props) {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             data-testid="input-search-page"
-            style={{ flex: 1, background: 'none', border: 'none', outline: 'none', color: 'var(--color-paper)', fontSize: '16px', padding: '16px 0', fontFamily: 'var(--font-family-sans)' }}
+            style={{ flex: 1, background: 'none', border: 'none', outline: 'none', color: 'var(--color-espresso)', fontSize: '16px', padding: '16px 0', fontFamily: 'var(--font-family-sans)' }}
           />
-          <button type="submit" style={{ background: 'var(--color-lime)', color: 'var(--color-ink)', border: 'none', borderRadius: '999px', padding: '10px 20px', fontWeight: 700, fontSize: '14px', cursor: 'pointer', flexShrink: 0, fontFamily: 'var(--font-family-display)' }}>
+          <button type="submit" style={{ background: 'var(--color-lime)', color: 'var(--color-cream)', border: 'none', borderRadius: '999px', padding: '10px 20px', fontWeight: 700, fontSize: '14px', cursor: 'pointer', flexShrink: 0, fontFamily: 'var(--font-family-display)' }}>
             Search
           </button>
         </div>
@@ -55,7 +55,7 @@ export default function SearchResults({ initialQuery = '' }: Props) {
       {/* Results */}
       {query.length < 2 ? (
         <div>
-          <h2 style={{ fontFamily: 'var(--font-family-display)', fontWeight: 700, fontSize: '20px', letterSpacing: '-0.01em', color: 'var(--color-paper)', margin: '0 0 20px' }}>Trending picks</h2>
+          <h2 style={{ fontFamily: 'var(--font-family-display)', fontWeight: 700, fontSize: '20px', letterSpacing: '-0.01em', color: 'var(--color-espresso)', margin: '0 0 20px' }}>Trending picks</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px' }} className="search-grid">
             {trending.map((product) => (
               <ProductCard key={product.id} product={product} />
@@ -64,11 +64,11 @@ export default function SearchResults({ initialQuery = '' }: Props) {
         </div>
       ) : results.length === 0 ? (
         <div style={{ textAlign: 'center', padding: '60px 0', color: 'var(--color-muted)' }}>
-          <p style={{ fontFamily: 'var(--font-family-display)', fontSize: '20px', fontWeight: 600, color: 'var(--color-paper)' }}>Nothing found for "{query}"</p>
+          <p style={{ fontFamily: 'var(--font-family-display)', fontSize: '20px', fontWeight: 600, color: 'var(--color-espresso)' }}>Nothing found for "{query}"</p>
           <p style={{ fontSize: '14px', marginBottom: '24px' }}>Try a different term or browse categories.</p>
           <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', justifyContent: 'center' }}>
             {['sneakers', 'bag', 'watch', 'fragrance', 'tech'].map((t) => (
-              <button key={t} onClick={() => setQuery(t)} style={{ padding: '8px 16px', background: 'var(--color-charcoal)', border: '1px solid var(--color-slate)', borderRadius: '999px', color: 'var(--color-paper)', fontSize: '13px', cursor: 'pointer', fontFamily: 'var(--font-family-sans)' }}>{t}</button>
+              <button key={t} onClick={() => setQuery(t)} style={{ padding: '8px 16px', background: 'var(--color-charcoal)', border: '1px solid var(--color-slate)', borderRadius: '999px', color: 'var(--color-espresso)', fontSize: '13px', cursor: 'pointer', fontFamily: 'var(--font-family-sans)' }}>{t}</button>
             ))}
           </div>
         </div>

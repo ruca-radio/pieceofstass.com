@@ -1,0 +1,418 @@
+---
+/**
+ * AdminLayout.astro — shell for all /admin/* pages.
+ * Left-rail nav, utilitarian dense design using brand tokens.
+ * Props: title (page title), activeNav (nav item key)
+ */
+export interface Props {
+  title: string;
+  activeNav?: 'dashboard' | 'orders' | 'products' | 'customers' | 'carts';
+}
+
+const { title, activeNav = 'dashboard' } = Astro.props;
+
+const nav = [
+  { key: 'dashboard', label: 'Dashboard', href: '/admin', icon: '▦' },
+  { key: 'orders', label: 'Orders', href: '/admin/orders', icon: '📦' },
+  { key: 'products', label: 'Products', href: '/admin/products', icon: '🏷' },
+  { key: 'customers', label: 'Customers', href: '/admin/customers', icon: '👤' },
+  { key: 'carts', label: 'Abandoned Carts', href: '/admin/abandoned-carts', icon: '🛒' },
+];
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>{title} — Piece of Stass Admin</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --adm-bg: #0f0f10;
+      --adm-rail: #141416;
+      --adm-surface: #1c1c1f;
+      --adm-surface2: #242427;
+      --adm-border: #2a2a2e;
+      --adm-text: #e8e8e3;
+      --adm-muted: #8a8a8e;
+      --adm-lime: #C6FF3A;
+      --adm-ink: #0A0A0B;
+      --adm-violet: #7B5CFF;
+      --adm-success: #2FA866;
+      --adm-error: #E5484D;
+      --adm-warning: #E8A33D;
+      --adm-font: Inter, system-ui, -apple-system, sans-serif;
+      --adm-mono: "Space Mono", ui-monospace, monospace;
+      --adm-display: "Space Grotesk", Inter, sans-serif;
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--adm-bg);
+      color: var(--adm-text);
+      font-family: var(--adm-font);
+      font-size: 14px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .adm-shell {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ── Left Rail ── */
+    .adm-rail {
+      width: 220px;
+      flex-shrink: 0;
+      background: var(--adm-rail);
+      border-right: 1px solid var(--adm-border);
+      display: flex;
+      flex-direction: column;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    .adm-brand {
+      padding: 20px 16px 16px;
+      border-bottom: 1px solid var(--adm-border);
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .adm-brand-name {
+      font-family: var(--adm-display);
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--adm-lime);
+      letter-spacing: -0.01em;
+    }
+    .adm-brand-sub {
+      font-size: 11px;
+      color: var(--adm-muted);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .adm-nav {
+      padding: 12px 8px;
+      flex: 1;
+    }
+    .adm-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 8px 10px;
+      border-radius: 6px;
+      text-decoration: none;
+      color: var(--adm-muted);
+      font-size: 13px;
+      font-weight: 500;
+      transition: background 0.1s, color 0.1s;
+      margin-bottom: 2px;
+    }
+    .adm-nav-item:hover {
+      background: var(--adm-surface);
+      color: var(--adm-text);
+    }
+    .adm-nav-item.active {
+      background: var(--adm-surface2);
+      color: var(--adm-lime);
+      font-weight: 600;
+    }
+    .adm-nav-icon {
+      width: 18px;
+      text-align: center;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    .adm-rail-footer {
+      padding: 12px 8px;
+      border-top: 1px solid var(--adm-border);
+    }
+    .adm-signout {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 8px 10px;
+      border-radius: 6px;
+      color: var(--adm-muted);
+      font-size: 13px;
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+      background: none;
+      border: none;
+      width: 100%;
+      text-align: left;
+      transition: background 0.1s, color 0.1s;
+    }
+    .adm-signout:hover {
+      background: var(--adm-surface);
+      color: var(--adm-error);
+    }
+
+    /* ── Main Area ── */
+    .adm-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      overflow-x: auto;
+    }
+
+    .adm-topbar {
+      padding: 14px 24px;
+      border-bottom: 1px solid var(--adm-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--adm-rail);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .adm-page-title {
+      font-family: var(--adm-display);
+      font-weight: 700;
+      font-size: 18px;
+      letter-spacing: -0.01em;
+      color: var(--adm-text);
+    }
+    .adm-topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 12px;
+      color: var(--adm-muted);
+      font-family: var(--adm-mono);
+    }
+    .adm-store-link {
+      color: var(--adm-violet);
+      text-decoration: none;
+      font-family: var(--adm-font);
+      font-size: 12px;
+      padding: 4px 10px;
+      border: 1px solid var(--adm-border);
+      border-radius: 4px;
+      transition: border-color 0.1s;
+    }
+    .adm-store-link:hover { border-color: var(--adm-violet); }
+
+    .adm-content {
+      flex: 1;
+      padding: 24px;
+    }
+
+    /* ── Utility classes for pages ── */
+    .adm-card {
+      background: var(--adm-surface);
+      border: 1px solid var(--adm-border);
+      border-radius: 8px;
+      padding: 16px;
+    }
+    .adm-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    .adm-table th {
+      text-align: left;
+      padding: 8px 12px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--adm-muted);
+      border-bottom: 1px solid var(--adm-border);
+      white-space: nowrap;
+    }
+    .adm-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--adm-border);
+      color: var(--adm-text);
+      vertical-align: middle;
+    }
+    .adm-table tr:last-child td { border-bottom: none; }
+    .adm-table tbody tr:hover td { background: var(--adm-surface2); }
+    .adm-table a { color: var(--adm-lime); text-decoration: none; }
+    .adm-table a:hover { text-decoration: underline; }
+
+    .adm-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+    }
+    .adm-badge-pending    { background: rgba(232,163,61,0.15); color: #E8A33D; }
+    .adm-badge-captured   { background: rgba(123,92,255,0.15); color: #a388ff; }
+    .adm-badge-supplier   { background: rgba(198,255,58,0.12); color: var(--adm-lime); }
+    .adm-badge-shipped    { background: rgba(47,168,102,0.15); color: var(--adm-success); }
+    .adm-badge-delivered  { background: rgba(47,168,102,0.2);  color: var(--adm-success); }
+    .adm-badge-refunded   { background: rgba(229,72,77,0.12);  color: var(--adm-error); }
+    .adm-badge-cancelled  { background: rgba(138,138,142,0.12); color: var(--adm-muted); }
+    .adm-badge-active     { background: rgba(47,168,102,0.15); color: var(--adm-success); }
+    .adm-badge-draft      { background: rgba(138,138,142,0.12); color: var(--adm-muted); }
+
+    .adm-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid transparent;
+      text-decoration: none;
+      transition: opacity 0.1s, border-color 0.1s;
+      white-space: nowrap;
+    }
+    .adm-btn-primary   { background: var(--adm-lime); color: var(--adm-ink); }
+    .adm-btn-secondary { background: var(--adm-surface2); color: var(--adm-text); border-color: var(--adm-border); }
+    .adm-btn-danger    { background: rgba(229,72,77,0.15); color: var(--adm-error); border-color: rgba(229,72,77,0.3); }
+    .adm-btn:hover     { opacity: 0.85; }
+
+    .adm-input, .adm-select, .adm-textarea {
+      background: var(--adm-surface2);
+      border: 1px solid var(--adm-border);
+      border-radius: 6px;
+      color: var(--adm-text);
+      font-family: var(--adm-font);
+      font-size: 13px;
+      padding: 7px 10px;
+      outline: none;
+      width: 100%;
+      transition: border-color 0.1s;
+    }
+    .adm-input:focus, .adm-select:focus, .adm-textarea:focus {
+      border-color: var(--adm-violet);
+    }
+    .adm-textarea { resize: vertical; min-height: 80px; }
+
+    .adm-label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--adm-muted);
+      margin-bottom: 5px;
+    }
+
+    .adm-kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .adm-kpi {
+      background: var(--adm-surface);
+      border: 1px solid var(--adm-border);
+      border-radius: 8px;
+      padding: 14px 16px;
+    }
+    .adm-kpi-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--adm-muted);
+      margin-bottom: 6px;
+    }
+    .adm-kpi-value {
+      font-family: var(--adm-display);
+      font-weight: 700;
+      font-size: 26px;
+      letter-spacing: -0.02em;
+      color: var(--adm-text);
+      line-height: 1;
+    }
+    .adm-kpi-sub {
+      font-size: 12px;
+      color: var(--adm-muted);
+      margin-top: 4px;
+      font-family: var(--adm-mono);
+    }
+
+    .adm-section-title {
+      font-family: var(--adm-display);
+      font-weight: 700;
+      font-size: 16px;
+      letter-spacing: -0.01em;
+      margin-bottom: 12px;
+      color: var(--adm-text);
+    }
+
+    .adm-filters {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+      align-items: flex-end;
+    }
+
+    .adm-mono { font-family: var(--adm-mono); }
+    .adm-text-muted { color: var(--adm-muted); }
+    .adm-text-lime  { color: var(--adm-lime); }
+
+    @media (max-width: 768px) {
+      .adm-rail { width: 56px; }
+      .adm-nav-item span { display: none; }
+      .adm-brand-name, .adm-brand-sub { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="adm-shell">
+    <!-- Left Rail Navigation -->
+    <nav class="adm-rail">
+      <div class="adm-brand">
+        <div class="adm-brand-name">Piece of Stass</div>
+        <div class="adm-brand-sub">Admin</div>
+      </div>
+      <div class="adm-nav">
+        {nav.map((item) => (
+          <a
+            href={item.href}
+            class={`adm-nav-item${activeNav === item.key ? ' active' : ''}`}
+          >
+            <span class="adm-nav-icon">{item.icon}</span>
+            <span>{item.label}</span>
+          </a>
+        ))}
+      </div>
+      <div class="adm-rail-footer">
+        <form method="POST" action="/api/admin/sign-out" style="margin:0">
+          <button type="submit" class="adm-signout">
+            <span class="adm-nav-icon">↩</span>
+            <span>Sign out</span>
+          </button>
+        </form>
+      </div>
+    </nav>
+
+    <!-- Main content area -->
+    <div class="adm-main">
+      <div class="adm-topbar">
+        <h1 class="adm-page-title">{title}</h1>
+        <div class="adm-topbar-right">
+          <a href="/" class="adm-store-link" target="_blank">← View store</a>
+        </div>
+      </div>
+      <main class="adm-content">
+        <slot />
+      </main>
+    </div>
+  </div>
+</body>
+</html>

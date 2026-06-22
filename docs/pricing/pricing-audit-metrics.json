@@ -1,0 +1,268 @@
+{
+  "before_distribution": {
+    "bags": {
+      "count": 10,
+      "min": 189.0,
+      "median": 199.0,
+      "max": 219.0
+    },
+    "footwear": {
+      "count": 10,
+      "min": 149.0,
+      "median": 159.0,
+      "max": 179.0
+    },
+    "fragrance": {
+      "count": 10,
+      "min": 68.0,
+      "median": 78.0,
+      "max": 98.0
+    },
+    "kids": {
+      "count": 10,
+      "min": 72.0,
+      "median": 82.0,
+      "max": 102.0
+    },
+    "men": {
+      "count": 10,
+      "min": 98.0,
+      "median": 108.0,
+      "max": 128.0
+    },
+    "tech": {
+      "count": 10,
+      "min": 119.0,
+      "median": 129.0,
+      "max": 149.0
+    },
+    "watches": {
+      "count": 10,
+      "min": 249.0,
+      "median": 259.0,
+      "max": 279.0
+    },
+    "women": {
+      "count": 10,
+      "min": 138.0,
+      "median": 148.0,
+      "max": 168.0
+    }
+  },
+  "after_distribution": {
+    "bags": {
+      "count": 10,
+      "min": 58.99,
+      "median": 74.99,
+      "max": 96.99
+    },
+    "footwear": {
+      "count": 10,
+      "min": 76.99,
+      "median": 87.99,
+      "max": 96.99
+    },
+    "fragrance": {
+      "count": 10,
+      "min": 39.99,
+      "median": 47.99,
+      "max": 58.99
+    },
+    "kids": {
+      "count": 10,
+      "min": 24.99,
+      "median": 32.49,
+      "max": 42.99
+    },
+    "men": {
+      "count": 10,
+      "min": 38.99,
+      "median": 55.99,
+      "max": 82.99
+    },
+    "tech": {
+      "count": 10,
+      "min": 24.99,
+      "median": 43.99,
+      "max": 68.99
+    },
+    "watches": {
+      "count": 10,
+      "min": 96.99,
+      "median": 123.99,
+      "max": 148.99
+    },
+    "women": {
+      "count": 10,
+      "min": 29.99,
+      "median": 61.49,
+      "max": 74.99
+    }
+  },
+  "category_margin_rows": [
+    {
+      "category": "bags",
+      "revenue_weight": 0.14229509431120815,
+      "avg_price": 75.59,
+      "assumed_cost": 26.4565,
+      "target_gm": 0.65,
+      "category_revenue": 755.9,
+      "category_cost": 264.565
+    },
+    {
+      "category": "footwear",
+      "revenue_weight": 0.16469635932382065,
+      "avg_price": 87.49,
+      "assumed_cost": 34.996,
+      "target_gm": 0.6,
+      "category_revenue": 874.9,
+      "category_cost": 349.96000000000004
+    },
+    {
+      "category": "fragrance",
+      "revenue_weight": 0.09128044877828397,
+      "avg_price": 48.49,
+      "assumed_cost": 14.547000000000002,
+      "target_gm": 0.7,
+      "category_revenue": 484.90000000000003,
+      "category_cost": 145.47000000000003
+    },
+    {
+      "category": "kids",
+      "revenue_weight": 0.062102330484545006,
+      "avg_price": 32.989999999999995,
+      "assumed_cost": 13.855799999999999,
+      "target_gm": 0.58,
+      "category_revenue": 329.9,
+      "category_cost": 138.558
+    },
+    {
+      "category": "men",
+      "revenue_weight": 0.10878731975452731,
+      "avg_price": 57.79,
+      "assumed_cost": 23.116,
+      "target_gm": 0.6,
+      "category_revenue": 577.9,
+      "category_cost": 231.16
+    },
+    {
+      "category": "tech",
+      "revenue_weight": 0.08770377621324499,
+      "avg_price": 46.59,
+      "assumed_cost": 23.295,
+      "target_gm": 0.5,
+      "category_revenue": 465.90000000000003,
+      "category_cost": 232.95000000000002
+    },
+    {
+      "category": "watches",
+      "revenue_weight": 0.2303941869658522,
+      "avg_price": 122.39000000000001,
+      "assumed_cost": 46.5082,
+      "target_gm": 0.62,
+      "category_revenue": 1223.9,
+      "category_cost": 465.08200000000005
+    },
+    {
+      "category": "women",
+      "revenue_weight": 0.11274048416851776,
+      "avg_price": 59.89,
+      "assumed_cost": 22.7582,
+      "target_gm": 0.62,
+      "category_revenue": 598.9,
+      "category_cost": 227.582
+    }
+  ],
+  "blended_margin": 0.6130930687850608,
+  "average_item_price": 66.4025,
+  "items_per_order": 1.45,
+  "assumed_aov": 96.283625,
+  "conversion_rate": 0.02,
+  "monthly_cost": 142.98,
+  "direct_break_even_orders": 3,
+  "direct_break_even_sessions": 150,
+  "cost_model_break_even_orders": 30,
+  "cost_model_break_even_sessions": 1500,
+  "spot_checks": [
+    {
+      "title": "White cement high-top court sneaker",
+      "category": "footwear",
+      "old_price": 149.0,
+      "new_price": 82.99,
+      "compare_at_price": 118.99,
+      "reason": "Core retro high-top moved into the footwear sweet spot; high enough to protect margin without looking like premium sneaker resale."
+    },
+    {
+      "title": "Skeleton dial automatic watch",
+      "category": "watches",
+      "old_price": 259.0,
+      "new_price": 148.99,
+      "compare_at_price": 200.99,
+      "reason": "Most premium watch silhouette in the set, so it stays in the upper half while still below the watch ceiling."
+    },
+    {
+      "title": "Mini box crossbody bag",
+      "category": "bags",
+      "old_price": 189.0,
+      "new_price": 58.99,
+      "compare_at_price": 86.99,
+      "reason": "Small entry crossbody moved to the low end of the bag sweet spot to create an accessible add-on option."
+    },
+    {
+      "title": "Oversized travel tote bag",
+      "category": "bags",
+      "old_price": 199.0,
+      "new_price": 96.99,
+      "compare_at_price": 130.99,
+      "reason": "Larger travel utility earns the highest bag price, but remains below the $128 ceiling."
+    },
+    {
+      "title": "Lightweight zip jacket",
+      "category": "men",
+      "old_price": 128.0,
+      "new_price": 82.99,
+      "compare_at_price": 115.99,
+      "reason": "Outerwear has higher perceived value and likely higher landed cost, so it sits above core tees/knits."
+    },
+    {
+      "title": "Clean letter-print baby tee",
+      "category": "women",
+      "old_price": 148.0,
+      "new_price": 29.99,
+      "compare_at_price": 42.99,
+      "reason": "Basic fitted tee reset to an entry fashion price instead of an unrealistic dress-level price."
+    },
+    {
+      "title": "Rosette trim strappy dress",
+      "category": "women",
+      "old_price": 168.0,
+      "new_price": 74.99,
+      "compare_at_price": 109.99,
+      "reason": "Event-ready detail justifies upper-half women's pricing while remaining below $98."
+    },
+    {
+      "title": "Kids cork-footbed slide sandal",
+      "category": "kids",
+      "old_price": 72.0,
+      "new_price": 24.99,
+      "compare_at_price": 35.99,
+      "reason": "Simple slide sandal repriced as a low-risk entry kids item."
+    },
+    {
+      "title": "Spiced leather eau de parfum",
+      "category": "fragrance",
+      "old_price": 98.0,
+      "new_price": 58.99,
+      "compare_at_price": 80.99,
+      "reason": "Deeper unisex scent positioned as premium fragrance but under the $78 category ceiling."
+    },
+    {
+      "title": "Smartwatch silicone strap set",
+      "category": "tech",
+      "old_price": 129.0,
+      "new_price": 24.99,
+      "compare_at_price": 36.99,
+      "reason": "Accessory set reset to the tech floor because it is a low-complexity add-on, not a device."
+    }
+  ]
+}

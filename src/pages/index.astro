@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ProductCard from '../components/islands/ProductCard';
 import EmailSignup from '../components/islands/EmailSignup';
+import InternalLinks from '../components/InternalLinks.astro';
 import { allProducts, allCategories, getTrendingProducts, formatPriceDollars } from '../lib/products';
 
 const trending = getTrendingProducts(8);
@@ -20,6 +21,20 @@ const orgJsonLd = {
   ],
 };
 
+const websiteJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  url: 'https://pieceofstass.com/',
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: {
+      '@type': 'EntryPoint',
+      urlTemplate: 'https://pieceofstass.com/search?q={search_term_string}'
+    },
+    'query-input': 'required name=search_term_string'
+  }
+};
+
 const itemListJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'ItemList',
@@ -35,11 +50,11 @@ const itemListJsonLd = {
 ---
 
 <BaseLayout
-  title="Piece of Stass — Raid the Stash. The look for less."
-  description="Curated trend-driven lifestyle finds across footwear, bags, watches, fragrance, tech, and fits. Dropped daily. Priced for impulse."
-  jsonLd={[orgJsonLd, itemListJsonLd]}
+  title="Piece of Stass | Raid The Stash | Aesthetic Fashion & Accessories"
+  description="Shop the latest in clean girl, quiet luxury, and Y2K aesthetics. Unbranded, trend-forward apparel, footwear, and accessories. Raid the stash today."
+  jsonLd={[orgJsonLd, websiteJsonLd, itemListJsonLd]}
 >
-  <!-- Hero -->
+  <link rel="preload" as="image" href={trending[0].images[0]} fetchpriority="high" />
   <section style="position: relative; min-height: 90vh; display: flex; align-items: center; overflow: hidden; background: var(--color-ink);">
     <!-- Background gradient accent -->
     <div style="position: absolute; inset: 0; background: radial-gradient(ellipse 60% 80% at 80% 50%, rgba(198,255,58,0.06) 0%, transparent 70%); pointer-events: none;"/>
@@ -49,9 +64,9 @@ const itemListJsonLd = {
       <!-- Copy -->
       <div>
         <p style="font-family: var(--font-family-mono); font-size: 11px; letter-spacing: 0.12em; color: var(--color-lime); text-transform: uppercase; margin: 0 0 16px;">The summer drop is live</p>
-        <h1 style="font-family: var(--font-family-display); font-weight: 700; font-size: clamp(48px, 8vw, 84px); line-height: 1.0; letter-spacing: -0.03em; color: var(--color-paper); margin: 0 0 24px;">
-          Raid<br/>
-          <span style="color: var(--color-lime);">the stash.</span>
+        <h1 style="font-family: var(--font-family-display); font-weight: 700; font-size: clamp(48px, 8vw, 84px); line-height: 1.0; letter-spacing: -0.03em; color: var(--color-espresso); margin: 0 0 24px;">
+          Piece of Stass:<br/>
+          <span style="color: var(--color-lime);">Curated Aesthetic Essentials.</span>
         </h1>
         <p style="font-size: 18px; color: var(--color-muted); margin: 0 0 32px; max-width: 480px; line-height: 1.6;">
           The look for less, dropped daily. Trend-driven finds across 8 categories — picked by someone with taste.
@@ -59,7 +74,7 @@ const itemListJsonLd = {
         <div style="display: flex; gap: 12px; flex-wrap: wrap;">
           <a
             href="/shop"
-            style="background: var(--color-lime); color: var(--color-ink); border-radius: 999px; padding: 16px 32px; font-family: var(--font-family-display); font-weight: 700; font-size: 16px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: box-shadow 200ms; letter-spacing: -0.01em;"
+            style="background: var(--color-lime); color: var(--color-cream); border-radius: 999px; padding: 16px 32px; font-family: var(--font-family-display); font-weight: 700; font-size: 16px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: box-shadow 200ms; letter-spacing: -0.01em;"
             onmouseover="this.style.boxShadow='var(--shadow-lime-glow)'"
             onmouseout="this.style.boxShadow='none'"
           >
@@ -68,8 +83,8 @@ const itemListJsonLd = {
           </a>
           <a
             href="/shop/footwear"
-            style="background: transparent; color: var(--color-paper); border: 1.5px solid var(--color-slate); border-radius: 999px; padding: 16px 32px; font-family: var(--font-family-display); font-weight: 600; font-size: 16px; text-decoration: none; transition: border-color 150ms, color 150ms;"
-            onmouseover="this.style.borderColor='var(--color-paper)'"
+            style="background: transparent; color: var(--color-espresso); border: 1.5px solid var(--color-slate); border-radius: 999px; padding: 16px 32px; font-family: var(--font-family-display); font-weight: 600; font-size: 16px; text-decoration: none; transition: border-color 150ms, color 150ms;"
+            onmouseover="this.style.borderColor='var(--color-espresso)'"
             onmouseout="this.style.borderColor='var(--color-slate)'"
           >
             Footwear
@@ -89,6 +104,8 @@ const itemListJsonLd = {
               src={product.images[0]}
               alt={product.title}
               loading={i < 2 ? 'eager' : 'lazy'}
+              fetchpriority={i < 2 ? 'high' : 'auto'}
+              decoding="async"
               width={300}
               height={400}
               style="width: 100%; height: 100%; object-fit: cover; transition: transform 400ms var(--ease-expo-out);"
@@ -115,7 +132,7 @@ const itemListJsonLd = {
             <span style="font-size: 22px;" aria-hidden="true">
               {cat.slug === 'footwear' ? '👟' : cat.slug === 'watches' ? '⌚' : cat.slug === 'bags' ? '👜' : cat.slug === 'men' ? '🧥' : cat.slug === 'women' ? '👗' : cat.slug === 'kids' ? '🎒' : cat.slug === 'fragrance' ? '🌸' : '🎧'}
             </span>
-            <span style="font-size: 12px; font-weight: 600; color: var(--color-paper); font-family: var(--font-family-display);">{cat.title}</span>
+            <span style="font-size: 12px; font-weight: 600; color: var(--color-espresso); font-family: var(--font-family-display);">{cat.title}</span>
           </a>
         ))}
       </div>
@@ -128,7 +145,7 @@ const itemListJsonLd = {
       <div style="display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 32px; gap: 16px;">
         <div>
           <p style="font-family: var(--font-family-mono); font-size: 11px; letter-spacing: 0.08em; color: var(--color-lime); text-transform: uppercase; margin: 0 0 6px;">Stashed before it's trending</p>
-          <h2 style="font-family: var(--font-family-display); font-weight: 700; font-size: 30px; letter-spacing: -0.02em; margin: 0; color: var(--color-paper);">Trending now</h2>
+          <h2 style="font-family: var(--font-family-display); font-weight: 700; font-size: 30px; letter-spacing: -0.02em; margin: 0; color: var(--color-espresso);">Trending now</h2>
         </div>
         <a href="/shop" style="font-size: 13px; font-weight: 600; color: var(--color-lime); text-decoration: none; white-space: nowrap; font-family: var(--font-family-display);">View all →</a>
       </div>
@@ -145,7 +162,7 @@ const itemListJsonLd = {
     <div style="max-width: 1280px; margin: 0 auto; padding: 0 16px;">
       <div style="text-align: center; margin-bottom: 40px;">
         <p style="font-family: var(--font-family-mono); font-size: 11px; letter-spacing: 0.08em; color: var(--color-muted); text-transform: uppercase; margin: 0 0 8px;">As seen on</p>
-        <h2 style="font-family: var(--font-family-display); font-weight: 700; font-size: 24px; letter-spacing: -0.02em; margin: 0; color: var(--color-paper);">All over your FYP</h2>
+        <h2 style="font-family: var(--font-family-display); font-weight: 700; font-size: 24px; letter-spacing: -0.02em; margin: 0; color: var(--color-espresso);">All over your FYP</h2>
       </div>
       <!-- UGC grid -->
       <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;" class="ugc-grid">
@@ -158,6 +175,7 @@ const itemListJsonLd = {
               src={product.images[0]}
               alt={product.title}
               loading="lazy"
+              decoding="async"
               width={300}
               height={300}
               style="width: 100%; height: 100%; object-fit: cover; transition: transform 400ms var(--ease-expo-out);"
@@ -165,7 +183,7 @@ const itemListJsonLd = {
               onmouseout="this.style.transform='scale(1)'"
             />
             <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(10,10,11,0.6) 0%, transparent 60%); display: flex; align-items: flex-end; padding: 10px;">
-              <span style="font-size: 11px; color: var(--color-paper); font-weight: 600; font-family: var(--font-family-display);">{formatPriceDollars(product.price)}</span>
+              <span style="font-size: 11px; color: var(--color-espresso); font-weight: 600; font-family: var(--font-family-display);">{formatPriceDollars(product.price)}</span>
             </div>
           </a>
         ))}
@@ -185,7 +203,7 @@ const itemListJsonLd = {
       </div>
       <div>
         <p style="font-family: var(--font-family-mono); font-size: 11px; letter-spacing: 0.08em; color: var(--color-lime); text-transform: uppercase; margin: 0 0 16px;">Founder's note</p>
-        <h2 style="font-family: var(--font-family-display); font-weight: 700; font-size: clamp(24px, 4vw, 38px); letter-spacing: -0.02em; margin: 0 0 20px; color: var(--color-paper); line-height: 1.15;">
+        <h2 style="font-family: var(--font-family-display); font-weight: 700; font-size: clamp(24px, 4vw, 38px); letter-spacing: -0.02em; margin: 0 0 20px; color: var(--color-espresso); line-height: 1.15;">
           We don't sell everything.<br/>We sell the edit.
         </h2>
         <p style="font-size: 16px; color: var(--color-muted); line-height: 1.7; margin: 0 0 16px;">Taste, not the price tag. I started Piece of Stass because good style shouldn't be gatekept behind a logo. I scrolled so you don't have to. Every single pick in this stash has passed my personal taste test.</p>
@@ -204,7 +222,7 @@ const itemListJsonLd = {
       <div style="display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 32px;">
         <div>
           <p style="font-family: var(--font-family-mono); font-size: 11px; letter-spacing: 0.08em; color: var(--color-lime); text-transform: uppercase; margin: 0 0 6px;">Just dropped</p>
-          <h2 style="font-family: var(--font-family-display); font-weight: 700; font-size: 30px; letter-spacing: -0.02em; margin: 0; color: var(--color-paper);">New arrivals</h2>
+          <h2 style="font-family: var(--font-family-display); font-weight: 700; font-size: 30px; letter-spacing: -0.02em; margin: 0; color: var(--color-espresso);">New arrivals</h2>
         </div>
         <a href="/shop" style="font-size: 13px; font-weight: 600; color: var(--color-lime); text-decoration: none; font-family: var(--font-family-display);">Shop all →</a>
       </div>
@@ -213,6 +231,7 @@ const itemListJsonLd = {
           <ProductCard product={product} eager={false} client:visible />
         ))}
       </div>
+      <InternalLinks type="home" />
     </div>
   </section>
 </BaseLayout>

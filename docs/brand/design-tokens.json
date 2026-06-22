@@ -1,45 +1,91 @@
 {
   "$schema": "https://design-tokens.org/schema.json",
   "name": "Piece of Stass Design Tokens",
-  "version": "1.0.0",
-  "description": "Production design tokens for pieceofstass.com. Consumed directly by the frontend Tailwind config. Signature color is Stass Lime (#C6FF3A) on a near-black Ink canvas. Mobile-first, WCAG AA. Text on Stass Lime must ALWAYS be Ink (#0A0A0B), never white.",
+  "version": "2.0.0",
+  "description": "Production design tokens for pieceofstass.com. v2 'Atelier' refresh (June 2026): the palette moves off the high-contrast Stass Lime on near-black canvas to a warm, premium, feminine-leaning system — Bone Cream canvas, Espresso text, with a single ownable signature accent, Stass Rose (a dusty mauve-rose). Secondary accent is warm Sage; a small terracotta Clay 'moment' color is reserved for sale tags, urgency and conversion. Mobile-first, WCAG AA. The legacy lime/ink system is preserved under `color.legacy` in case we ever want it back as a sub-brand accent. NOTE ON TAILWIND KEYS: the Tailwind color keys (lime, ink, paper, charcoal, slate, etc.) are intentionally retained from v1 and REMAPPED to new hex values so existing var(--color-*) references flip to the warm system automatically. New semantic names (cream, espresso, rose, sage, clay, accent) are provided as the canonical aliases.",
   "meta": {
     "baseFontSizePx": 16,
     "gridUnitPx": 8,
     "wcagTarget": "AA",
-    "fontStrategy": "Google Fonts only, self-hosted woff2, font-display: swap"
+    "fontStrategy": "Google Fonts only, self-hosted woff2, font-display: swap",
+    "refresh": {
+      "version": "v2 — Atelier",
+      "date": "2026-06",
+      "rationale": "Client feedback: the lime-on-black palette read too jarring/loud for the core audience (Gen-Z to millennial women, 18-35, discovering via Instagram & TikTok). v2 keeps the brand DNA — confident, curated, slightly cheeky, 'Raid the stash.' — but warms the system to feel premium and feminine-without-being-twee. Reference moodboard: the warm minimalism of Glossier, the soft luxury of Reformation, the modern-feminine of SKIMS, with one signature rose pop that owns the brand. Colors are tuned to screenshot beautifully on mobile / TikTok."
+    }
   },
   "color": {
     "brand": {
-      "lime": { "value": "#C6FF3A", "description": "Stass Lime — signature. Primary CTA fill, wordmark, save/stash icon, 'new' flags. Text on top must be ink. Contrast vs ink = 16.74:1." },
-      "ink": { "value": "#0A0A0B", "description": "Stass Ink — primary dark canvas and primary text on light. Contrast vs paper = 18.92:1." },
-      "paper": { "value": "#FAFAF7", "description": "Stash Paper — primary light surface and text on dark." }
+      "cream": { "value": "#F6F0E8", "alias": ["paper"], "description": "Bone Cream — primary warm light canvas. NOT pure white. Backgrounds, large fields. Espresso text on cream = 13.92:1." },
+      "espresso": { "value": "#2A211C", "alias": ["ink"], "description": "Espresso — warm near-black. NOT pure black. Primary text on cream, dark UI accents, footer. Contrast vs cream = 13.92:1." },
+      "rose": { "value": "#A14C58", "alias": ["lime", "accent"], "description": "Stass Rose — the signature, ownable hue (dusty mauve-rose). Primary CTA fill, wordmark accent, links, save/stash icon, 'new' flags. Text on a Rose fill must ALWAYS be Cream (5.03:1), never Espresso. Rose as text/link on cream = 5.03:1 (AA body pass)." },
+      "roseBright": { "value": "#B25E6B", "alias": [], "description": "Stass Rose (bright) — large-text and decorative-only variant of the signature for hero display type, gradient partner and oversized graphic moments. Large text/3:1 use only on cream (3.94:1)." }
     },
     "secondary": {
-      "violet": { "value": "#7B5CFF", "description": "Hype Violet — secondary CTA, links, gradient partner. Large text/UI on paper (4.17:1); body OK on ink (4.54:1)." },
-      "pink": { "value": "#FF4D8D", "description": "Sass Pink — tertiary accent, sale flags. Graphic/large only on paper (3.0:1); text use on ink (6.31:1). Never primary." }
+      "sage": { "value": "#6F7B5F", "alias": ["violet"], "description": "Warm Sage — secondary accent, grounding/natural counterpoint to Rose. Pills, secondary CTAs, category chips, links on dark. Cream text on Sage = 5.08:1. Sage as large text on cream = 3.97:1." },
+      "clay": { "value": "#C4673D", "alias": ["pink"], "description": "Terracotta Clay — the small 'moment' color. Used SPARINGLY for sale tags, urgency, countdowns and conversion CTAs. Use the deep variant (#9B4824) as a fill behind Cream text (5.54:1). Clay as large text/icon on cream = 3.46:1. Never a primary surface." },
+      "clayDeep": { "value": "#9B4824", "alias": [], "description": "Clay (deep) — sale-tag / urgency fill. Cream text on Clay-deep = 5.54:1 (AA). Clay-deep as body text on cream = 5.54:1." }
     },
     "neutral": {
-      "ink": { "value": "#0A0A0B" },
-      "charcoal": { "value": "#1C1C1F", "description": "Dark surface / cards on dark" },
-      "slate": { "value": "#3A3A3E", "description": "Secondary dark surface, borders on dark" },
-      "muted": { "value": "#6B6B6E", "description": "Secondary text on paper. Contrast vs paper = 5.08:1 (AA body pass)." },
-      "line": { "value": "#E4E4DE", "description": "Borders, dividers, hairlines on light" },
-      "surface": { "value": "#F2F1EC", "description": "Cards, inputs on light" },
-      "paper": { "value": "#FAFAF7" }
+      "espresso": { "value": "#2A211C", "alias": ["ink"] },
+      "surfaceRaised": { "value": "#FBF7F1", "alias": ["charcoal"], "description": "Raised cards / panels / inputs on cream. Slightly lighter than canvas to lift content. Espresso text = 14.76:1." },
+      "line": { "value": "#E6DCCF", "alias": ["slate"], "description": "Warm hairline borders, dividers, rules on light." },
+      "muted": { "value": "#726558", "alias": [], "description": "Warm Taupe — secondary text on cream. Contrast vs cream = 4.99:1 (AA body pass)." },
+      "faint": { "value": "#94857A", "alias": [], "description": "Tertiary text, placeholders, disabled, decorative labels. Vs cream = 3.15:1 (large/non-essential only)." },
+      "surfaceSunken": { "value": "#F0E7DA", "alias": ["surface"], "description": "Sunken/inset surfaces, alt rows, skeleton base. Espresso text = 12.87:1." },
+      "cream": { "value": "#F6F0E8", "alias": ["paper"] }
     },
     "semantic": {
-      "success": { "value": "#2FA866", "description": "Order confirmed, in stock" },
-      "error": { "value": "#E5484D", "description": "Form errors, sold out" },
-      "warning": { "value": "#E8A33D", "description": "Low stock, caution" },
-      "info": { "value": "#7B5CFF", "description": "Reuses Hype Violet" }
+      "success": { "value": "#3F6A44", "description": "Forest — order confirmed, in stock. Vs cream = 5.53:1. Cream on success = 5.53:1." },
+      "error": { "value": "#B23A33", "description": "Brick — form errors, sold out. Vs cream = 5.23:1. Cream on error = 5.23:1." },
+      "warning": { "value": "#9C6A22", "description": "Amber (text) — low stock, caution as text on cream = 4.12:1 (use at 14px+ bold / large)." },
+      "warningFill": { "value": "#E7B45A", "description": "Amber fill for low-stock badges; Espresso text on it = 8.31:1." },
+      "info": { "value": "#6F7B5F", "description": "Reuses Sage." }
     },
     "gradient": {
-      "hype": {
-        "value": "linear-gradient(135deg, #C6FF3A 0%, #7B5CFF 100%)",
-        "stops": ["#C6FF3A", "#7B5CFF"],
+      "blush": {
+        "value": "linear-gradient(135deg, #B25E6B 0%, #C4673D 100%)",
+        "stops": ["#B25E6B", "#C4673D"],
         "angle": 135,
-        "description": "The one sanctioned gradient — hero washes, drop reveals, app splash. Backgrounds only, never on the wordmark or text."
+        "description": "Atelier Blush — the one sanctioned gradient (Rose -> Clay), warm and editorial. Hero washes, drop reveals, app splash. Backgrounds only, never on the wordmark or body text. For text gradients use over cream at display sizes only."
+      },
+      "creamWash": {
+        "value": "linear-gradient(180deg, #FBF7F1 0%, #F0E7DA 100%)",
+        "stops": ["#FBF7F1", "#F0E7DA"],
+        "angle": 180,
+        "description": "Quiet cream-to-sand vertical wash for soft section backgrounds and the hero base. The feminine, premium default."
+      }
+    },
+    "legacy": {
+      "description": "v1 'Stass Lime' system — retired as the primary palette June 2026 but preserved here in case we ever want the lime/ink energy back as a sub-brand, drop-specific accent, or limited-edition capsule. Do NOT use in the default UI.",
+      "lime": { "value": "#C6FF3A", "description": "Legacy Stass Lime — former signature." },
+      "ink": { "value": "#0A0A0B", "description": "Legacy Stass Ink — former near-black canvas." },
+      "paper": { "value": "#FAFAF7", "description": "Legacy Stash Paper — former light surface." },
+      "violet": { "value": "#7B5CFF", "description": "Legacy Hype Violet." },
+      "pink": { "value": "#FF4D8D", "description": "Legacy Sass Pink." },
+      "gradient": { "value": "linear-gradient(135deg, #C6FF3A 0%, #7B5CFF 100%)", "description": "Legacy Hype gradient." }
+    },
+    "ramp": {
+      "description": "Full 50-950 Tailwind shade ramps for the four primary brand colors plus espresso. 500 is the canonical brand value. Tints mix toward white; shades mix toward a warm black (#1A1410).",
+      "cream": {
+        "50": "#FEFEFE", "100": "#FEFDFC", "200": "#FDFBF9", "300": "#FBF8F5", "400": "#F9F4EF",
+        "500": "#F6F0E8", "600": "#D3CDC5", "700": "#ABA59F", "800": "#88827C", "900": "#655F59", "950": "#423C37"
+      },
+      "espresso": {
+        "50": "#F2F2F1", "100": "#E1E0DF", "200": "#C8C5C4", "300": "#A19D9B", "400": "#6A6460",
+        "500": "#2A211C", "600": "#271F1A", "700": "#251D18", "800": "#221A16", "900": "#1F1814", "950": "#1D1612"
+      },
+      "rose": {
+        "50": "#F9F4F5", "100": "#F2E6E8", "200": "#E7D0D4", "300": "#D6B0B6", "400": "#BD828A",
+        "500": "#A14C58", "600": "#8B434C", "700": "#733940", "800": "#5E3034", "900": "#482728", "950": "#321E1D"
+      },
+      "sage": {
+        "50": "#F6F7F5", "100": "#EBEDE9", "200": "#DADDD5", "300": "#C0C5B9", "400": "#9AA38F",
+        "500": "#6F7B5F", "600": "#616B52", "700": "#525844", "800": "#444838", "900": "#37372B", "950": "#29271E"
+      },
+      "clay": {
+        "50": "#FBF6F3", "100": "#F7EAE4", "200": "#F0D7CD", "300": "#E5BCAA", "400": "#D69577",
+        "500": "#C4673D", "600": "#A95A36", "700": "#8A4B2E", "800": "#6F3E26", "900": "#54301F", "950": "#392318"
       }
     }
   },
@@ -110,17 +156,17 @@
     "xl": "24px",
     "2xl": "32px",
     "pill": "999px",
-    "description": "Default product cards use lg (16px). Buttons use pill. Inputs use md."
+    "description": "Default product cards use lg (16px). Buttons use pill. Inputs use md. v2 leans into the soft, generous radii for a calmer, more premium feel."
   },
   "shadow": {
-    "description": "Soft, warm, low-spread shadows. Dark canvas needs subtle elevation; avoid heavy drop shadows.",
-    "xs": { "value": "0 1px 2px rgba(10,10,11,0.06)" },
-    "sm": { "value": "0 2px 6px rgba(10,10,11,0.08)" },
-    "md": { "value": "0 6px 16px rgba(10,10,11,0.10)" },
-    "lg": { "value": "0 12px 32px rgba(10,10,11,0.14)" },
-    "xl": { "value": "0 24px 56px rgba(10,10,11,0.18)" },
-    "lime-glow": { "value": "0 0 24px rgba(198,255,58,0.45)", "description": "Signature focus/active glow for primary CTA and stash actions. Use sparingly." },
-    "focus-ring": { "value": "0 0 0 3px rgba(123,92,255,0.55)", "description": "Keyboard focus ring (Hype Violet) — accessibility." }
+    "description": "Soft, warm, low-spread shadows tinted with Espresso. On a light cream canvas, elevation is subtle — avoid heavy or cool-gray drop shadows.",
+    "xs": { "value": "0 1px 2px rgba(42,33,28,0.05)" },
+    "sm": { "value": "0 2px 6px rgba(42,33,28,0.07)" },
+    "md": { "value": "0 6px 16px rgba(42,33,28,0.09)" },
+    "lg": { "value": "0 12px 32px rgba(42,33,28,0.12)" },
+    "xl": { "value": "0 24px 56px rgba(42,33,28,0.16)" },
+    "rose-glow": { "value": "0 0 24px rgba(161,76,88,0.30)", "alias": ["lime-glow"], "description": "Signature focus/active glow for primary CTA and stash actions (Rose). Use sparingly — softer than the old lime glow." },
+    "focus-ring": { "value": "0 0 0 3px rgba(161,76,88,0.45)", "description": "Keyboard focus ring (Stass Rose) — accessibility." }
   },
   "motion": {
     "duration": {
@@ -129,19 +175,19 @@
       "base": "240ms",
       "slow": "400ms",
       "hero": "600ms",
-      "description": "Micro 120-180ms, standard 200-280ms, hero 400-600ms. Nothing user-blocking over 600ms."
+      "description": "Micro 120-180ms, standard 200-280ms, hero 400-600ms. Nothing user-blocking over 600ms. v2: motion is a touch gentler — favor expo-out settles over springy overshoot for a calmer, premium read."
     },
     "easing": {
-      "expo-out": { "value": "cubic-bezier(0.22, 1, 0.36, 1)", "description": "Default entrance — quick in, gentle settle." },
-      "spring": { "value": "cubic-bezier(0.34, 1.56, 0.64, 1)", "description": "Interactive overshoot — add-to-bag, stash save (1.15 scale pop)." },
+      "expo-out": { "value": "cubic-bezier(0.22, 1, 0.36, 1)", "description": "Default entrance — quick in, gentle settle. Primary v2 easing." },
+      "spring": { "value": "cubic-bezier(0.34, 1.56, 0.64, 1)", "description": "Interactive overshoot — add-to-bag, stash save. Use a smaller pop (1.08) in v2." },
       "standard": { "value": "cubic-bezier(0.4, 0.0, 0.2, 1)", "description": "Neutral in-out for layout transitions." },
       "ease-out": { "value": "cubic-bezier(0.0, 0.0, 0.2, 1)", "description": "Exits / fades." }
     },
     "transform": {
       "hoverScale": 1.02,
       "pressScale": 0.98,
-      "popScale": 1.15,
-      "description": "Hover up, press down (web, 150ms). Pop for save/stash confirmation (spring)."
+      "popScale": 1.08,
+      "description": "Hover up, press down (web, 150ms). Softer pop (1.08) for save/stash confirmation in v2."
     },
     "reducedMotion": {
       "fallback": "opacity fade, max 120ms, no transforms",
@@ -156,21 +202,32 @@
     "xl": "1280px"
   },
   "tailwind": {
-    "description": "Suggested mapping for tailwind.config.js theme.extend. Keys mirror the tokens above.",
+    "description": "Mapping for Tailwind v4 @theme / theme.extend. The v1 keys (lime, ink, paper, charcoal, slate, violet, pink, surface) are RETAINED and remapped to v2 warm values so existing var(--color-*) references flip automatically. Canonical v2 aliases (cream, espresso, rose, sage, clay, accent) are also exposed.",
     "colors": {
-      "lime": "#C6FF3A",
-      "ink": "#0A0A0B",
-      "paper": "#FAFAF7",
-      "violet": "#7B5CFF",
-      "pink": "#FF4D8D",
-      "charcoal": "#1C1C1F",
-      "slate": "#3A3A3E",
-      "muted": "#6B6B6E",
-      "line": "#E4E4DE",
-      "surface": "#F2F1EC",
-      "success": "#2FA866",
-      "error": "#E5484D",
-      "warning": "#E8A33D"
+      "lime": "#A14C58",
+      "ink": "#2A211C",
+      "paper": "#F6F0E8",
+      "violet": "#6F7B5F",
+      "pink": "#C4673D",
+      "charcoal": "#FBF7F1",
+      "slate": "#E6DCCF",
+      "muted": "#726558",
+      "line": "#E6DCCF",
+      "surface": "#F0E7DA",
+      "cream": "#F6F0E8",
+      "espresso": "#2A211C",
+      "rose": "#A14C58",
+      "rose-bright": "#B25E6B",
+      "rose-deep": "#8B434C",
+      "sage": "#6F7B5F",
+      "clay": "#C4673D",
+      "clay-deep": "#9B4824",
+      "accent": "#A14C58",
+      "faint": "#94857A",
+      "success": "#3F6A44",
+      "error": "#B23A33",
+      "warning": "#9C6A22",
+      "warning-fill": "#E7B45A"
     },
     "fontFamily": {
       "display": ["Space Grotesk", "Inter", "system-ui", "sans-serif"],
@@ -200,12 +257,12 @@
       "sm": "6px", "md": "10px", "lg": "16px", "xl": "24px", "2xl": "32px", "pill": "999px"
     },
     "boxShadow": {
-      "xs": "0 1px 2px rgba(10,10,11,0.06)",
-      "sm": "0 2px 6px rgba(10,10,11,0.08)",
-      "md": "0 6px 16px rgba(10,10,11,0.10)",
-      "lg": "0 12px 32px rgba(10,10,11,0.14)",
-      "xl": "0 24px 56px rgba(10,10,11,0.18)",
-      "lime-glow": "0 0 24px rgba(198,255,58,0.45)"
+      "xs": "0 1px 2px rgba(42,33,28,0.05)",
+      "sm": "0 2px 6px rgba(42,33,28,0.07)",
+      "md": "0 6px 16px rgba(42,33,28,0.09)",
+      "lg": "0 12px 32px rgba(42,33,28,0.12)",
+      "xl": "0 24px 56px rgba(42,33,28,0.16)",
+      "rose-glow": "0 0 24px rgba(161,76,88,0.30)"
     },
     "transitionTimingFunction": {
       "expo-out": "cubic-bezier(0.22, 1, 0.36, 1)",
@@ -219,7 +276,8 @@
       "sm": "390px", "md": "768px", "lg": "1024px", "xl": "1280px"
     },
     "backgroundImage": {
-      "hype-gradient": "linear-gradient(135deg, #C6FF3A 0%, #7B5CFF 100%)"
+      "blush-gradient": "linear-gradient(135deg, #B25E6B 0%, #C4673D 100%)",
+      "cream-wash": "linear-gradient(180deg, #FBF7F1 0%, #F0E7DA 100%)"
     }
   }
 }

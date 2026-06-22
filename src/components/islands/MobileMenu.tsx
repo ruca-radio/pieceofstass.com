@@ -20,7 +20,7 @@ export default function MobileMenu({ categories }: Props) {
           border: 'none',
           cursor: 'pointer',
           padding: '8px',
-          color: 'var(--color-paper)',
+          color: 'var(--color-espresso)',
           display: 'flex',
           alignItems: 'center',
         }}
@@ -73,12 +73,12 @@ export default function MobileMenu({ categories }: Props) {
               <button
                 onClick={() => setOpen(false)}
                 aria-label="Close menu"
-                style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-paper)', float: 'right', padding: '4px' }}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-espresso)', float: 'right', padding: '4px' }}
               >
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
               </button>
               <a href="/" style={{ textDecoration: 'none' }}>
-                <span style={{ fontFamily: 'var(--font-family-display)', fontWeight: 700, fontSize: '18px', color: 'var(--color-paper)' }}>STASS</span>
+                <span style={{ fontFamily: 'var(--font-family-display)', fontWeight: 700, fontSize: '18px', color: 'var(--color-espresso)' }}>STASS</span>
               </a>
             </div>
 
@@ -95,7 +95,7 @@ export default function MobileMenu({ categories }: Props) {
                   key={cat.slug}
                   href={`/shop/${cat.slug}`}
                   onClick={() => setOpen(false)}
-                  style={{ display: 'block', padding: '12px 0', color: 'var(--color-paper)', fontSize: '16px', textDecoration: 'none', borderBottom: '1px solid rgba(58,58,62,0.5)' }}
+                  style={{ display: 'block', padding: '12px 0', color: 'var(--color-espresso)', fontSize: '16px', textDecoration: 'none', borderBottom: '1px solid rgba(58,58,62,0.5)' }}
                 >
                   {cat.title}
                 </a>

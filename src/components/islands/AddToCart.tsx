@@ -1,7 +1,9 @@
 import { useState } from 'react';
-import { addToCart } from '../../lib/store';
+import { cartOpen } from '../../lib/store';
+import { apiAddItem } from '../../lib/cart';
 import { showToast } from './ToastContainer';
-import type { Product, ProductVariant } from '../../lib/types';
+import { trackEvent } from '../../lib/analytics';
+import type { Product } from '../../lib/types';
 
 interface Props {
   product: Product;
@@ -30,6 +32,7 @@ export default function AddToCart({ product }: Props) {
   const [selected, setSelected] = useState<OptionMap>(defaultOptions);
   const [qty, setQty] = useState(1);
   const [adding, setAdding] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const currentVariant = product.variants.find((v) =>
     optionKeys.every((k) => v.options[k] === selected[k])
@@ -38,16 +41,40 @@ export default function AddToCart({ product }: Props) {
   const handleATC = async () => {
     if (!currentVariant) return;
     setAdding(true);
-    addToCart({
-      productId: product.id,
-      variantSku: currentVariant.sku,
-      title: product.title,
-      image: product.images[0] || '',
-      price: product.price,
-      quantity: qty,
-      options: selected,
+    setError(null);
+
+    // (a) Call API — server validates product/variant and records in KV
+    const { error: apiError } = await apiAddItem({
+      product_id: product.id,
+      variant_id: currentVariant.sku,
+      qty,
     });
+
+    if (apiError) {
+      setError(apiError);
+      setAdding(false);
+      showToast('Failed to add item', 'error');
+      return;
+    }
+
+    // (b) Store is already updated by apiAddItem → cartItems nanostore sync
+
+    // (c) Fire analytics
+    void trackEvent('AddToCart', {
+      content_ids: [currentVariant.sku],
+      content_name: product.title,
+      content_type: 'product',
+      contents: [{ id: currentVariant.sku, quantity: qty, price: product.price }],
+      currency: 'USD',
+      value: product.price * qty,
+      num_items: qty,
+    });
+
     showToast('Added to bag', 'success');
+
+    // (d) Open the drawer
+    cartOpen.set(true);
+
     setTimeout(() => setAdding(false), 800);
   };
 
@@ -57,7 +84,7 @@ export default function AddToCart({ product }: Props) {
       {optionKeys.map((key) => (
         <div key={key}>
           <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--color-muted)', margin: '0 0 8px', textTransform: 'capitalize', letterSpacing: '0.04em', fontFamily: 'var(--font-family-mono)' }}>
-            {key}: <span style={{ color: 'var(--color-paper)' }}>{selected[key]}</span>
+            {key}: <span style={{ color: 'var(--color-espresso)' }}>{selected[key]}</span>
           </p>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
             {optionValues[key].map((val) => {
@@ -83,7 +110,7 @@ export default function AddToCart({ product }: Props) {
                     cursor: outOfStock ? 'not-allowed' : 'pointer',
                     border: `1.5px solid ${isSelected ? 'var(--color-lime)' : 'var(--color-slate)'}`,
                     background: isSelected ? 'var(--color-lime)' : 'transparent',
-                    color: isSelected ? 'var(--color-ink)' : outOfStock ? 'var(--color-muted)' : 'var(--color-paper)',
+                    color: isSelected ? 'var(--color-ink)' : outOfStock ? 'var(--color-muted)' : 'var(--color-espresso)',
                     opacity: outOfStock ? 0.4 : 1,
                     textDecoration: outOfStock ? 'line-through' : 'none',
                     transition: 'background 150ms, border-color 150ms, color 150ms',
@@ -101,11 +128,18 @@ export default function AddToCart({ product }: Props) {
       <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
         <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--color-muted)', margin: 0, fontFamily: 'var(--font-family-mono)', letterSpacing: '0.04em' }}>QTY</p>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0', background: 'var(--color-slate)', borderRadius: '999px', overflow: 'hidden' }}>
-          <button onClick={() => setQty(Math.max(1, qty - 1))} aria-label="Decrease quantity" style={{ width: '40px', height: '40px', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-paper)', fontSize: '18px' }}>−</button>
-          <span style={{ padding: '0 4px', fontFamily: 'var(--font-family-mono)', fontSize: '14px', color: 'var(--color-paper)', minWidth: '24px', textAlign: 'center' }}>{qty}</span>
-          <button onClick={() => setQty(qty + 1)} aria-label="Increase quantity" style={{ width: '40px', height: '40px', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-paper)', fontSize: '18px' }}>+</button>
+          <button onClick={() => setQty(Math.max(1, qty - 1))} aria-label="Decrease quantity" style={{ width: '40px', height: '40px', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-espresso)', fontSize: '18px' }}>−</button>
+          <span style={{ padding: '0 4px', fontFamily: 'var(--font-family-mono)', fontSize: '14px', color: 'var(--color-espresso)', minWidth: '24px', textAlign: 'center' }}>{qty}</span>
+          <button onClick={() => setQty(qty + 1)} aria-label="Increase quantity" style={{ width: '40px', height: '40px', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-espresso)', fontSize: '18px' }}>+</button>
         </div>
       </div>
+
+      {/* Error message */}
+      {error && (
+        <p style={{ fontSize: '13px', color: '#ff6b6b', margin: 0, padding: '8px 12px', background: 'rgba(255,107,107,0.1)', borderRadius: 'var(--radius-md)', border: '1px solid rgba(255,107,107,0.2)' }}>
+          {error}
+        </p>
+      )}
 
       {/* ATC button */}
       <button

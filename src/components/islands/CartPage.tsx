@@ -13,9 +13,9 @@ export default function CartPage() {
     return (
       <div style={{ textAlign: 'center', padding: '80px 0', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
         <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--color-slate)" strokeWidth="1.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-        <h1 style={{ fontFamily: 'var(--font-family-display)', fontWeight: 700, fontSize: '24px', margin: 0, color: 'var(--color-paper)' }}>Your bag is empty</h1>
+        <h1 style={{ fontFamily: 'var(--font-family-display)', fontWeight: 700, fontSize: '24px', margin: 0, color: 'var(--color-espresso)' }}>Your bag is empty</h1>
         <p style={{ color: 'var(--color-muted)', fontSize: '15px', maxWidth: '300px' }}>The look for less is waiting. Raid the stash.</p>
-        <a href="/shop" style={{ background: 'var(--color-lime)', color: 'var(--color-ink)', borderRadius: '999px', padding: '14px 32px', fontWeight: 700, fontSize: '15px', textDecoration: 'none', fontFamily: 'var(--font-family-display)' }}>
+        <a href="/shop" style={{ background: 'var(--color-lime)', color: 'var(--color-cream)', borderRadius: '999px', padding: '14px 32px', fontWeight: 700, fontSize: '15px', textDecoration: 'none', fontFamily: 'var(--font-family-display)' }}>
           Shop now
         </a>
       </div>
@@ -24,7 +24,7 @@ export default function CartPage() {
 
   return (
     <div>
-      <h1 style={{ fontFamily: 'var(--font-family-display)', fontWeight: 700, fontSize: '30px', letterSpacing: '-0.02em', margin: '0 0 32px', color: 'var(--color-paper)' }}>
+      <h1 style={{ fontFamily: 'var(--font-family-display)', fontWeight: 700, fontSize: '30px', letterSpacing: '-0.02em', margin: '0 0 32px', color: 'var(--color-espresso)' }}>
         Your bag
       </h1>
 
@@ -33,7 +33,7 @@ export default function CartPage() {
         <div>
           {/* Free shipping bar */}
           <div style={{ background: 'var(--color-charcoal)', border: '1px solid var(--color-slate)', borderRadius: 'var(--radius-lg)', padding: '16px', marginBottom: '24px' }}>
-            <p style={{ fontSize: '13px', color: remaining > 0 ? 'var(--color-paper)' : 'var(--color-lime)', margin: '0 0 8px', fontWeight: 600 }}>
+            <p style={{ fontSize: '13px', color: remaining > 0 ? 'var(--color-espresso)' : 'var(--color-lime)', margin: '0 0 8px', fontWeight: 600 }}>
               {remaining > 0 ? `Add $${remaining.toFixed(0)} more for free shipping` : 'Free shipping unlocked'}
             </p>
             <div style={{ height: '6px', background: 'var(--color-slate)', borderRadius: '999px', overflow: 'hidden' }}>
@@ -46,17 +46,17 @@ export default function CartPage() {
               <li key={item.variantSku} style={{ display: 'flex', gap: '16px', padding: '16px', background: 'var(--color-charcoal)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--color-slate)' }}>
                 <img src={item.image} alt={item.title} loading="lazy" width={80} height={80} style={{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: 'var(--radius-md)', flexShrink: 0 }} />
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <p style={{ fontSize: '15px', fontWeight: 600, color: 'var(--color-paper)', margin: '0 0 4px' }}>{item.title}</p>
+                  <p style={{ fontSize: '15px', fontWeight: 600, color: 'var(--color-espresso)', margin: '0 0 4px' }}>{item.title}</p>
                   <p style={{ fontSize: '12px', color: 'var(--color-muted)', margin: '0 0 12px', fontFamily: 'var(--font-family-mono)' }}>
                     {Object.entries(item.options).map(([k, v]) => `${k}: ${v}`).join(' · ')}
                   </p>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0', background: 'var(--color-slate)', borderRadius: '999px' }}>
-                      <button onClick={() => updateCartItem(item.variantSku, item.quantity - 1)} style={{ width: '36px', height: '36px', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-paper)', fontSize: '16px' }}>−</button>
-                      <span style={{ fontFamily: 'var(--font-family-mono)', fontSize: '14px', color: 'var(--color-paper)', minWidth: '20px', textAlign: 'center' }}>{item.quantity}</span>
-                      <button onClick={() => updateCartItem(item.variantSku, item.quantity + 1)} style={{ width: '36px', height: '36px', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-paper)', fontSize: '16px' }}>+</button>
+                      <button onClick={() => updateCartItem(item.variantSku, item.quantity - 1)} style={{ width: '36px', height: '36px', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-espresso)', fontSize: '16px' }}>−</button>
+                      <span style={{ fontFamily: 'var(--font-family-mono)', fontSize: '14px', color: 'var(--color-espresso)', minWidth: '20px', textAlign: 'center' }}>{item.quantity}</span>
+                      <button onClick={() => updateCartItem(item.variantSku, item.quantity + 1)} style={{ width: '36px', height: '36px', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-espresso)', fontSize: '16px' }}>+</button>
                     </div>
-                    <span style={{ fontFamily: 'var(--font-family-mono)', fontWeight: 700, fontSize: '15px', color: 'var(--color-paper)' }}>${(item.price * item.quantity).toFixed(0)}</span>
+                    <span style={{ fontFamily: 'var(--font-family-mono)', fontWeight: 700, fontSize: '15px', color: 'var(--color-espresso)' }}>${(item.price * item.quantity).toFixed(0)}</span>
                   </div>
                   <button onClick={() => removeFromCart(item.variantSku)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-muted)', fontSize: '12px', padding: '6px 0 0', textDecoration: 'underline', fontFamily: 'var(--font-family-sans)' }}>Remove</button>
                 </div>
@@ -68,27 +68,27 @@ export default function CartPage() {
         {/* Summary */}
         <div>
           <div style={{ background: 'var(--color-charcoal)', border: '1px solid var(--color-slate)', borderRadius: 'var(--radius-xl)', padding: '24px', position: 'sticky', top: '100px' }}>
-            <h2 style={{ fontFamily: 'var(--font-family-display)', fontWeight: 700, fontSize: '18px', margin: '0 0 20px', color: 'var(--color-paper)' }}>Order summary</h2>
+            <h2 style={{ fontFamily: 'var(--font-family-display)', fontWeight: 700, fontSize: '18px', margin: '0 0 20px', color: 'var(--color-espresso)' }}>Order summary</h2>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '20px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <span style={{ fontSize: '14px', color: 'var(--color-muted)' }}>Subtotal</span>
-                <span style={{ fontFamily: 'var(--font-family-mono)', fontSize: '14px', color: 'var(--color-paper)' }}>${subtotal.toFixed(0)}</span>
+                <span style={{ fontFamily: 'var(--font-family-mono)', fontSize: '14px', color: 'var(--color-espresso)' }}>${subtotal.toFixed(0)}</span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <span style={{ fontSize: '14px', color: 'var(--color-muted)' }}>Shipping</span>
-                <span style={{ fontFamily: 'var(--font-family-mono)', fontSize: '14px', color: subtotal >= FREE_SHIPPING_THRESHOLD ? 'var(--color-lime)' : 'var(--color-paper)' }}>
+                <span style={{ fontFamily: 'var(--font-family-mono)', fontSize: '14px', color: subtotal >= FREE_SHIPPING_THRESHOLD ? 'var(--color-lime)' : 'var(--color-espresso)' }}>
                   {subtotal >= FREE_SHIPPING_THRESHOLD ? 'Free' : 'Calculated at checkout'}
                 </span>
               </div>
               <div style={{ borderTop: '1px solid var(--color-slate)', paddingTop: '10px', display: 'flex', justifyContent: 'space-between' }}>
-                <span style={{ fontSize: '16px', fontWeight: 700, color: 'var(--color-paper)' }}>Total</span>
-                <span style={{ fontFamily: 'var(--font-family-mono)', fontSize: '18px', fontWeight: 700, color: 'var(--color-paper)' }}>${subtotal.toFixed(0)}</span>
+                <span style={{ fontSize: '16px', fontWeight: 700, color: 'var(--color-espresso)' }}>Total</span>
+                <span style={{ fontFamily: 'var(--font-family-mono)', fontSize: '18px', fontWeight: 700, color: 'var(--color-espresso)' }}>${subtotal.toFixed(0)}</span>
               </div>
             </div>
             <a
               href="/checkout"
               data-testid="button-checkout-cart"
-              style={{ display: 'block', background: 'var(--color-lime)', color: 'var(--color-ink)', border: 'none', borderRadius: '999px', padding: '16px', fontFamily: 'var(--font-family-display)', fontWeight: 700, fontSize: '15px', cursor: 'pointer', textAlign: 'center', textDecoration: 'none', marginBottom: '12px' }}
+              style={{ display: 'block', background: 'var(--color-lime)', color: 'var(--color-cream)', border: 'none', borderRadius: '999px', padding: '16px', fontFamily: 'var(--font-family-display)', fontWeight: 700, fontSize: '15px', cursor: 'pointer', textAlign: 'center', textDecoration: 'none', marginBottom: '12px' }}
             >
               Proceed to checkout
             </a>

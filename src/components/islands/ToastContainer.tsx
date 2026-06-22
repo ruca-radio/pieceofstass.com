@@ -38,8 +38,8 @@ export default function ToastContainer() {
   };
   const textColors: Record<Toast['type'], string> = {
     success: 'var(--color-ink)',
-    error: 'var(--color-paper)',
-    info: 'var(--color-paper)',
+    error: 'var(--color-espresso)',
+    info: 'var(--color-espresso)',
   };
 
   return (

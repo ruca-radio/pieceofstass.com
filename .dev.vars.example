@@ -1,0 +1,39 @@
+# ============================================================
+# Piece of Stass — Local Development Secrets
+# ============================================================
+# Copy this file to .dev.vars and fill in your values.
+# .dev.vars is gitignored — never commit secrets.
+#
+# These values are injected into the Cloudflare Workers runtime
+# during local development (`npm run preview` with wrangler) and
+# are accessible via `context.locals.runtime.env` in API routes.
+#
+# For plain `astro dev` (no wrangler), secrets must be set in
+# your shell environment or a .env file instead.
+# ============================================================
+
+# ── Stripe ────────────────────────────────────────────────────────────────────
+# Get your test keys from: https://dashboard.stripe.com/test/apikeys
+STRIPE_SECRET_KEY=sk_test_REPLACE_ME
+
+# Webhook secret from the Stripe CLI or Dashboard → Webhooks.
+# For local testing: run `stripe listen --forward-to localhost:4321/api/webhooks/stripe`
+# and paste the "whsec_..." value here.
+STRIPE_WEBHOOK_SECRET=whsec_REPLACE_ME
+
+# ── Site URL ──────────────────────────────────────────────────────────────────
+# Used as the base URL for Stripe success/cancel redirect URLs.
+PUBLIC_SITE_URL=http://localhost:4321
+
+# ── Analytics (optional in dev) ───────────────────────────────────────────────
+# META_PIXEL_ID=
+# META_CAPI_ACCESS_TOKEN=
+# META_TEST_EVENT_CODE=TEST12345
+# TIKTOK_PIXEL_ID=
+# TIKTOK_ACCESS_TOKEN=
+# GA4_MEASUREMENT_ID=
+
+# ── Email (optional in dev) ───────────────────────────────────────────────────
+# KLAVIYO_API_KEY=
+# KLAVIYO_LIST_ID=
+# RESEND_API_KEY=

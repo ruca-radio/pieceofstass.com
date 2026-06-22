@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
-import { addToCart } from '../../lib/store';
+import { cartOpen } from '../../lib/store';
+import { apiAddItem } from '../../lib/cart';
 import { showToast } from './ToastContainer';
+import { trackEvent } from '../../lib/analytics';
 import type { Product } from '../../lib/types';
 
 interface Props {
@@ -11,6 +13,7 @@ interface Props {
 
 export default function StickyATC({ product, selectedVariantSku, selectedOptions }: Props) {
   const [visible, setVisible] = useState(false);
+  const [adding, setAdding] = useState(false);
 
   useEffect(() => {
     const threshold = 400;
@@ -21,21 +24,41 @@ export default function StickyATC({ product, selectedVariantSku, selectedOptions
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const handleATC = () => {
+  const handleATC = async () => {
     const variant = selectedVariantSku
       ? product.variants.find((v) => v.sku === selectedVariantSku)
       : product.variants[0];
     if (!variant) return;
-    addToCart({
-      productId: product.id,
-      variantSku: variant.sku,
-      title: product.title,
-      image: product.images[0] || '',
-      price: product.price,
-      quantity: 1,
-      options: selectedOptions || variant.options,
+
+    setAdding(true);
+
+    // Call API
+    const { error } = await apiAddItem({
+      product_id: product.id,
+      variant_id: variant.sku,
+      qty: 1,
     });
+
+    if (error) {
+      showToast('Failed to add item', 'error');
+      setAdding(false);
+      return;
+    }
+
+    // Analytics
+    void trackEvent('AddToCart', {
+      content_ids: [variant.sku],
+      content_name: product.title,
+      content_type: 'product',
+      contents: [{ id: variant.sku, quantity: 1, price: product.price }],
+      currency: 'USD',
+      value: product.price,
+      num_items: 1,
+    });
+
     showToast('Added to bag', 'success');
+    cartOpen.set(true);
+    setAdding(false);
   };
 
   return (
@@ -61,11 +84,12 @@ export default function StickyATC({ product, selectedVariantSku, selectedOptions
         <img src={product.images[0]} alt="" loading="lazy" width={44} height={44} style={{ width: '44px', height: '44px', objectFit: 'cover', borderRadius: 'var(--radius-md)', flexShrink: 0 }} />
       )}
       <div style={{ flex: 1, minWidth: 0 }}>
-        <p style={{ fontSize: '12px', fontWeight: 600, color: 'var(--color-paper)', margin: 0 }} className="line-clamp-1">{product.title}</p>
+        <p style={{ fontSize: '12px', fontWeight: 600, color: 'var(--color-espresso)', margin: 0 }} className="line-clamp-1">{product.title}</p>
         <p style={{ fontSize: '13px', fontFamily: 'var(--font-family-mono)', color: 'var(--color-lime)', margin: 0, fontWeight: 700 }}>${product.price}</p>
       </div>
       <button
         onClick={handleATC}
+        disabled={adding}
         data-testid="button-sticky-atc"
         style={{
           background: 'var(--color-lime)',
@@ -76,12 +100,14 @@ export default function StickyATC({ product, selectedVariantSku, selectedOptions
           fontFamily: 'var(--font-family-display)',
           fontWeight: 700,
           fontSize: '14px',
-          cursor: 'pointer',
+          cursor: adding ? 'wait' : 'pointer',
           whiteSpace: 'nowrap',
           flexShrink: 0,
+          opacity: adding ? 0.7 : 1,
+          transition: 'opacity 150ms',
         }}
       >
-        Add to bag
+        {adding ? 'Adding…' : 'Add to bag'}
       </button>
     </div>
   );

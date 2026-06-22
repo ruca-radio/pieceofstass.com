@@ -4,7 +4,7 @@ interface Props {
   description: string;
   canonical?: string;
   ogImage?: string;
-  ogType?: 'website' | 'product' | 'article';
+  ogType?: 'website' | 'product' | 'article' | 'profile';
   jsonLd?: object | object[];
   noindex?: boolean;
 }
@@ -19,15 +19,21 @@ const {
   noindex = false,
 } = Astro.props;
 
-const siteUrl = 'https://pieceofstass.com';
+const siteUrl = import.meta.env.PUBLIC_SITE_URL || 'https://pieceofstass.com';
 const canonicalUrl = canonical ? canonical : `${siteUrl}${Astro.url.pathname}`;
 const ogImageFull = ogImage.startsWith('http') ? ogImage : `${siteUrl}${ogImage}`;
+
+const robotsValue = noindex ? 'noindex,nofollow' : 'index,follow';
 ---
 
 <title>{title}</title>
 <meta name="description" content={description} />
 <link rel="canonical" href={canonicalUrl} />
-{noindex && <meta name="robots" content="noindex,nofollow" />}
+<meta name="robots" content={robotsValue} />
+
+<!-- Language / Hreflang -->
+<link rel="alternate" hreflang="x-default" href={canonicalUrl} />
+<link rel="alternate" hreflang="en-us" href={canonicalUrl} />
 
 <!-- Open Graph -->
 <meta property="og:type" content={ogType} />
@@ -36,6 +42,7 @@ const ogImageFull = ogImage.startsWith('http') ? ogImage : `${siteUrl}${ogImage}
 <meta property="og:image" content={ogImageFull} />
 <meta property="og:url" content={canonicalUrl} />
 <meta property="og:site_name" content="Piece of Stass" />
+<meta property="og:locale" content="en_US" />
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image" />
@@ -43,6 +50,16 @@ const ogImageFull = ogImage.startsWith('http') ? ogImage : `${siteUrl}${ogImage}
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={ogImageFull} />
 <meta name="twitter:site" content="@pieceofstass" />
+
+<!-- Preconnects & Resource Hints -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+
+<!-- Favicon -->
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+<link rel="manifest" href="/site.webmanifest" />
 
 <!-- JSON-LD -->
 {jsonLd && (

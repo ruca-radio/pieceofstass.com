@@ -1,0 +1,196 @@
+---
+export const prerender = false;
+
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { getOrderById } from '../../../lib/users-server';
+
+if (!Astro.locals.user) {
+  return Astro.redirect('/account/sign-in');
+}
+
+const user = Astro.locals.user;
+const env = (Astro.locals as Record<string, unknown>).runtime?.env as
+  | Record<string, unknown>
+  | undefined;
+
+const { id } = Astro.params;
+if (!id) return Astro.redirect('/account/orders');
+
+const order = await getOrderById(id, env);
+
+// Only show orders belonging to this user (or associated by email)
+if (!order || (order.user_id !== user.id && order.email !== user.email)) {
+  return Astro.redirect('/account/orders');
+}
+
+function formatCurrency(amount: number, currency = 'USD'): string {
+  return new Intl.NumberFormat('en-US', { style: 'currency', currency }).format(amount / 100);
+}
+function formatDate(iso: string): string {
+  return new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }).format(new Date(iso));
+}
+
+const statusSteps = ['pending', 'processing', 'shipped', 'delivered'];
+const currentStep = statusSteps.indexOf(order.status);
+
+const statusColors: Record<string, string> = {
+  pending:    '#E8A33D',
+  processing: '#7B5CFF',
+  shipped:    '#C6FF3A',
+  delivered:  '#2FA866',
+  cancelled:  '#E5484D',
+  refunded:   '#6B6B6E',
+};
+---
+
+<BaseLayout
+  title={`Order #${id.slice(0, 8).toUpperCase()} — Piece of Stass`}
+  description="View your order details."
+  noindex
+>
+  <div style="max-width: 960px; margin: 0 auto; padding: 48px 16px 96px;">
+    <!-- Breadcrumb -->
+    <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--color-muted); margin-bottom: 32px;">
+      <a href="/account" style="color: var(--color-muted); text-decoration: none;">Account</a>
+      <span>›</span>
+      <a href="/account/orders" style="color: var(--color-muted); text-decoration: none;">Orders</a>
+      <span>›</span>
+      <span style="color: var(--color-paper); font-family: var(--font-family-mono);">#{id.slice(0, 8).toUpperCase()}</span>
+    </div>
+
+    <!-- Header -->
+    <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 32px; flex-wrap: wrap;">
+      <div>
+        <h1 style="font-family: var(--font-family-display); font-size: 28px; font-weight: 700; color: var(--color-paper); letter-spacing: -0.03em; margin-bottom: 4px;">
+          Order #{id.slice(0, 8).toUpperCase()}
+        </h1>
+        <p style="font-size: 13px; color: var(--color-muted);">Placed {formatDate(order.created_at)}</p>
+      </div>
+      <span style={`font-size: 13px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: ${statusColors[order.status] ?? '#6B6B6E'}; background: rgba(255,255,255,0.05); padding: 6px 14px; border-radius: var(--radius-pill); border: 1px solid currentColor;`}>
+        {order.status}
+      </span>
+    </div>
+
+    <!-- Status timeline (for active orders) -->
+    {!['cancelled', 'refunded'].includes(order.status) && (
+      <div style="background: var(--color-charcoal); border-radius: var(--radius-xl); border: 1px solid var(--color-slate); padding: 28px 32px; margin-bottom: 24px;">
+        <h2 style="font-size: 14px; font-weight: 600; color: var(--color-muted); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 24px;">Order status</h2>
+        <div style="display: flex; align-items: center; gap: 0; position: relative;">
+          {statusSteps.map((step, i) => (
+            <div style="flex: 1; display: flex; flex-direction: column; align-items: center; position: relative; z-index: 1;">
+              <!-- Connector line -->
+              {i > 0 && (
+                <div style={`position: absolute; top: 14px; right: 50%; left: -50%; height: 2px; background: ${i <= currentStep ? 'var(--color-lime)' : 'var(--color-slate)'}; z-index: 0;`}></div>
+              )}
+              <!-- Dot -->
+              <div style={`width: 28px; height: 28px; border-radius: 50%; border: 2px solid ${i <= currentStep ? 'var(--color-lime)' : 'var(--color-slate)'}; background: ${i <= currentStep ? 'var(--color-lime)' : 'var(--color-charcoal)'}; display: flex; align-items: center; justify-content: center; margin-bottom: 8px; flex-shrink: 0; z-index: 1; position: relative;`}>
+                {i <= currentStep && <span style="color: var(--color-ink); font-size: 12px; font-weight: 700;">✓</span>}
+              </div>
+              <!-- Label -->
+              <span style={`font-size: 11px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: ${i <= currentStep ? 'var(--color-paper)' : 'var(--color-muted)'}; text-align: center;`}>
+                {step.charAt(0).toUpperCase() + step.slice(1)}
+              </span>
+            </div>
+          ))}
+        </div>
+
+        {order.tracking_url && order.tracking_number && (
+          <div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--color-slate);">
+            <p style="font-size: 14px; color: var(--color-muted); margin-bottom: 8px;">Tracking number: <span style="font-family: var(--font-family-mono); color: var(--color-paper);">{order.tracking_number}</span></p>
+            <a href={order.tracking_url} target="_blank" rel="noopener noreferrer" style="display: inline-block; font-size: 14px; font-weight: 600; color: var(--color-lime); text-decoration: none;">
+              Track shipment →
+            </a>
+          </div>
+        )}
+        {!order.tracking_url && order.status === 'processing' && (
+          <p style="font-size: 13px; color: var(--color-muted); margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--color-slate);">
+            Tracking information will appear here once your order ships (typically 2–5 business days).
+          </p>
+        )}
+      </div>
+    )}
+
+    <div style="display: grid; grid-template-columns: 1fr; gap: 24px;">
+
+      <!-- Line items -->
+      <section style="background: var(--color-charcoal); border-radius: var(--radius-xl); border: 1px solid var(--color-slate); padding: 28px 32px;">
+        <h2 style="font-size: 16px; font-weight: 700; color: var(--color-paper); margin-bottom: 20px; letter-spacing: -0.01em;">Items</h2>
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+          {order.items.map((item) => (
+            <div style="display: flex; gap: 16px; align-items: center; padding-bottom: 16px; border-bottom: 1px solid var(--color-slate); last:border-bottom-none;">
+              {item.image && (
+                <img
+                  src={item.image}
+                  alt={item.title}
+                  width="60"
+                  height="60"
+                  style="width: 60px; height: 60px; object-fit: cover; border-radius: var(--radius-md); flex-shrink: 0; background: var(--color-slate);"
+                />
+              )}
+              {!item.image && (
+                <div style="width: 60px; height: 60px; background: var(--color-slate); border-radius: var(--radius-md); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 24px; opacity: 0.4;">
+                  📦
+                </div>
+              )}
+              <div style="flex: 1; min-width: 0;">
+                <div style="font-size: 15px; font-weight: 600; color: var(--color-paper); margin-bottom: 2px;">{item.title}</div>
+                {item.options && Object.keys(item.options).length > 0 && (
+                  <div style="font-size: 13px; color: var(--color-muted);">
+                    {Object.entries(item.options).map(([k, v]) => `${k}: ${v}`).join(' · ')}
+                  </div>
+                )}
+                <div style="font-size: 13px; color: var(--color-muted); margin-top: 2px;">Qty: {item.quantity}</div>
+              </div>
+              <div style="font-size: 15px; font-weight: 600; color: var(--color-paper); flex-shrink: 0;">
+                {formatCurrency(item.price * item.quantity, order.currency)}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <!-- Order totals -->
+        <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--color-slate);">
+          <div style="display: flex; justify-content: space-between; font-size: 13px; color: var(--color-muted); margin-bottom: 8px;">
+            <span>Subtotal</span>
+            <span>{formatCurrency(order.subtotal, order.currency)}</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 13px; color: var(--color-muted); margin-bottom: 8px;">
+            <span>Shipping</span>
+            <span>{order.shipping === 0 ? 'Free' : formatCurrency(order.shipping, order.currency)}</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 13px; color: var(--color-muted); margin-bottom: 16px;">
+            <span>Tax</span>
+            <span>{formatCurrency(order.tax, order.currency)}</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 18px; font-weight: 700; color: var(--color-paper); padding-top: 12px; border-top: 1px solid var(--color-slate);">
+            <span>Total</span>
+            <span style="color: var(--color-lime);">{formatCurrency(order.total, order.currency)}</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Shipping address -->
+      {order.shipping_address && (
+        <section style="background: var(--color-charcoal); border-radius: var(--radius-xl); border: 1px solid var(--color-slate); padding: 28px 32px;">
+          <h2 style="font-size: 16px; font-weight: 700; color: var(--color-paper); margin-bottom: 16px; letter-spacing: -0.01em;">Shipping address</h2>
+          <address style="font-style: normal; font-size: 15px; color: var(--color-muted); line-height: 1.8;">
+            {order.shipping_address.first_name} {order.shipping_address.last_name}<br />
+            {order.shipping_address.address_1}<br />
+            {order.shipping_address.address_2 && <>{order.shipping_address.address_2}<br /></>}
+            {order.shipping_address.city}, {order.shipping_address.state} {order.shipping_address.postal_code}<br />
+            {order.shipping_address.country}
+          </address>
+        </section>
+      )}
+    </div>
+
+    <!-- Help -->
+    <div style="margin-top: 32px; padding: 20px 24px; background: rgba(123,92,255,0.08); border-radius: var(--radius-lg); border: 1px solid rgba(123,92,255,0.2);">
+      <p style="font-size: 14px; color: var(--color-muted); line-height: 1.6;">
+        Need help with this order? Email us at
+        <a href="mailto:hello@pieceofstass.com" style="color: var(--color-violet); font-weight: 600; text-decoration: none;">hello@pieceofstass.com</a>
+        and include your order number.
+      </p>
+    </div>
+  </div>
+</BaseLayout>

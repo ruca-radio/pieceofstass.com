@@ -1,0 +1,193 @@
+---
+export const prerender = false;
+
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { listOrdersByUserId, listAddresses } from '../../lib/users-server';
+
+// Require authentication
+if (!Astro.locals.user) {
+  return Astro.redirect('/account/sign-in');
+}
+
+const user = Astro.locals.user;
+const env = (Astro.locals as Record<string, unknown>).runtime?.env as
+  | Record<string, unknown>
+  | undefined;
+
+const [recentOrders, addresses] = await Promise.all([
+  listOrdersByUserId(user.id, env),
+  listAddresses(user.id, env),
+]);
+
+const last5 = recentOrders.slice(0, 5);
+const greeting = user.first_name ? `Hey, ${user.first_name}!` : 'Your account';
+
+function formatCurrency(amount: number, currency = 'USD'): string {
+  return new Intl.NumberFormat('en-US', { style: 'currency', currency }).format(amount / 100);
+}
+
+function formatDate(iso: string): string {
+  return new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: 'numeric' }).format(new Date(iso));
+}
+
+const statusColors: Record<string, string> = {
+  pending:    '#E8A33D',
+  processing: '#7B5CFF',
+  shipped:    '#C6FF3A',
+  delivered:  '#2FA866',
+  cancelled:  '#E5484D',
+  refunded:   '#6B6B6E',
+};
+---
+
+<BaseLayout
+  title="My Account — Piece of Stass"
+  description="Manage your orders, addresses, and preferences."
+  noindex
+>
+  <div style="max-width: 960px; margin: 0 auto; padding: 48px 16px 96px;">
+
+    <!-- Header -->
+    <div style="margin-bottom: 48px;">
+      <h1 style="font-family: var(--font-family-display); font-size: 32px; font-weight: 700; color: var(--color-espresso); letter-spacing: -0.03em; margin-bottom: 4px;">
+        {greeting}
+      </h1>
+      <p style="font-size: 15px; color: var(--color-muted);">{user.email}</p>
+    </div>
+
+    <!-- Quick nav -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 48px;">
+      {[
+        { href: '/account/orders', icon: '📦', label: 'Orders' },
+        { href: '/account/addresses', icon: '📍', label: 'Addresses' },
+        { href: '/account/profile', icon: '✏️', label: 'Profile' },
+      ].map(({ href, icon, label }) => (
+        <a href={href} style="display: flex; align-items: center; gap: 12px; background: var(--color-charcoal); border: 1px solid var(--color-slate); border-radius: var(--radius-lg); padding: 16px 20px; text-decoration: none; color: var(--color-espresso); transition: border-color 150ms, box-shadow 150ms;" class="account-nav-card">
+          <span style="font-size: 22px;">{icon}</span>
+          <span style="font-size: 15px; font-weight: 600;">{label}</span>
+          <span style="margin-left: auto; color: var(--color-muted);">→</span>
+        </a>
+      ))}
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr; gap: 32px;">
+
+      <!-- Recent orders -->
+      <section style="background: var(--color-charcoal); border-radius: var(--radius-xl); border: 1px solid var(--color-slate); padding: 32px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px;">
+          <h2 style="font-family: var(--font-family-display); font-size: 20px; font-weight: 700; color: var(--color-espresso); letter-spacing: -0.02em;">Recent orders</h2>
+          {last5.length > 0 && (
+            <a href="/account/orders" style="font-size: 13px; color: var(--color-lime); text-decoration: none; font-weight: 600;">View all →</a>
+          )}
+        </div>
+
+        {last5.length === 0 ? (
+          <div style="text-align: center; padding: 40px 0;">
+            <div style="font-size: 40px; margin-bottom: 12px; opacity: 0.4;">📦</div>
+            <p style="font-size: 15px; color: var(--color-muted);">No orders yet.</p>
+            <a href="/shop" style="display: inline-block; margin-top: 16px; font-size: 14px; color: var(--color-lime); font-weight: 600; text-decoration: none;">Start shopping →</a>
+          </div>
+        ) : (
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            {last5.map((order) => (
+              <a
+                href={`/account/orders/${order.id}`}
+                style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px; background: var(--color-ink); border-radius: var(--radius-md); text-decoration: none; border: 1px solid var(--color-slate); transition: border-color 150ms;"
+                class="order-row"
+              >
+                <div>
+                  <div style="font-size: 13px; font-family: var(--font-family-mono); color: var(--color-lime); margin-bottom: 2px;">#{order.id.slice(0, 8).toUpperCase()}</div>
+                  <div style="font-size: 13px; color: var(--color-muted);">{formatDate(order.created_at)} · {order.items.length} item{order.items.length !== 1 ? 's' : ''}</div>
+                </div>
+                <div style="text-align: right; flex-shrink: 0;">
+                  <div style="font-size: 15px; font-weight: 600; color: var(--color-espresso); margin-bottom: 4px;">{formatCurrency(order.total, order.currency)}</div>
+                  <span style={`display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: ${statusColors[order.status] ?? '#6B6B6E'};`}>
+                    {order.status}
+                  </span>
+                </div>
+              </a>
+            ))}
+          </div>
+        )}
+      </section>
+
+      <!-- Preferences -->
+      <section style="background: var(--color-charcoal); border-radius: var(--radius-xl); border: 1px solid var(--color-slate); padding: 32px;">
+        <h2 style="font-family: var(--font-family-display); font-size: 20px; font-weight: 700; color: var(--color-espresso); letter-spacing: -0.02em; margin-bottom: 24px;">Preferences</h2>
+
+        <div id="pref-form">
+          <label style="display: flex; align-items: flex-start; gap: 14px; cursor: pointer; padding: 16px; background: var(--color-ink); border-radius: var(--radius-md); border: 1px solid var(--color-slate);">
+            <input
+              type="checkbox"
+              id="marketing-opt-in"
+              checked={user.marketing_opt_in}
+              style="width: 18px; height: 18px; margin-top: 1px; accent-color: var(--color-lime); flex-shrink: 0;"
+            />
+            <div>
+              <div style="font-size: 15px; font-weight: 600; color: var(--color-espresso); margin-bottom: 2px;">Marketing emails & SMS</div>
+              <div style="font-size: 13px; color: var(--color-muted); line-height: 1.5;">New drops, exclusive offers, and early access. Unsubscribe anytime.</div>
+            </div>
+          </label>
+          <p id="pref-status" style="font-size: 13px; color: var(--color-success); margin-top: 10px; min-height: 18px;"></p>
+        </div>
+      </section>
+
+      <!-- Sign out -->
+      <div style="text-align: right;">
+        <form method="post" action="/api/auth/sign-out" id="sign-out-form">
+          <button type="submit" style="background: none; border: 1px solid var(--color-slate); border-radius: var(--radius-pill); padding: 10px 20px; font-size: 13px; color: var(--color-muted); cursor: pointer; transition: color 150ms, border-color 150ms;" onmouseover="this.style.color='var(--color-espresso)';this.style.borderColor='var(--color-muted)'" onmouseout="this.style.color='var(--color-muted)';this.style.borderColor='var(--color-slate)'">
+            Sign out
+          </button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .account-nav-card:hover {
+    border-color: var(--color-lime) !important;
+    box-shadow: var(--shadow-lime-glow) !important;
+  }
+  .order-row:hover {
+    border-color: var(--color-muted) !important;
+  }
+</style>
+
+<script>
+  // Marketing opt-in toggle
+  const checkbox = document.getElementById('marketing-opt-in') as HTMLInputElement;
+  const status = document.getElementById('pref-status') as HTMLParagraphElement;
+
+  checkbox?.addEventListener('change', async () => {
+    status.textContent = 'Saving…';
+    status.style.color = 'var(--color-muted)';
+    try {
+      const res = await fetch('/api/account/profile', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ marketing_opt_in: checkbox.checked }),
+      });
+      if (res.ok) {
+        status.textContent = 'Saved ✓';
+        status.style.color = 'var(--color-success)';
+        setTimeout(() => { status.textContent = ''; }, 2000);
+      } else {
+        status.textContent = 'Failed to save';
+        status.style.color = 'var(--color-error)';
+      }
+    } catch {
+      status.textContent = 'Network error';
+      status.style.color = 'var(--color-error)';
+    }
+  });
+
+  // Sign out (POST form)
+  const signOutForm = document.getElementById('sign-out-form') as HTMLFormElement;
+  signOutForm?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    await fetch('/api/auth/sign-out', { method: 'POST' });
+    window.location.href = '/';
+  });
+</script>

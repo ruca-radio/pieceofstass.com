@@ -11,7 +11,7 @@ export default function SearchButton() {
         border: 'none',
         cursor: 'pointer',
         padding: '8px',
-        color: 'var(--color-paper)',
+        color: 'var(--color-espresso)',
         borderRadius: '999px',
         display: 'flex',
         alignItems: 'center',

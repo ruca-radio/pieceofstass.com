@@ -53,7 +53,7 @@ const currentPath = Astro.url.pathname;
           <path d="M9 17v8" stroke="var(--color-ink)" stroke-width="3" stroke-linecap="round" />
         </svg>
         <span
-          style="font-family: var(--font-family-display); font-weight: 700; font-size: 18px; color: var(--color-paper); letter-spacing: -0.02em; line-height: 1;"
+          style="font-family: var(--font-family-display); font-weight: 700; font-size: 18px; color: var(--color-espresso); letter-spacing: -0.02em; line-height: 1;"
         >
           STASS
         </span>
@@ -68,14 +68,14 @@ const currentPath = Astro.url.pathname;
     >
       <a
         href="/shop"
-        style={`font-size: 14px; font-weight: 600; padding: 6px 12px; border-radius: 999px; text-decoration: none; transition: background 150ms; color: ${currentPath === '/shop' ? 'var(--color-lime)' : 'var(--color-paper)'};`}
+        style={`font-size: 14px; font-weight: 600; padding: 6px 12px; border-radius: 999px; text-decoration: none; transition: background 150ms; color: ${currentPath === '/shop' ? 'var(--color-lime)' : 'var(--color-espresso)'};`}
       >
         New
       </a>
       {navCategories.slice(0, 6).map((cat) => (
         <a
           href={`/shop/${cat.slug}`}
-          style={`font-size: 14px; font-weight: 500; padding: 6px 12px; border-radius: 999px; text-decoration: none; transition: background 150ms; color: ${currentPath === `/shop/${cat.slug}` ? 'var(--color-lime)' : 'var(--color-paper)'};`}
+          style={`font-size: 14px; font-weight: 500; padding: 6px 12px; border-radius: 999px; text-decoration: none; transition: background 150ms; color: ${currentPath === `/shop/${cat.slug}` ? 'var(--color-lime)' : 'var(--color-espresso)'};`}
         >
           {cat.title}
         </a>

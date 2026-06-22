@@ -49,7 +49,7 @@ export default function EmailSignup({ compact = false }: { compact?: boolean }) 
           border: '1px solid var(--color-slate)',
           borderRadius: '999px',
           padding: '12px 20px',
-          color: 'var(--color-paper)',
+          color: 'var(--color-espresso)',
           fontSize: '14px',
           fontFamily: 'var(--font-family-sans)',
           outline: 'none',

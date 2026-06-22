@@ -54,11 +54,11 @@ export default function PLPFilters({ products, categoryTitle }: Props) {
           <button
             onClick={() => setFilterDrawerOpen(true)}
             data-testid="button-filters"
-            style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'var(--color-charcoal)', border: '1px solid var(--color-slate)', borderRadius: '999px', padding: '8px 14px', color: 'var(--color-paper)', fontSize: '13px', cursor: 'pointer', fontFamily: 'var(--font-family-sans)' }}
+            style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'var(--color-charcoal)', border: '1px solid var(--color-slate)', borderRadius: '999px', padding: '8px 14px', color: 'var(--color-espresso)', fontSize: '13px', cursor: 'pointer', fontFamily: 'var(--font-family-sans)' }}
           >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z"/></svg>
             Filters
-            {priceMax !== null && <span style={{ background: 'var(--color-lime)', color: 'var(--color-ink)', borderRadius: '999px', padding: '0 5px', fontSize: '10px', fontWeight: 700 }}>1</span>}
+            {priceMax !== null && <span style={{ background: 'var(--color-lime)', color: 'var(--color-cream)', borderRadius: '999px', padding: '0 5px', fontSize: '10px', fontWeight: 700 }}>1</span>}
           </button>
           <span style={{ fontSize: '12px', color: 'var(--color-muted)', fontFamily: 'var(--font-family-mono)' }}>{filtered.length} items</span>
         </div>
@@ -67,7 +67,7 @@ export default function PLPFilters({ products, categoryTitle }: Props) {
           value={sort}
           onChange={(e) => setSort(e.target.value as SortKey)}
           data-testid="select-sort"
-          style={{ background: 'var(--color-charcoal)', border: '1px solid var(--color-slate)', borderRadius: '999px', padding: '8px 14px', color: 'var(--color-paper)', fontSize: '13px', cursor: 'pointer', fontFamily: 'var(--font-family-sans)', outline: 'none' }}
+          style={{ background: 'var(--color-charcoal)', border: '1px solid var(--color-slate)', borderRadius: '999px', padding: '8px 14px', color: 'var(--color-espresso)', fontSize: '13px', cursor: 'pointer', fontFamily: 'var(--font-family-sans)', outline: 'none' }}
         >
           <option value="featured">Featured</option>
           <option value="newest">Newest</option>
@@ -81,7 +81,7 @@ export default function PLPFilters({ products, categoryTitle }: Props) {
         <div style={{ display: 'flex', gap: '8px', marginBottom: '16px', flexWrap: 'wrap' }}>
           <button
             onClick={() => setPriceMax(null)}
-            style={{ display: 'flex', alignItems: 'center', gap: '4px', background: 'var(--color-charcoal)', border: '1px solid var(--color-slate)', borderRadius: '999px', padding: '6px 12px', color: 'var(--color-paper)', fontSize: '12px', cursor: 'pointer', fontFamily: 'var(--font-family-sans)' }}
+            style={{ display: 'flex', alignItems: 'center', gap: '4px', background: 'var(--color-charcoal)', border: '1px solid var(--color-slate)', borderRadius: '999px', padding: '6px 12px', color: 'var(--color-espresso)', fontSize: '12px', cursor: 'pointer', fontFamily: 'var(--font-family-sans)' }}
           >
             Under ${priceMax}
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
@@ -109,9 +109,9 @@ export default function PLPFilters({ products, categoryTitle }: Props) {
           <button
             onClick={() => setVisibleCount((n) => n + 24)}
             data-testid="button-load-more"
-            style={{ background: 'transparent', border: '1.5px solid var(--color-slate)', borderRadius: '999px', padding: '14px 32px', color: 'var(--color-paper)', fontSize: '14px', fontWeight: 600, cursor: 'pointer', fontFamily: 'var(--font-family-display)', transition: 'border-color 150ms, color 150ms' }}
+            style={{ background: 'transparent', border: '1.5px solid var(--color-slate)', borderRadius: '999px', padding: '14px 32px', color: 'var(--color-espresso)', fontSize: '14px', fontWeight: 600, cursor: 'pointer', fontFamily: 'var(--font-family-display)', transition: 'border-color 150ms, color 150ms' }}
             onMouseOver={(e) => { e.currentTarget.style.borderColor = 'var(--color-lime)'; e.currentTarget.style.color = 'var(--color-lime)'; }}
-            onMouseOut={(e) => { e.currentTarget.style.borderColor = 'var(--color-slate)'; e.currentTarget.style.color = 'var(--color-paper)'; }}
+            onMouseOut={(e) => { e.currentTarget.style.borderColor = 'var(--color-slate)'; e.currentTarget.style.color = 'var(--color-espresso)'; }}
           >
             Load more ({sorted.length - visibleCount} remaining)
           </button>
@@ -130,7 +130,7 @@ export default function PLPFilters({ products, categoryTitle }: Props) {
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
               <h3 style={{ fontFamily: 'var(--font-family-display)', fontWeight: 700, fontSize: '18px', margin: 0 }}>Filter</h3>
-              <button onClick={() => setFilterDrawerOpen(false)} aria-label="Close filters" style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-paper)', padding: '4px' }}>
+              <button onClick={() => setFilterDrawerOpen(false)} aria-label="Close filters" style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-espresso)', padding: '4px' }}>
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
               </button>
             </div>
@@ -143,7 +143,7 @@ export default function PLPFilters({ products, categoryTitle }: Props) {
                     key={p}
                     onClick={() => setPriceMax(priceMax === p ? null : p)}
                     aria-pressed={priceMax === p}
-                    style={{ padding: '8px 16px', borderRadius: '999px', fontSize: '13px', fontFamily: 'var(--font-family-mono)', border: `1.5px solid ${priceMax === p ? 'var(--color-lime)' : 'var(--color-slate)'}`, background: priceMax === p ? 'var(--color-lime)' : 'transparent', color: priceMax === p ? 'var(--color-ink)' : 'var(--color-paper)', cursor: 'pointer', transition: 'all 150ms' }}
+                    style={{ padding: '8px 16px', borderRadius: '999px', fontSize: '13px', fontFamily: 'var(--font-family-mono)', border: `1.5px solid ${priceMax === p ? 'var(--color-lime)' : 'var(--color-slate)'}`, background: priceMax === p ? 'var(--color-lime)' : 'transparent', color: priceMax === p ? 'var(--color-cream)' : 'var(--color-espresso)', cursor: 'pointer', transition: 'all 150ms' }}
                   >
                     Under ${p}
                   </button>
@@ -154,13 +154,13 @@ export default function PLPFilters({ products, categoryTitle }: Props) {
             <div style={{ display: 'flex', gap: '12px' }}>
               <button
                 onClick={() => { setPriceMax(null); setFilterDrawerOpen(false); }}
-                style={{ flex: 1, background: 'transparent', border: '1.5px solid var(--color-slate)', borderRadius: '999px', padding: '14px', color: 'var(--color-paper)', fontWeight: 600, cursor: 'pointer', fontFamily: 'var(--font-family-display)', fontSize: '14px' }}
+                style={{ flex: 1, background: 'transparent', border: '1.5px solid var(--color-slate)', borderRadius: '999px', padding: '14px', color: 'var(--color-espresso)', fontWeight: 600, cursor: 'pointer', fontFamily: 'var(--font-family-display)', fontSize: '14px' }}
               >
                 Clear all
               </button>
               <button
                 onClick={() => setFilterDrawerOpen(false)}
-                style={{ flex: 2, background: 'var(--color-lime)', border: 'none', borderRadius: '999px', padding: '14px', color: 'var(--color-ink)', fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font-family-display)', fontSize: '14px' }}
+                style={{ flex: 2, background: 'var(--color-lime)', border: 'none', borderRadius: '999px', padding: '14px', color: 'var(--color-cream)', fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font-family-display)', fontSize: '14px' }}
               >
                 View {filtered.length} items
               </button>

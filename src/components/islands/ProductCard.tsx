@@ -47,6 +47,8 @@ export default function ProductCard({ product, eager = false }: Props) {
             src={product.images[0]}
             alt={product.title}
             loading={eager ? 'eager' : 'lazy'}
+            fetchpriority={eager ? 'high' : 'auto'}
+            decoding="async"
             width={400}
             height={533}
             style={{
@@ -60,12 +62,12 @@ export default function ProductCard({ product, eager = false }: Props) {
           {/* Badges */}
           <div style={{ position: 'absolute', top: '10px', left: '10px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
             {discount && discount >= 10 && (
-              <span style={{ background: 'var(--color-pink)', color: 'var(--color-paper)', fontSize: '10px', fontWeight: 700, fontFamily: 'var(--font-family-mono)', padding: '3px 8px', borderRadius: '999px', letterSpacing: '0.04em' }}>
+              <span style={{ background: 'var(--color-pink)', color: 'var(--color-espresso)', fontSize: '10px', fontWeight: 700, fontFamily: 'var(--font-family-mono)', padding: '3px 8px', borderRadius: '999px', letterSpacing: '0.04em' }}>
                 −{discount}%
               </span>
             )}
             {product.tags?.includes('source-sampled') && (
-              <span style={{ background: 'var(--color-lime)', color: 'var(--color-ink)', fontSize: '10px', fontWeight: 700, fontFamily: 'var(--font-family-mono)', padding: '3px 8px', borderRadius: '999px', letterSpacing: '0.04em' }}>
+              <span style={{ background: 'var(--color-lime)', color: 'var(--color-cream)', fontSize: '10px', fontWeight: 700, fontFamily: 'var(--font-family-mono)', padding: '3px 8px', borderRadius: '999px', letterSpacing: '0.04em' }}>
                 NEW
               </span>
             )}
@@ -82,7 +84,7 @@ export default function ProductCard({ product, eager = false }: Props) {
               left: '10px',
               right: '10px',
               background: added ? 'var(--color-lime)' : 'rgba(10,10,11,0.85)',
-              color: added ? 'var(--color-ink)' : 'var(--color-paper)',
+              color: added ? 'var(--color-ink)' : 'var(--color-espresso)',
               border: 'none',
               borderRadius: '999px',
               padding: '10px',
@@ -103,13 +105,13 @@ export default function ProductCard({ product, eager = false }: Props) {
         {/* Info */}
         <div>
           <p
-            style={{ fontSize: '13px', fontWeight: 600, color: 'var(--color-paper)', margin: '0 0 4px', lineHeight: 1.3 }}
+            style={{ fontSize: '13px', fontWeight: 600, color: 'var(--color-espresso)', margin: '0 0 4px', lineHeight: 1.3 }}
             className="line-clamp-2"
           >
             {product.title}
           </p>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
-            <span style={{ fontFamily: 'var(--font-family-mono)', fontSize: '13px', fontWeight: 700, color: 'var(--color-paper)' }}>
+            <span style={{ fontFamily: 'var(--font-family-mono)', fontSize: '13px', fontWeight: 700, color: 'var(--color-espresso)' }}>
               {formatPriceDollars(product.price)}
             </span>
             {product.compare_at_price && product.compare_at_price > product.price && (

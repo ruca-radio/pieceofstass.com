@@ -39,7 +39,7 @@ export default function TrackOrder() {
               onChange={(e) => setOrderId(e.target.value)}
               required
               data-testid="input-order-id"
-              style={{ width: '100%', background: 'var(--color-charcoal)', border: '1px solid var(--color-slate)', borderRadius: 'var(--radius-md)', padding: '12px 16px', color: 'var(--color-paper)', fontSize: '15px', fontFamily: 'var(--font-family-sans)', outline: 'none', boxSizing: 'border-box' }}
+              style={{ width: '100%', background: 'var(--color-charcoal)', border: '1px solid var(--color-slate)', borderRadius: 'var(--radius-md)', padding: '12px 16px', color: 'var(--color-espresso)', fontSize: '15px', fontFamily: 'var(--font-family-sans)', outline: 'none', boxSizing: 'border-box' }}
             />
           </div>
           <div>
@@ -54,14 +54,14 @@ export default function TrackOrder() {
               onChange={(e) => setEmail(e.target.value)}
               required
               data-testid="input-track-email"
-              style={{ width: '100%', background: 'var(--color-charcoal)', border: '1px solid var(--color-slate)', borderRadius: 'var(--radius-md)', padding: '12px 16px', color: 'var(--color-paper)', fontSize: '15px', fontFamily: 'var(--font-family-sans)', outline: 'none', boxSizing: 'border-box' }}
+              style={{ width: '100%', background: 'var(--color-charcoal)', border: '1px solid var(--color-slate)', borderRadius: 'var(--radius-md)', padding: '12px 16px', color: 'var(--color-espresso)', fontSize: '15px', fontFamily: 'var(--font-family-sans)', outline: 'none', boxSizing: 'border-box' }}
             />
           </div>
           <button
             type="submit"
             disabled={status === 'loading'}
             data-testid="button-track"
-            style={{ background: 'var(--color-lime)', color: 'var(--color-ink)', border: 'none', borderRadius: '999px', padding: '14px', fontFamily: 'var(--font-family-display)', fontWeight: 700, fontSize: '15px', cursor: status === 'loading' ? 'wait' : 'pointer', opacity: status === 'loading' ? 0.7 : 1 }}
+            style={{ background: 'var(--color-lime)', color: 'var(--color-cream)', border: 'none', borderRadius: '999px', padding: '14px', fontFamily: 'var(--font-family-display)', fontWeight: 700, fontSize: '15px', cursor: status === 'loading' ? 'wait' : 'pointer', opacity: status === 'loading' ? 0.7 : 1 }}
           >
             {status === 'loading' ? 'Looking up...' : 'Track order'}
           </button>
@@ -70,7 +70,7 @@ export default function TrackOrder() {
         <div>
           <div style={{ background: 'var(--color-charcoal)', border: '1px solid var(--color-slate)', borderRadius: 'var(--radius-xl)', padding: '24px', marginBottom: '24px' }}>
             <p style={{ fontSize: '12px', fontFamily: 'var(--font-family-mono)', color: 'var(--color-muted)', margin: '0 0 4px' }}>ORDER</p>
-            <p style={{ fontFamily: 'var(--font-family-display)', fontWeight: 700, fontSize: '18px', color: 'var(--color-paper)', margin: '0 0 20px' }}>{orderId}</p>
+            <p style={{ fontFamily: 'var(--font-family-display)', fontWeight: 700, fontSize: '18px', color: 'var(--color-espresso)', margin: '0 0 20px' }}>{orderId}</p>
 
             {/* Timeline */}
             <div style={{ position: 'relative' }}>
@@ -88,7 +88,7 @@ export default function TrackOrder() {
                       )}
                     </div>
                     <div style={{ paddingBottom: i < STEPS.length - 1 ? '0' : '0', paddingTop: '1px' }}>
-                      <p style={{ fontSize: '13px', fontWeight: active ? 700 : 600, color: active ? 'var(--color-lime)' : done ? 'var(--color-paper)' : 'var(--color-muted)', margin: 0 }}>{step.label}</p>
+                      <p style={{ fontSize: '13px', fontWeight: active ? 700 : 600, color: active ? 'var(--color-lime)' : done ? 'var(--color-espresso)' : 'var(--color-muted)', margin: 0 }}>{step.label}</p>
                       {active && <p style={{ fontSize: '12px', color: 'var(--color-muted)', margin: '2px 0 24px', fontFamily: 'var(--font-family-mono)' }}>{step.description}</p>}
                       {!active && <div style={{ height: '32px' }} />}
                     </div>
