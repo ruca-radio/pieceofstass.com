@@ -1,0 +1,324 @@
+---
+export const prerender = false;
+
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import { requireAdmin } from '../../lib/admin-auth';
+import { getOrdersKVFromEnv } from '../../lib/orders-server';
+
+const env = await requireAdmin(Astro);
+if (!env) return Astro.redirect('/admin/sign-in?error=session');
+
+const runtimeEnv = ((Astro.locals as Record<string, unknown>)?.runtime as Record<string, unknown>)?.env as Record<string, unknown> | undefined;
+const kv = getOrdersKVFromEnv(runtimeEnv);
+
+// Load settings
+const settingsRaw = await kv.get('admin_settings');
+const settings = settingsRaw ? JSON.parse(settingsRaw) : {
+  store_name: 'Piece of Stass',
+  support_email: 'hello@pieceofstass.com',
+  support_phone: '',
+  address: '',
+  currency: 'USD',
+  tax_rate: 0.08,
+  shipping_rates: [
+    { zone: 'US', rate: 0, label: 'Free shipping (US)' },
+    { zone: 'International', rate: 15, label: 'International shipping' },
+  ],
+};
+
+// Load admin users
+const adminUsersRaw = await kv.get('admin_users');
+const adminUsers: Array<{ username: string; created_at: string }> = adminUsersRaw
+  ? (JSON.parse(adminUsersRaw) as Array<{ username: string; password_hash: string; created_at: string }>).map(({ username, created_at }) => ({ username, created_at }))
+  : [];
+---
+<AdminLayout title="Settings" activeNav="settings">
+
+  <div style="display:grid;grid-template-columns:1fr 300px;gap:20px;align-items:start;">
+
+    <div style="display:flex;flex-direction:column;gap:16px;">
+
+      <!-- Store info -->
+      <div class="adm-card">
+        <div style="font-weight:700;font-size:14px;margin-bottom:16px;">Store Information</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div style="grid-column:span 2;">
+            <label class="adm-label">Store Name</label>
+            <input type="text" id="s-name" class="adm-input" value={settings.store_name} />
+          </div>
+          <div>
+            <label class="adm-label">Support Email</label>
+            <input type="email" id="s-email" class="adm-input" value={settings.support_email} />
+          </div>
+          <div>
+            <label class="adm-label">Support Phone</label>
+            <input type="text" id="s-phone" class="adm-input" value={settings.support_phone ?? ''} placeholder="+1-555-0100" />
+          </div>
+          <div style="grid-column:span 2;">
+            <label class="adm-label">Business Address</label>
+            <input type="text" id="s-address" class="adm-input" value={settings.address ?? ''} placeholder="123 Main St, New York, NY 10001" />
+          </div>
+          <div>
+            <label class="adm-label">Currency</label>
+            <select id="s-currency" class="adm-select">
+              <option value="USD" selected={settings.currency === 'USD'}>USD — US Dollar</option>
+              <option value="EUR" selected={settings.currency === 'EUR'}>EUR — Euro</option>
+              <option value="GBP" selected={settings.currency === 'GBP'}>GBP — British Pound</option>
+            </select>
+          </div>
+          <div>
+            <label class="adm-label">Default Tax Rate (%)</label>
+            <input type="number" id="s-tax" class="adm-input" value={(settings.tax_rate ?? 0.08) * 100} step="0.1" min="0" max="30" />
+          </div>
+        </div>
+        <div style="margin-top:14px;display:flex;justify-content:flex-end;">
+          <button type="button" class="adm-btn adm-btn-primary" onclick="saveStoreSettings()">Save Store Settings</button>
+        </div>
+      </div>
+
+      <!-- Shipping rates -->
+      <div class="adm-card">
+        <div style="font-weight:700;font-size:14px;margin-bottom:14px;">Shipping Rates</div>
+        <div id="shipping-rates" style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px;">
+          {(settings.shipping_rates ?? []).map((rate: { zone: string; rate: number; label: string }, i: number) => (
+            <div class="shipping-rate-row" style="display:flex;gap:8px;align-items:center;" data-idx={i}>
+              <input type="text" value={rate.zone} placeholder="Zone (e.g. US)" class="adm-input sr-zone" style="width:120px;font-size:12px;" />
+              <input type="number" value={rate.rate} placeholder="Rate $" class="adm-input sr-rate" style="width:80px;font-size:12px;" min="0" step="1" />
+              <input type="text" value={rate.label} placeholder="Label" class="adm-input sr-label" style="flex:1;font-size:12px;" />
+              <button type="button" class="adm-btn adm-btn-danger" style="padding:4px 8px;font-size:12px;" onclick="this.closest('.shipping-rate-row').remove()">✕</button>
+            </div>
+          ))}
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button type="button" class="adm-btn adm-btn-secondary" style="font-size:12px;" onclick="addShippingRate()">+ Add Zone</button>
+          <button type="button" class="adm-btn adm-btn-primary" style="font-size:12px;margin-left:auto;" onclick="saveShippingRates()">Save Shipping Rates</button>
+        </div>
+      </div>
+
+      <!-- Email templates -->
+      <div class="adm-card">
+        <div style="font-weight:700;font-size:14px;margin-bottom:10px;">Email Templates</div>
+        <div style="font-size:13px;color:var(--adm-muted);line-height:1.7;margin-bottom:12px;">
+          Transactional email templates are defined in code (<code class="adm-mono">/src/lib/emails/</code>).
+          To preview or edit copy, see the email source files directly.
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          {[
+            { name: 'Order Confirmation', file: 'order-confirmation.ts' },
+            { name: 'Shipping Notification', file: 'shipping-notification.ts' },
+            { name: 'Refund Confirmation', file: 'refund-confirmation.ts' },
+            { name: 'Abandoned Cart Recovery', file: 'abandoned-cart.ts' },
+            { name: 'Magic Link (Login)', file: 'magic-link.ts' },
+          ].map((t) => (
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;background:var(--adm-surface2);border-radius:6px;">
+              <span style="font-size:13px;">{t.name}</span>
+              <code class="adm-mono" style="font-size:11px;color:var(--adm-muted);">/src/lib/emails/{t.file}</code>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Change password -->
+      <div class="adm-card">
+        <div style="font-weight:700;font-size:14px;margin-bottom:14px;">Change Admin Password</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div>
+            <label class="adm-label">New Password</label>
+            <input type="password" id="new-password" class="adm-input" placeholder="Min 12 characters" />
+          </div>
+          <div>
+            <label class="adm-label">Confirm New Password</label>
+            <input type="password" id="confirm-password" class="adm-input" placeholder="Repeat password" />
+          </div>
+          <div style="font-size:12px;color:var(--adm-muted);">
+            Note: In production, update <code class="adm-mono">ADMIN_PASSWORD_HASH</code> via wrangler secret.
+            This form stores an override in KV for convenience.
+          </div>
+        </div>
+        <div style="margin-top:12px;display:flex;justify-content:flex-end;">
+          <button type="button" class="adm-btn adm-btn-danger" onclick="changePassword()">Update Password</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Right sidebar: Admin users -->
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <div class="adm-card">
+        <div style="font-weight:700;font-size:14px;margin-bottom:14px;">Admin Users</div>
+
+        <div style="margin-bottom:12px;">
+          <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--adm-surface2);border-radius:6px;margin-bottom:6px;">
+            <span style="font-size:13px;flex:1;">anna (primary)</span>
+            <span class="adm-badge adm-badge-active" style="font-size:10px;">Primary</span>
+          </div>
+          {adminUsers.map(u => (
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--adm-surface2);border-radius:6px;margin-bottom:6px;">
+              <span style="font-size:13px;flex:1;">{u.username}</span>
+              <span style="font-size:11px;color:var(--adm-muted);">{new Date(u.created_at).toLocaleDateString()}</span>
+              <button
+                type="button"
+                class="adm-btn adm-btn-danger"
+                style="padding:2px 8px;font-size:11px;"
+                onclick={`deleteAdminUser('${u.username}')`}
+              >✕</button>
+            </div>
+          ))}
+        </div>
+
+        <div style="border-top:1px solid var(--adm-border);padding-top:12px;">
+          <div style="font-size:12px;font-weight:600;margin-bottom:8px;color:var(--adm-muted);">Add Admin User</div>
+          <input type="text" id="new-admin-username" class="adm-input" placeholder="Username" style="margin-bottom:6px;font-size:12px;" />
+          <input type="password" id="new-admin-password" class="adm-input" placeholder="Password (min 8 chars)" style="margin-bottom:8px;font-size:12px;" />
+          <button type="button" class="adm-btn adm-btn-primary" style="width:100%;justify-content:center;font-size:12px;" onclick="addAdminUser()">
+            Add Admin User
+          </button>
+        </div>
+      </div>
+
+      <!-- Danger zone -->
+      <div class="adm-card" style="border-color:rgba(229,72,77,0.2);">
+        <div style="font-weight:700;font-size:13px;color:var(--adm-error);margin-bottom:8px;">Danger Zone</div>
+        <div style="font-size:12px;color:var(--adm-muted);margin-bottom:10px;line-height:1.5;">
+          These actions affect production data and cannot be undone.
+        </div>
+        <button
+          type="button"
+          class="adm-btn adm-btn-danger"
+          style="width:100%;justify-content:center;font-size:12px;"
+          onclick="if(confirm('Clear dev order index? This removes all dev test orders.'))clearDevOrders()"
+        >
+          Clear Dev Order Index
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+</AdminLayout>
+
+<script>
+  async function saveStoreSettings() {
+    const payload = {
+      store_name: document.getElementById('s-name').value,
+      support_email: document.getElementById('s-email').value,
+      support_phone: document.getElementById('s-phone').value,
+      address: document.getElementById('s-address').value,
+      currency: document.getElementById('s-currency').value,
+      tax_rate: parseFloat(document.getElementById('s-tax').value) / 100,
+    };
+    try {
+      const r = await fetch('/api/admin/settings', {
+        method: 'PATCH',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify(payload),
+      });
+      const data = await r.json();
+      if (data.ok) window.adminToast('Store settings saved', 'success');
+      else window.adminToast(data.error || 'Save failed', 'error');
+    } catch(e) { window.adminToast('Network error', 'error'); }
+  }
+
+  function addShippingRate() {
+    const container = document.getElementById('shipping-rates');
+    const div = document.createElement('div');
+    div.className = 'shipping-rate-row';
+    div.style.cssText = 'display:flex;gap:8px;align-items:center;';
+    div.innerHTML = `
+      <input type="text" placeholder="Zone" class="adm-input sr-zone" style="width:120px;font-size:12px;" />
+      <input type="number" placeholder="Rate $" class="adm-input sr-rate" style="width:80px;font-size:12px;" min="0" step="1" />
+      <input type="text" placeholder="Label" class="adm-input sr-label" style="flex:1;font-size:12px;" />
+      <button type="button" class="adm-btn adm-btn-danger" style="padding:4px 8px;font-size:12px;" onclick="this.closest('.shipping-rate-row').remove()">✕</button>
+    `;
+    container.appendChild(div);
+  }
+
+  async function saveShippingRates() {
+    const rows = document.querySelectorAll('.shipping-rate-row');
+    const shipping_rates = [...rows].map(row => ({
+      zone: row.querySelector('.sr-zone').value,
+      rate: parseFloat(row.querySelector('.sr-rate').value) || 0,
+      label: row.querySelector('.sr-label').value,
+    })).filter(r => r.zone);
+
+    try {
+      const r = await fetch('/api/admin/settings', {
+        method: 'PATCH',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ shipping_rates }),
+      });
+      const data = await r.json();
+      if (data.ok) window.adminToast('Shipping rates saved', 'success');
+      else window.adminToast(data.error || 'Save failed', 'error');
+    } catch(e) { window.adminToast('Network error', 'error'); }
+  }
+
+  async function changePassword() {
+    const newPw = document.getElementById('new-password').value;
+    const confirmPw = document.getElementById('confirm-password').value;
+    if (!newPw || newPw.length < 12) { window.adminToast('Password must be at least 12 characters', 'warning'); return; }
+    if (newPw !== confirmPw) { window.adminToast('Passwords do not match', 'warning'); return; }
+    if (!confirm('Update admin password? Old sessions will remain valid until expiry.')) return;
+
+    try {
+      const r = await fetch('/api/admin/settings', {
+        method: 'PATCH',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ new_password: newPw }),
+      });
+      const data = await r.json();
+      if (data.ok) {
+        window.adminToast('Password updated (KV override set). Update ADMIN_PASSWORD_HASH env var for full rotation.', 'success');
+        document.getElementById('new-password').value = '';
+        document.getElementById('confirm-password').value = '';
+      } else {
+        window.adminToast(data.error || 'Update failed', 'error');
+      }
+    } catch(e) { window.adminToast('Network error', 'error'); }
+  }
+
+  async function addAdminUser() {
+    const username = document.getElementById('new-admin-username').value.trim();
+    const password = document.getElementById('new-admin-password').value;
+    if (!username || !password) { window.adminToast('Username and password required', 'warning'); return; }
+
+    try {
+      const r = await fetch('/api/admin/users', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ username, password }),
+      });
+      const data = await r.json();
+      if (data.ok) {
+        window.adminToast(`Admin user ${username} added`, 'success');
+        setTimeout(() => location.reload(), 800);
+      } else {
+        window.adminToast(data.error || 'Create failed', 'error');
+      }
+    } catch(e) { window.adminToast('Network error', 'error'); }
+  }
+
+  async function deleteAdminUser(username) {
+    if (!confirm(`Remove admin access for ${username}?`)) return;
+    try {
+      const r = await fetch('/api/admin/users', {
+        method: 'DELETE',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ username }),
+      });
+      const data = await r.json();
+      if (data.ok) { window.adminToast(`${username} removed`, 'success'); setTimeout(() => location.reload(), 600); }
+      else window.adminToast(data.error || 'Failed', 'error');
+    } catch(e) { window.adminToast('Network error', 'error'); }
+  }
+
+  async function clearDevOrders() {
+    // This is a dev utility — deletes the order index
+    window.adminToast('Clearing dev order index…', 'info');
+    try {
+      // Call the seed endpoint to reset
+      const r = await fetch('/api/admin/seed-test-order', { method: 'POST' });
+      if (r.ok) window.adminToast('Dev orders reset', 'success');
+    } catch(e) { window.adminToast('Error', 'error'); }
+  }
+</script>

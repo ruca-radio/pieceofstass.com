@@ -27,6 +27,8 @@ if (customerOrders.length === 0) {
 
 const name = customerOrders[0].customer_name;
 const totalSpend = customerOrders.reduce((sum, o) => sum + o.total, 0);
+const avgOrder = totalSpend / customerOrders.length;
+
 const shippingAddresses = customerOrders
   .filter((o) => o.shipping_address)
   .map((o) => o.shipping_address!)
@@ -34,7 +36,15 @@ const shippingAddresses = customerOrders
     const key = `${addr.line1}|${addr.postal_code}`;
     if (!unique.some((a) => `${a.line1}|${a.postal_code}` === key)) unique.push(addr);
     return unique;
-  }, [] as typeof customerOrders[0]['shipping_address'][]);
+  }, [] as Array<NonNullable<typeof customerOrders[0]['shipping_address']>>);
+
+// Marketing opt-in — look up in users KV if possible
+let marketingOptIn = false;
+try {
+  const { getUserByEmail } = await import('../../../lib/users-server');
+  const user = await getUserByEmail(email, runtimeEnv);
+  marketingOptIn = user?.marketing_opt_in ?? false;
+} catch { /* no-op */ }
 
 function formatMoney(n: number) {
   return `$${n.toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
@@ -56,10 +66,11 @@ const statusLabel: Record<string, string> = {
   shipped: 'Shipped', delivered: 'Delivered', refunded: 'Refunded', cancelled: 'Cancelled',
 };
 ---
-<AdminLayout title="Customer Detail" activeNav="customers">
+<AdminLayout title="Customer" activeNav="customers">
 
   <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
     <a href="/admin/customers" style="color:var(--adm-muted);text-decoration:none;font-size:13px;">← Customers</a>
+    {marketingOptIn && <span class="adm-badge adm-badge-active" style="font-size:10px;">Marketing Opt-In</span>}
   </div>
 
   <div style="display:grid;grid-template-columns:1fr 280px;gap:16px;align-items:start;">
@@ -103,36 +114,83 @@ const statusLabel: Record<string, string> = {
       </div>
     </div>
 
-    <!-- Customer summary -->
+    <!-- Right sidebar -->
     <div style="display:flex;flex-direction:column;gap:12px;">
+
+      <!-- Customer summary -->
       <div class="adm-card">
-        <div style="font-weight:600;font-size:13px;margin-bottom:12px;">Customer</div>
-        <div style="font-size:15px;font-weight:600;margin-bottom:4px;">{name ?? '—'}</div>
-        <div style="font-size:13px;color:var(--adm-violet);">{email}</div>
-        <div style="margin-top:12px;display:flex;flex-direction:column;gap:6px;">
+        <div style="font-weight:600;font-size:13px;margin-bottom:12px;">Customer Profile</div>
+        <div style="font-size:15px;font-weight:700;margin-bottom:4px;">{name ?? '—'}</div>
+        <div style="font-size:13px;color:var(--adm-violet);margin-bottom:12px;">{email}</div>
+        <div style="display:flex;flex-direction:column;gap:7px;">
           <div style="display:flex;justify-content:space-between;font-size:12px;">
             <span style="color:var(--adm-muted);">Orders</span>
             <span style="font-weight:600;">{customerOrders.length}</span>
           </div>
           <div style="display:flex;justify-content:space-between;font-size:12px;">
-            <span style="color:var(--adm-muted);">Total Spend</span>
+            <span style="color:var(--adm-muted);">LTV</span>
             <span class="adm-mono" style="font-weight:600;">{formatMoney(totalSpend)}</span>
           </div>
           <div style="display:flex;justify-content:space-between;font-size:12px;">
             <span style="color:var(--adm-muted);">Avg Order</span>
-            <span class="adm-mono">{formatMoney(totalSpend / customerOrders.length)}</span>
+            <span class="adm-mono">{formatMoney(avgOrder)}</span>
           </div>
           <div style="display:flex;justify-content:space-between;font-size:12px;">
             <span style="color:var(--adm-muted);">First Order</span>
             <span>{formatDate(customerOrders[customerOrders.length - 1].created_at)}</span>
           </div>
+          <div style="display:flex;justify-content:space-between;font-size:12px;">
+            <span style="color:var(--adm-muted);">Last Order</span>
+            <span>{formatDate(customerOrders[0].created_at)}</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:12px;">
+            <span style="color:var(--adm-muted);">Marketing</span>
+            <span style={marketingOptIn ? 'color:var(--adm-success)' : 'color:var(--adm-muted)'}>
+              {marketingOptIn ? 'Opted in' : 'Not opted in'}
+            </span>
+          </div>
         </div>
       </div>
 
+      <!-- Actions -->
+      <div class="adm-card">
+        <div style="font-weight:600;font-size:13px;margin-bottom:10px;">Actions</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <button
+            type="button"
+            class="adm-btn adm-btn-secondary"
+            style="font-size:12px;"
+            onclick={`sendMagicLink('${encodeURIComponent(email)}', this)`}
+          >
+            Send Login Link
+          </button>
+        </div>
+      </div>
+
+      <!-- Admin note -->
+      <div class="adm-card">
+        <div style="font-weight:600;font-size:13px;margin-bottom:10px;">Admin Note</div>
+        <textarea
+          id="admin-note-input"
+          class="adm-textarea"
+          placeholder="Private note about this customer…"
+          style="min-height:80px;font-size:12px;"
+        ></textarea>
+        <div style="margin-top:8px;display:flex;justify-content:flex-end;">
+          <button
+            type="button"
+            class="adm-btn adm-btn-primary"
+            style="font-size:12px;"
+            onclick={`saveCustomerNote('${encodeURIComponent(email)}')`}
+          >Save Note</button>
+        </div>
+      </div>
+
+      <!-- Addresses -->
       {shippingAddresses.length > 0 && (
         <div class="adm-card">
           <div style="font-weight:600;font-size:13px;margin-bottom:12px;">
-            Address{shippingAddresses.length > 1 ? 'es' : ''} (read-only)
+            Address{shippingAddresses.length > 1 ? 'es' : ''}
           </div>
           {shippingAddresses.map((addr, i) => (
             <div style={`font-size:12px;line-height:1.8;${i > 0 ? 'margin-top:12px;padding-top:12px;border-top:1px solid var(--adm-border);' : ''}`}>
@@ -150,3 +208,44 @@ const statusLabel: Record<string, string> = {
   </div>
 
 </AdminLayout>
+
+<script>
+  async function sendMagicLink(emailEncoded, btn) {
+    btn.disabled = true;
+    btn.textContent = 'Sending…';
+    try {
+      const r = await fetch(`/api/admin/customers/${emailEncoded}/send-magic-link`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({}),
+      });
+      const data = await r.json();
+      if (data.ok) {
+        window.adminToast(data.message || 'Login link sent', 'success');
+        if (data.dev_link) {
+          console.log('[dev] Magic link:', data.dev_link);
+          window.adminToast(`[dev] Check console for magic link`, 'info');
+        }
+      } else {
+        window.adminToast(data.error || 'Send failed', 'error');
+      }
+    } catch(e) { window.adminToast('Network error', 'error'); }
+    btn.textContent = 'Send Login Link';
+    btn.disabled = false;
+  }
+
+  async function saveCustomerNote(emailEncoded) {
+    const note = document.getElementById('admin-note-input').value;
+    if (!note.trim()) { window.adminToast('Enter a note first', 'info'); return; }
+    try {
+      const r = await fetch(`/api/admin/customers/${emailEncoded}/note`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ note }),
+      });
+      const data = await r.json();
+      if (data.ok) window.adminToast('Note saved', 'success');
+      else window.adminToast(data.error || 'Save failed', 'error');
+    } catch(e) { window.adminToast('Network error', 'error'); }
+  }
+</script>
