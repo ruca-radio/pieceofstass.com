@@ -94,35 +94,88 @@ if [[ -n "$CF_ACCOUNT_ID" ]]; then
 fi
 
 # ── 3. KV namespaces ──────────────────────────────────────────────────────────
+# Replace every id under a binding block in wrangler.toml.
+# Works for both top-level [[kv_namespaces]] and [[env.*.kv_namespaces]] blocks.
+patch_wrangler_kv() {
+  local name="$1" prod_id="$2" prev_id="$3"
+  # Use a python one-liner because sed across multi-line TOML blocks is brittle.
+  python3 - "$name" "$prod_id" "$prev_id" <<'PY'
+import re, sys, pathlib
+name, prod, prev = sys.argv[1], sys.argv[2], sys.argv[3]
+p = pathlib.Path("wrangler.toml")
+text = p.read_text()
+
+# Match every kv_namespaces block (top-level or env-scoped) whose binding
+# is `name`. Replace its id and (if provided) preview_id lines, even if they
+# currently say REPLACE_WITH_*.
+pattern = re.compile(
+    r'(\[\[(?:env\.[a-zA-Z0-9_]+\.)?kv_namespaces\]\]\s*\n'   # header
+    r'binding\s*=\s*"' + re.escape(name) + r'"\s*\n)'         # binding line
+    r'(?:[^\[]*?)',                                          # body up to next block
+    re.MULTILINE,
+)
+
+def replace_block(m):
+    block = m.group(0)
+    # rewrite or insert id
+    if re.search(r'^id\s*=', block, re.MULTILINE):
+        block = re.sub(r'^id\s*=.*$', f'id = "{prod}"', block, count=1, flags=re.MULTILINE)
+    else:
+        block += f'id = "{prod}"\n'
+    # rewrite or insert preview_id only if we have one
+    if prev:
+        if re.search(r'^preview_id\s*=', block, re.MULTILINE):
+            block = re.sub(r'^preview_id\s*=.*$', f'preview_id = "{prev}"', block, count=1, flags=re.MULTILINE)
+        else:
+            block += f'preview_id = "{prev}"\n'
+    return block
+
+new_text, n = pattern.subn(replace_block, text)
+p.write_text(new_text)
+print(f"  patched {n} block(s) for {name}")
+PY
+}
+
 provision_kv() {
   local name="$1"
   hdr "KV: ${name}"
-  if grep -q "binding = \"${name}\"" wrangler.toml 2>/dev/null \
-     && grep -A2 "binding = \"${name}\"" wrangler.toml | grep -q "id = \"[a-f0-9]\{32\}\""; then
-    ok "${name} already has an id in wrangler.toml — skipping"
+
+  # Already configured? (real 32-char hex id, not a placeholder)
+  if grep -A3 "binding = \"${name}\"" wrangler.toml 2>/dev/null | grep -qE '^id\s*=\s*"[a-f0-9]{32}"'; then
+    ok "${name} already has a valid id in wrangler.toml — skipping"
     return 0
   fi
+
   warn "${name} not bound — creating..."
   local prod_out prev_out prod_id prev_id
   prod_out=$($WRANGLER kv namespace create "$name" 2>&1 || true)
   prev_out=$($WRANGLER kv namespace create "$name" --preview 2>&1 || true)
-  prod_id=$(echo "$prod_out" | grep -oE 'id = "[a-f0-9]{32}"' | head -1 | sed 's/id = "//; s/"//')
-  prev_id=$(echo "$prev_out" | grep -oE 'preview_id = "[a-f0-9]{32}"' | head -1 | sed 's/preview_id = "//; s/"//')
+  prod_id=$(echo "$prod_out" | grep -oE '[a-f0-9]{32}' | head -1)
+  prev_id=$(echo "$prev_out" | grep -oE '[a-f0-9]{32}' | head -1)
+
+  # Handle the "already exists" path — list and grab the id
   if [[ -z "$prod_id" ]]; then
-    err "Could not parse ${name} id. Output was: $prod_out"
-    err "If the namespace already exists, paste its id into wrangler.toml manually."
+    warn "Create returned no id (likely already exists). Looking up existing id..."
+    prod_id=$($WRANGLER kv namespace list 2>/dev/null | python3 -c "
+import sys, json, re
+try:
+    data = json.loads(sys.stdin.read())
+except Exception:
+    sys.exit(0)
+for n in data:
+    if n.get('title','').endswith('${name}') and not n.get('title','').endswith('_preview-${name}'):
+        print(n['id']); break
+" || true)
+  fi
+
+  if [[ -z "$prod_id" ]]; then
+    err "Could not determine ${name} id automatically."
+    err "Run: wrangler kv namespace list  — then paste the id into wrangler.toml."
     return 1
   fi
+
   ok "${name} id=${prod_id} preview_id=${prev_id:-<none>}"
-  # Try sed-replacing placeholders in wrangler.toml
-  case "$name" in
-    CART_KV)   sed -i.bak "s/REPLACE_WITH_KV_NAMESPACE_ID/${prod_id}/g; s/REPLACE_WITH_PREVIEW_KV_ID/${prev_id}/g" wrangler.toml ;;
-  esac
-  warn "If ${name} doesn't yet appear in wrangler.toml, paste this block under [env.production]:"
-  echo "  [[env.production.kv_namespaces]]"
-  echo "  binding = \"${name}\""
-  echo "  id      = \"${prod_id}\""
-  [[ -n "$prev_id" ]] && echo "  preview_id = \"${prev_id}\""
+  patch_wrangler_kv "$name" "$prod_id" "$prev_id"
 }
 
 if [[ "$MODE" == "setup" || "$MODE" == "deploy" || "$MODE" == "preview" ]]; then
@@ -270,6 +323,68 @@ push_production_secrets() {
   ok "Pushed ${pushed} secrets; skipped ${skipped} (empty / public)"
 }
 
+# Hoist PUBLIC_* values + a few non-secret runtime URLs into wrangler.toml's
+# [env.production.vars] block so the live Worker reads them. Without this,
+# wrangler.toml ships with REPLACE_ME placeholders.
+patch_wrangler_public_vars() {
+  hdr "Updating [env.production.vars] in wrangler.toml"
+  local site_url="${SECRET_VALUES[PUBLIC_SITE_URL]:-https://pieceofstass.com}"
+  local stripe_pk="${SECRET_VALUES[PUBLIC_STRIPE_KEY]:-}"
+  local ga4="${SECRET_VALUES[GA4_MEASUREMENT_ID]:-}"
+  local cfwa="${SECRET_VALUES[CF_WEB_ANALYTICS_TOKEN]:-}"
+  local klaviyo_site="${SECRET_VALUES[KLAVIYO_SITE_ID]:-}"
+  local meta_pixel="${SECRET_VALUES[META_PIXEL_ID]:-}"
+  local tiktok_pixel="${SECRET_VALUES[TIKTOK_PIXEL_ID]:-}"
+
+  python3 - "$site_url" "$stripe_pk" "$ga4" "$cfwa" "$klaviyo_site" "$meta_pixel" "$tiktok_pixel" <<'PY'
+import re, sys, pathlib
+site_url, stripe_pk, ga4, cfwa, klaviyo_site, meta_pixel, tiktok_pixel = sys.argv[1:8]
+
+updates = {
+    "PUBLIC_SITE_URL": site_url,
+    "PUBLIC_STRIPE_PUBLISHABLE_KEY": stripe_pk,
+    "PUBLIC_GA4_MEASUREMENT_ID": ga4,
+    "PUBLIC_CF_WEB_ANALYTICS_TOKEN": cfwa,
+    "PUBLIC_KLAVIYO_SITE_ID": klaviyo_site,
+    "PUBLIC_META_PIXEL_ID": meta_pixel,
+    "PUBLIC_TIKTOK_PIXEL_ID": tiktok_pixel,
+    "CHECKOUT_URL": f"{site_url.rstrip('/')}/checkout",
+}
+
+p = pathlib.Path("wrangler.toml")
+text = p.read_text()
+
+# Find the [env.production.vars] block boundaries.
+m = re.search(r'^\[env\.production\.vars\]\s*\n', text, re.MULTILINE)
+if not m:
+    print("  [env.production.vars] block not found — skipping")
+    sys.exit(0)
+start = m.end()
+# Block ends at the next [section] header or EOF.
+rest = text[start:]
+end_m = re.search(r'^\[', rest, re.MULTILINE)
+end = start + (end_m.start() if end_m else len(rest))
+block = text[start:end]
+
+for key, val in updates.items():
+    if not val:
+        continue
+    line_re = re.compile(rf'^{re.escape(key)}\s*=.*$', re.MULTILINE)
+    new_line = f'{key} = "{val}"'
+    if line_re.search(block):
+        block = line_re.sub(new_line, block, count=1)
+    else:
+        # append at end of block
+        if not block.endswith("\n"):
+            block += "\n"
+        block += new_line + "\n"
+
+text = text[:start] + block + text[end:]
+p.write_text(text)
+print(f"  patched {len([v for v in updates.values() if v])} public vars in [env.production.vars]")
+PY
+}
+
 if [[ "$MODE" == "setup" || "$MODE" == "secrets" || "$MODE" == "deploy" || "$MODE" == "preview" ]]; then
   collect_secrets
   write_dev_vars
@@ -277,6 +392,7 @@ if [[ "$MODE" == "setup" || "$MODE" == "secrets" || "$MODE" == "deploy" || "$MOD
     read -r -p "  Push these to Cloudflare Workers production now? [y/N] " yn
     if [[ "$yn" =~ ^[Yy]$ ]]; then
       push_production_secrets
+      patch_wrangler_public_vars
     else
       warn "Skipped pushing to production. Run with --secrets to push later."
     fi

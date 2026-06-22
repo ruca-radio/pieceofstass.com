@@ -51,32 +51,32 @@ bucket_name = "pieceofstass-images"
 # Paste the returned id below.
 [[kv_namespaces]]
 binding = "CART_KV"
-id = "REPLACE_WITH_KV_NAMESPACE_ID"          # ← run: wrangler kv:namespace create CART_KV
-preview_id = "REPLACE_WITH_PREVIEW_KV_ID"   # ← run: wrangler kv:namespace create CART_KV --preview
+id = "4347e3f6bef84b9aaf92a0959ae5ebfb"
+preview_id = "4347e3f6bef84b9aaf92a0959ae5ebfb"
 
 # ─── KV: User accounts, auth, addresses ─────────────────────
 # Auth & CX: stores user profiles, magic-link rate limits, saved addresses.
 # Create: npx wrangler kv:namespace create USERS_KV
 [[kv_namespaces]]
 binding = "USERS_KV"
-id = "REPLACE_WITH_USERS_KV_NAMESPACE_ID"       # ← run: wrangler kv:namespace create USERS_KV
-preview_id = "REPLACE_WITH_USERS_KV_PREVIEW_ID" # ← run: wrangler kv:namespace create USERS_KV --preview
+id = "ec5ffd30ef884ffba545f9e01422138c"
+preview_id = "f4c6e82e279f40188964596013d21a76"
 
 # ─── KV: Orders + product overrides ────────────────────────
 # Permanent order records (no TTL). Also stores product_override:{id} for admin edits.
 # Create: npx wrangler kv:namespace create ORDERS_KV
 [[kv_namespaces]]
 binding = "ORDERS_KV"
-id = "REPLACE_WITH_ORDERS_KV_NAMESPACE_ID"      # ← run: wrangler kv:namespace create ORDERS_KV
-preview_id = "REPLACE_WITH_ORDERS_KV_PREVIEW_ID"
+id = "93b7d75f45f446bd8d406e4f452ae931"
+preview_id = "db33a737d4154980aa6e77c27c4509ec"
 
 # ─── KV: Admin session audit + rate limiting ────────────────
 # Low-volume. Used for failed login rate limiting across Worker restarts.
 # Create: npx wrangler kv:namespace create ADMIN_KV
 [[kv_namespaces]]
 binding = "ADMIN_KV"
-id = "REPLACE_WITH_ADMIN_KV_NAMESPACE_ID"       # ← run: wrangler kv:namespace create ADMIN_KV
-preview_id = "REPLACE_WITH_ADMIN_KV_PREVIEW_ID"
+id = "ab898270540945fa8c248e8f29e09c7b"
+preview_id = "44054ba2ec5f44c190dcd62f5ef9a221"
 
 # ─── D1 Database Binding (optional) ─────────────────────────
 # Local persistence for: wishlists, recently viewed, A/B test assignments.
@@ -105,9 +105,10 @@ routes = [
 # via import.meta.env in Astro SSR.
 [env.production.vars]
 PUBLIC_SITE_URL = "https://pieceofstass.com"
-PUBLIC_STRIPE_PUBLISHABLE_KEY = "pk_live_REPLACE_ME"   # ← replace with live key
-PUBLIC_GA4_MEASUREMENT_ID = "G-REPLACE_ME"             # ← replace with GA4 property ID
-PUBLIC_CF_WEB_ANALYTICS_TOKEN = "REPLACE_ME"           # ← CF Dashboard → Web Analytics token
+PUBLIC_STRIPE_PUBLISHABLE_KEY = "pk_test_51Tl5ZUBMbjQ89N98Mxv91h2TmlC2za7wYKz29u2XPoBSWYT2v2S3K4gg72Z6UCF3K7TSnNuy0qbXXnk0jJJZl2gP00bNyTGwMy"
+PUBLIC_GA4_MEASUREMENT_ID = "G-V8ZENFWRYP"
+PUBLIC_CF_WEB_ANALYTICS_TOKEN = "6fdf6db1f3df4a31bc707bbcfe1eb385"
+CHECKOUT_URL = "https://pieceofstass.com/checkout"
 
 # Secrets (set via wrangler secret put, NOT here):
 #   AUTH_SECRET              (generate: openssl rand -base64 32)
@@ -133,22 +134,22 @@ bucket_name = "pieceofstass-images"
 # KV binding — production namespace
 [[env.production.kv_namespaces]]
 binding = "CART_KV"
-id = "REPLACE_WITH_KV_NAMESPACE_ID"
+id = "4347e3f6bef84b9aaf92a0959ae5ebfb"
 
 # KV: User accounts — production
 [[env.production.kv_namespaces]]
 binding = "USERS_KV"
-id = "REPLACE_WITH_USERS_KV_NAMESPACE_ID"
+id = "ec5ffd30ef884ffba545f9e01422138c"
 
 # KV: Orders + product overrides — production
 [[env.production.kv_namespaces]]
 binding = "ORDERS_KV"
-id = "REPLACE_WITH_ORDERS_KV_NAMESPACE_ID"
+id = "93b7d75f45f446bd8d406e4f452ae931"
 
 # KV: Admin rate-limiting — production
 [[env.production.kv_namespaces]]
 binding = "ADMIN_KV"
-id = "REPLACE_WITH_ADMIN_KV_NAMESPACE_ID"
+id = "ab898270540945fa8c248e8f29e09c7b"
 
 # Admin secrets (set via wrangler secret put --env production):
 #   ADMIN_PASSWORD_HASH    (run: echo "<password>" | node scripts/seed-admin-password.mjs)
