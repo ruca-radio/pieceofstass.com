@@ -22,7 +22,9 @@ import { createInterface } from 'readline';
 
 // ── PBKDF2 implementation using Node's Web Crypto (same as admin-auth.ts) ────
 
-const ITERATIONS = 310_000;
+// Cloudflare Workers' Web Crypto caps PBKDF2 iterations at 100,000.
+// Keep this in sync with src/lib/admin-auth.ts. Do NOT raise above 100k.
+const ITERATIONS = 100_000;
 
 async function hashPassword(password) {
   const encoder = new TextEncoder();

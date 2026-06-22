@@ -30,7 +30,7 @@ const JWT_ALG = 'HS256';
  */
 export async function hashPassword(
   password: string,
-  iterations = 310_000
+  iterations = 100_000 // Cloudflare Workers caps PBKDF2 at 100k; do not raise above this.
 ): Promise<string> {
   const encoder = new TextEncoder();
   const salt = crypto.getRandomValues(new Uint8Array(16));
