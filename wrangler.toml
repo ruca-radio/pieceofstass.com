@@ -62,6 +62,22 @@ binding = "USERS_KV"
 id = "REPLACE_WITH_USERS_KV_NAMESPACE_ID"       # ← run: wrangler kv:namespace create USERS_KV
 preview_id = "REPLACE_WITH_USERS_KV_PREVIEW_ID" # ← run: wrangler kv:namespace create USERS_KV --preview
 
+# ─── KV: Orders + product overrides ────────────────────────
+# Permanent order records (no TTL). Also stores product_override:{id} for admin edits.
+# Create: npx wrangler kv:namespace create ORDERS_KV
+[[kv_namespaces]]
+binding = "ORDERS_KV"
+id = "REPLACE_WITH_ORDERS_KV_NAMESPACE_ID"      # ← run: wrangler kv:namespace create ORDERS_KV
+preview_id = "REPLACE_WITH_ORDERS_KV_PREVIEW_ID"
+
+# ─── KV: Admin session audit + rate limiting ────────────────
+# Low-volume. Used for failed login rate limiting across Worker restarts.
+# Create: npx wrangler kv:namespace create ADMIN_KV
+[[kv_namespaces]]
+binding = "ADMIN_KV"
+id = "REPLACE_WITH_ADMIN_KV_NAMESPACE_ID"       # ← run: wrangler kv:namespace create ADMIN_KV
+preview_id = "REPLACE_WITH_ADMIN_KV_PREVIEW_ID"
+
 # ─── D1 Database Binding (optional) ─────────────────────────
 # Local persistence for: wishlists, recently viewed, A/B test assignments.
 # Create: npx wrangler d1 create pieceofstass-db
@@ -124,6 +140,20 @@ id = "REPLACE_WITH_KV_NAMESPACE_ID"
 binding = "USERS_KV"
 id = "REPLACE_WITH_USERS_KV_NAMESPACE_ID"
 
+# KV: Orders + product overrides — production
+[[env.production.kv_namespaces]]
+binding = "ORDERS_KV"
+id = "REPLACE_WITH_ORDERS_KV_NAMESPACE_ID"
+
+# KV: Admin rate-limiting — production
+[[env.production.kv_namespaces]]
+binding = "ADMIN_KV"
+id = "REPLACE_WITH_ADMIN_KV_NAMESPACE_ID"
+
+# Admin secrets (set via wrangler secret put --env production):
+#   ADMIN_PASSWORD_HASH    (run: echo "<password>" | node scripts/seed-admin-password.mjs)
+#   SUPPLIER_EMAIL_CHENYICO, SUPPLIER_EMAIL_117034687, etc.
+
 # D1 binding — production database (uncomment when created)
 # [[env.production.d1_databases]]
 # binding = "DB"
@@ -174,3 +204,13 @@ id = "REPLACE_WITH_PREVIEW_KV_ID"
 [[env.preview.kv_namespaces]]
 binding = "USERS_KV"
 id = "REPLACE_WITH_USERS_KV_PREVIEW_ID"
+
+# KV: Orders + product overrides — preview
+[[env.preview.kv_namespaces]]
+binding = "ORDERS_KV"
+id = "REPLACE_WITH_ORDERS_KV_PREVIEW_ID"
+
+# KV: Admin rate-limiting — preview
+[[env.preview.kv_namespaces]]
+binding = "ADMIN_KV"
+id = "REPLACE_WITH_ADMIN_KV_PREVIEW_ID"

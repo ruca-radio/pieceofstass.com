@@ -1,8 +1,15 @@
 ---
+export const prerender = false;
+
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PLPFilters from '../../components/islands/PLPFilters';
 import InternalLinks from '../../components/InternalLinks.astro';
-import { allProducts, allCategories } from '../../lib/products';
+import { allCategories } from '../../lib/products';
+import { listProductsForStorefront } from '../../lib/products-server';
+
+// Use SSR-aware loader so admin price/status overrides take effect in real time
+const runtimeEnv = ((Astro.locals as Record<string, unknown>)?.runtime as Record<string, unknown>)?.env as Record<string, unknown> | undefined;
+const allProducts = await listProductsForStorefront(runtimeEnv);
 
 const breadcrumbJsonLd = {
   '@context': 'https://schema.org',

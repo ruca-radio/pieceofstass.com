@@ -218,10 +218,11 @@ export async function verifyAdminJWT(
  * setAdminCookie — set the pos_admin session cookie.
  */
 export function setAdminCookie(context: APIContext, token: string): void {
+  // Path '/' so cookie is sent to both /admin/* (pages) and /api/admin/* (API routes)
   context.cookies.set(ADMIN_COOKIE, token, {
     httpOnly: true,
     sameSite: 'lax',
-    path: '/admin',
+    path: '/',
     maxAge: COOKIE_MAX_AGE,
     secure: true,
   });
@@ -234,7 +235,7 @@ export function clearAdminCookie(context: APIContext): void {
   context.cookies.set(ADMIN_COOKIE, '', {
     httpOnly: true,
     sameSite: 'lax',
-    path: '/admin',
+    path: '/',
     maxAge: 0,
     secure: true,
   });

@@ -2,6 +2,12 @@ import type { Product, Category } from './types';
 import productsData from '../../data/products.json';
 import categoriesData from '../../data/categories.json';
 
+// ── Base catalog (used by prerendered pages) ──────────────────────────────────
+// For SSR pages / runtime storefront access, use listProductsForStorefront()
+// from ./products-server.ts which merges these with KV admin overrides.
+// NOTE: prerendered static pages (shop/[category]/[handle]) use this base list
+// at BUILD time. Admin product edits in KV will take effect once those pages
+// are changed to SSR (output: 'server') or re-deployed.
 export const allProducts: Product[] = productsData.products as Product[];
 export const allCategories: Category[] = categoriesData.categories as Category[];
 

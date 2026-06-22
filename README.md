@@ -121,6 +121,97 @@ KLAVIYO_LIST_ID=            # Klaviyo list ID for newsletter signups
 
 ---
 
+## Admin access
+
+Anna (store owner) can access the fulfillment dashboard at `/admin`.
+
+### First-time setup
+
+**Step 1 — Generate a password hash:**
+
+```bash
+# Interactive prompt
+node scripts/seed-admin-password.mjs
+
+# Or pass password directly
+echo "yourpassword" | node scripts/seed-admin-password.mjs
+```
+
+This outputs a hash like: `pbkdf2sha256:310000:<salt>:<hash>`
+
+**Step 2 — Set the env var:**
+
+For local dev, add to `.dev.vars`:
+```
+ADMIN_PASSWORD_HASH=pbkdf2sha256:310000:...
+```
+
+For production Cloudflare Workers:
+```bash
+echo "pbkdf2sha256:310000:..." | wrangler secret put ADMIN_PASSWORD_HASH
+```
+
+**Step 3 — Access the dashboard:**
+
+Go to `https://pieceofstass.com/admin` → enter your password at the sign-in screen.
+
+### Admin pages
+
+| Page | Description |
+|---|---|
+| `/admin` | Dashboard: KPIs, recent orders |
+| `/admin/orders` | Order table with status/date/search filters |
+| `/admin/orders/:id` | Full order detail, status actions, supplier email copy |
+| `/admin/products` | All 80 products, searchable/filterable |
+| `/admin/products/:id` | Edit price, compare-at, description, draft/active |
+| `/admin/customers` | Customer list built from order history |
+| `/admin/customers/:email` | Customer detail with order history |
+| `/admin/abandoned-carts` | Carts with items not converted to orders (last 30d) |
+
+### API routes
+
+| Method | Path | Description |
+|---|---|---|
+| `POST` | `/api/admin/sign-in` | Verify password, set `pos_admin` cookie |
+| `POST` | `/api/admin/sign-out` | Clear cookie |
+| `PATCH` | `/api/admin/orders/:id` | Update order status |
+| `GET` | `/api/admin/orders/:id/supplier-csv` | Download supplier CSV |
+| `PATCH` | `/api/admin/products/:id` | Save product price/description/status override |
+
+### Security
+
+- Auth uses **PBKDF2-SHA256** (310,000 iterations, 16-byte random salt) — Web Crypto only, runs in Cloudflare Workers without native bindings
+- Session cookie: `pos_admin` — HttpOnly, SameSite=Lax, 12-hour expiry, signed JWT (HMAC-SHA256)
+- Cookie path restricted to `/admin` — does not interfere with `pos_session` (customer auth)
+- Rate limiting: 5 failed attempts per IP → 10-minute lockout
+- Admin password rotation automatically invalidates all active sessions
+
+### KV namespaces (admin-related)
+
+| Binding | Purpose |
+|---|---|
+| `ORDERS_KV` | Permanent order records + product overrides |
+| `ADMIN_KV` | Rate-limiting state (optional, low-volume) |
+
+Create namespaces:
+```bash
+wrangler kv:namespace create ORDERS_KV
+wrangler kv:namespace create ADMIN_KV
+```
+Paste the returned IDs into `wrangler.toml`.
+
+### Supplier routing
+
+`src/lib/supplier-routing.ts` maps each product category to its Yupoo supplier. Supplier contact emails are injected at runtime from env vars:
+
+```
+SUPPLIER_EMAIL_CHENYICO=chenyico@supplier.com
+SUPPLIER_EMAIL_117034687=watches@supplier.com
+# ... (see .dev.vars for full list)
+```
+
+---
+
 ## Deploy to Cloudflare Workers
 
 ```bash

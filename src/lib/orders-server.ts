@@ -107,7 +107,15 @@ interface KVLike {
 
 // ── In-memory dev fallback ────────────────────────────────────────────────────
 
-const _devMemory = new Map<string, string>();
+// Use globalThis to persist across Vite HMR module reloads in dev
+declare global {
+  // eslint-disable-next-line no-var
+  var __posDevMemory: Map<string, string> | undefined;
+}
+if (!globalThis.__posDevMemory) {
+  globalThis.__posDevMemory = new Map<string, string>();
+}
+const _devMemory = globalThis.__posDevMemory;
 
 // Seed some test orders for development
 const _seedOrders: Order[] = [
