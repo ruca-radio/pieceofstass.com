@@ -16,24 +16,22 @@
 
 import type { APIRoute } from 'astro';
 import { ImageResponse } from '@vercel/og';
-import { readFileSync } from 'fs';
-import { resolve } from 'path';
+// Font is loaded at request-time from jsDelivr (Workers-safe; no Node fs)
 
 export const prerender = false;
 
 // ─── Font loading ─────────────────────────────────────────────────────────────
-function loadFont(relativePath: string): ArrayBuffer | null {
-  try {
-    const buf = readFileSync(resolve(process.cwd(), relativePath));
-    return buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength) as ArrayBuffer;
-  } catch {
-    return null;
-  }
-}
+const FONT_URL =
+  'https://cdn.jsdelivr.net/npm/@fontsource/space-grotesk@5.1.0/files/space-grotesk-latin-700-normal.woff';
 
-const spaceGroteskBold = loadFont(
-  'node_modules/@fontsource/space-grotesk/files/space-grotesk-latin-700-normal.woff'
-);
+let _fontPromise: Promise<ArrayBuffer | null> | null = null;
+function loadDisplayFont(): Promise<ArrayBuffer | null> {
+  if (_fontPromise) return _fontPromise;
+  _fontPromise = fetch(FONT_URL)
+    .then((r) => (r.ok ? r.arrayBuffer() : null))
+    .catch(() => null);
+  return _fontPromise;
+}
 
 // ─── Brand tokens ─────────────────────────────────────────────────────────────
 const C = {
@@ -622,10 +620,11 @@ export const GET: APIRoute = async ({ params, redirect }) => {
   const parts = slug.replace(/\.png$/, '').split('/');
   const etag = `"og-${slugToEtag(slug)}"`;
 
-  const fonts = spaceGroteskBold
+  const fontData = await loadDisplayFont();
+  const fonts = fontData
     ? [{
         name: 'SpaceGrotesk',
-        data: spaceGroteskBold,
+        data: fontData,
         weight: 700 as const,
         style: 'normal' as const,
       }]
