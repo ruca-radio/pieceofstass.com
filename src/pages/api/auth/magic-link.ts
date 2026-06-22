@@ -18,7 +18,7 @@ function isValidEmail(email: unknown): email is string {
 }
 
 export const POST: APIRoute = async ({ request, locals }) => {
-  const env = (locals as Record<string, unknown>).runtime?.env as
+  const env = (locals as { runtime?: { env?: Record<string, unknown> } }).runtime?.env as
     | Record<string, unknown>
     | undefined;
 

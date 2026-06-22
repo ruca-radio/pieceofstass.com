@@ -15,7 +15,7 @@ import { upsertUser } from '../../../lib/users-server';
 export const prerender = false;
 
 export const GET: APIRoute = async ({ request, redirect, locals }) => {
-  const env = (locals as Record<string, unknown>).runtime?.env as
+  const env = (locals as { runtime?: { env?: Record<string, unknown> } }).runtime?.env as
     | Record<string, unknown>
     | undefined;
 

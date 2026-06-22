@@ -497,7 +497,7 @@ const devKV: KVLike = {
 // ── KV resolver ───────────────────────────────────────────────────────────────
 
 function getOrdersKV(context: APIContext): KVLike {
-  const env = (context.locals as Record<string, unknown>)?.runtime?.env as
+  const env = (context.locals as { runtime?: { env?: Record<string, unknown> } })?.runtime?.env as
     | Record<string, unknown>
     | undefined;
   const kv = (env?.ORDERS_KV ?? env?.CART_KV) as KVLike | undefined;

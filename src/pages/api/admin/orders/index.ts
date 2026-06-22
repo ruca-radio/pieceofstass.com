@@ -21,7 +21,7 @@ export async function GET(context: APIContext): Promise<Response> {
     return json({ error: 'Unauthorized' }, 401);
   }
 
-  const runtimeEnv = (context.locals as Record<string, unknown>)?.runtime?.env as
+  const runtimeEnv = (context.locals as { runtime?: { env?: Record<string, unknown> } })?.runtime?.env as
     | Record<string, unknown>
     | undefined;
   const kv = getOrdersKVFromEnv(runtimeEnv);

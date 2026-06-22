@@ -287,7 +287,7 @@ export const GET: APIRoute = async (context) => {
     return new Response('Missing order id', { status: 400 });
   }
 
-  const runtimeEnv = (context.locals as Record<string, unknown>)?.runtime?.env as
+  const runtimeEnv = (context.locals as { runtime?: { env?: Record<string, unknown> } })?.runtime?.env as
     | Record<string, unknown>
     | undefined;
   const envVars = (runtimeEnv ?? {}) as Record<string, string | undefined>;

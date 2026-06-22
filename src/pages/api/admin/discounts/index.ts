@@ -41,7 +41,7 @@ async function getDiscountIndex(kv: ReturnType<typeof getOrdersKVFromEnv>): Prom
 export async function GET(context: APIContext): Promise<Response> {
   if (!(await isAdminRequest(context))) return json({ error: 'Unauthorized' }, 401);
 
-  const runtimeEnv = (context.locals as Record<string, unknown>)?.runtime?.env as Record<string, unknown> | undefined;
+  const runtimeEnv = (context.locals as { runtime?: { env?: Record<string, unknown> } })?.runtime?.env as Record<string, unknown> | undefined;
   const kv = getOrdersKVFromEnv(runtimeEnv);
 
   const codes = await getDiscountIndex(kv);
@@ -59,7 +59,7 @@ export async function GET(context: APIContext): Promise<Response> {
 export async function POST(context: APIContext): Promise<Response> {
   if (!(await isAdminRequest(context))) return json({ error: 'Unauthorized' }, 401);
 
-  const runtimeEnv = (context.locals as Record<string, unknown>)?.runtime?.env as Record<string, unknown> | undefined;
+  const runtimeEnv = (context.locals as { runtime?: { env?: Record<string, unknown> } })?.runtime?.env as Record<string, unknown> | undefined;
   const kv = getOrdersKVFromEnv(runtimeEnv);
 
   let body: Partial<DiscountCode>;

@@ -20,7 +20,7 @@ export async function GET(context: APIContext): Promise<Response> {
   const { code } = context.params;
   if (!code) return json({ error: 'Missing code' }, 400);
 
-  const runtimeEnv = (context.locals as Record<string, unknown>)?.runtime?.env as Record<string, unknown> | undefined;
+  const runtimeEnv = (context.locals as { runtime?: { env?: Record<string, unknown> } })?.runtime?.env as Record<string, unknown> | undefined;
   const kv = getOrdersKVFromEnv(runtimeEnv);
   const raw = await kv.get(`discount:${code.toUpperCase()}`);
   if (!raw) return json({ error: 'Not found' }, 404);
@@ -32,7 +32,7 @@ export async function PATCH(context: APIContext): Promise<Response> {
   const { code } = context.params;
   if (!code) return json({ error: 'Missing code' }, 400);
 
-  const runtimeEnv = (context.locals as Record<string, unknown>)?.runtime?.env as Record<string, unknown> | undefined;
+  const runtimeEnv = (context.locals as { runtime?: { env?: Record<string, unknown> } })?.runtime?.env as Record<string, unknown> | undefined;
   const kv = getOrdersKVFromEnv(runtimeEnv);
   const rawKey = `discount:${code.toUpperCase()}`;
   const raw = await kv.get(rawKey);
@@ -59,7 +59,7 @@ export async function DELETE(context: APIContext): Promise<Response> {
   const { code } = context.params;
   if (!code) return json({ error: 'Missing code' }, 400);
 
-  const runtimeEnv = (context.locals as Record<string, unknown>)?.runtime?.env as Record<string, unknown> | undefined;
+  const runtimeEnv = (context.locals as { runtime?: { env?: Record<string, unknown> } })?.runtime?.env as Record<string, unknown> | undefined;
   const kv = getOrdersKVFromEnv(runtimeEnv);
   const upperCode = code.toUpperCase();
   const raw = await kv.get(`discount:${upperCode}`);

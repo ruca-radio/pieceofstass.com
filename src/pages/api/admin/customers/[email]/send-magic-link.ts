@@ -38,7 +38,7 @@ export async function POST(context: APIContext): Promise<Response> {
 
   const email = decodeURIComponent(emailParam);
 
-  const runtimeEnv = (context.locals as Record<string, unknown>)?.runtime?.env as
+  const runtimeEnv = (context.locals as { runtime?: { env?: Record<string, unknown> } })?.runtime?.env as
     | Record<string, string>
     | undefined;
 

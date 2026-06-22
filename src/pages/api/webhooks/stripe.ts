@@ -46,7 +46,7 @@ const devCartKV: KVLike = {
 };
 
 function getCartKV(context: Parameters<APIRoute>[0]): KVLike {
-  const env = (context.locals as Record<string, unknown>)?.runtime?.env as
+  const env = (context.locals as { runtime?: { env?: Record<string, unknown> } })?.runtime?.env as
     | Record<string, unknown>
     | undefined;
   const kv = env?.CART_KV as KVLike | undefined;
@@ -95,7 +95,7 @@ export const POST: APIRoute = async (context) => {
     const stripe = new Stripe(stripeKey);
 
     if (webhookSecret && sig) {
-      event = stripe.webhooks.constructEvent(rawBody, sig, webhookSecret) as typeof event;
+      event = stripe.webhooks.constructEvent(rawBody, sig, webhookSecret) as unknown as typeof event;
     } else {
       console.warn('[stripe webhook] No STRIPE_WEBHOOK_SECRET set — skipping signature verification');
       event = JSON.parse(rawBody) as typeof event;
@@ -140,7 +140,7 @@ export const POST: APIRoute = async (context) => {
     };
 
     const ordersKV = getOrdersKVFromEnv(
-      (context.locals as Record<string, unknown>)?.runtime?.env as Record<string, unknown> | undefined
+      (context.locals as { runtime?: { env?: Record<string, unknown> } })?.runtime?.env as Record<string, unknown> | undefined
     );
     const cartKV = getCartKV(context);
 

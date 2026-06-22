@@ -17,7 +17,7 @@ const MAX_ATTEMPTS = 5;
 const LOCKOUT_MS = 10 * 60 * 1000; // 10 minutes
 
 export async function POST(context: APIContext): Promise<Response> {
-  const env = (context.locals as Record<string, unknown>)?.runtime?.env as
+  const env = (context.locals as { runtime?: { env?: Record<string, unknown> } })?.runtime?.env as
     | Record<string, string>
     | undefined;
   const passwordHash = env?.ADMIN_PASSWORD_HASH ?? process.env.ADMIN_PASSWORD_HASH;

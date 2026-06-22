@@ -19,7 +19,7 @@ export async function GET(context: APIContext): Promise<Response> {
   if (!(await isAdminRequest(context))) return json({ error: 'Unauthorized' }, 401);
 
   const { provider } = context.params;
-  const runtimeEnv = (context.locals as Record<string, unknown>)?.runtime?.env as Record<string, string> | undefined;
+  const runtimeEnv = (context.locals as { runtime?: { env?: Record<string, unknown> } })?.runtime?.env as Record<string, string> | undefined;
 
   switch (provider) {
     case 'klaviyo': {

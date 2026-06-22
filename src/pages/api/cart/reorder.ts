@@ -28,7 +28,7 @@ function json(body: unknown, status = 200): Response {
 
 export const POST: APIRoute = async (context) => {
   // ── Auth ─────────────────────────────────────────────────────────────────────
-  const runtimeEnv = (context.locals as Record<string, unknown>)?.runtime?.env as
+  const runtimeEnv = (context.locals as { runtime?: { env?: Record<string, unknown> } })?.runtime?.env as
     | Record<string, unknown>
     | undefined;
   const envVars = (runtimeEnv ?? {}) as Record<string, string | undefined>;
