@@ -11,10 +11,23 @@ name = "pieceofstass"
 compatibility_date = "2026-06-01"
 compatibility_flags = ["nodejs_compat"]
 
-main = "./dist/_worker.js"
+main = "./dist/_worker.js/index.js"
 
-[site]
-bucket = "./dist"
+# Note: `main` points to the explicit entry file rather than the
+# ./dist/_worker.js directory because Wrangler 4 + Astro 5 + adapter 12.6
+# resolves the directory form inconsistently when [assets] is present.
+# index.js is the Astro-generated entrypoint and re-exports the fetch handler.
+
+# ─── Static Assets (Workers Static Assets, replaces deprecated [site]) ──────
+# Astro builds the SSR worker at dist/_worker.js/ and emits all static client
+# assets (CSS, JS islands, fonts, favicons, /brand/*) under dist/. The Worker
+# serves them via env.ASSETS.fetch(request). Without this block the live
+# Worker throws "Cannot read properties of undefined (reading 'fetch')" on
+# every static request — the symptom that caused all our 1101s.
+[assets]
+directory = "./dist"
+binding = "ASSETS"
+not_found_handling = "single-page-application"
 
 # ─── Smart Placement ────────────────────────────────────────
 # Cloudflare automatically places the Worker in the region
