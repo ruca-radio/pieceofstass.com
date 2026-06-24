@@ -9,7 +9,7 @@ import { clearSessionCookie } from '../../../lib/auth';
 export const prerender = false;
 
 export const POST: APIRoute = async ({ request, locals }) => {
-  const env = (locals as Record<string, unknown>).runtime?.env as
+  const env = (locals as { runtime?: { env?: Record<string, unknown> } }).runtime?.env as
     | Record<string, unknown>
     | undefined;
 

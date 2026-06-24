@@ -16,7 +16,7 @@ export default function ProductGallery({ images, title }: Props) {
           src={images[active]}
           alt={`${title} — image ${active + 1}`}
           loading="eager"
-          fetchpriority="high"
+          fetchPriority="high"
           decoding="async"
           width={600}
           height={800}

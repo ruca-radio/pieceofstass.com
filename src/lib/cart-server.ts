@@ -64,7 +64,7 @@ const devKV: KVLike = {
 
 function getKV(context: APIContext): KVLike {
   // Cloudflare Workers runtime exposes bindings via locals.runtime.env
-  const env = (context.locals as Record<string, unknown>)?.runtime?.env as
+  const env = (context.locals as { runtime?: { env?: Record<string, unknown> } })?.runtime?.env as
     | Record<string, unknown>
     | undefined;
   const kv = env?.CART_KV as KVLike | undefined;

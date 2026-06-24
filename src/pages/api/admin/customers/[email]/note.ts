@@ -4,7 +4,7 @@
  */
 import type { APIContext } from 'astro';
 import { isAdminRequest } from '../../../../../lib/admin-auth';
-import { getUserByEmail, upsertUser } from '../../../../../lib/users-server';
+import { upsertUser } from '../../../../../lib/users-server';
 
 export const prerender = false;
 
@@ -24,7 +24,7 @@ export async function POST(context: APIContext): Promise<Response> {
   if (!emailParam) return json({ error: 'Missing email' }, 400);
   const email = decodeURIComponent(emailParam);
 
-  const runtimeEnv = (context.locals as Record<string, unknown>)?.runtime?.env as
+  const runtimeEnv = (context.locals as { runtime?: { env?: Record<string, unknown> } })?.runtime?.env as
     | Record<string, unknown>
     | undefined;
 
@@ -40,7 +40,7 @@ export async function POST(context: APIContext): Promise<Response> {
   }
 
   // Upsert user with admin_notes field
-  const user = await upsertUser(email, { admin_notes: body.note } as Parameters<typeof upsertUser>[1], runtimeEnv);
+  await upsertUser(email, { admin_notes: body.note } as Parameters<typeof upsertUser>[1], runtimeEnv);
 
-  return json({ ok: true, admin_notes: (user as Record<string, unknown>).admin_notes });
+  return json({ ok: true, admin_notes: body.note });
 }

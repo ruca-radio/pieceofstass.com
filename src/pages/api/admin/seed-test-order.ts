@@ -13,7 +13,7 @@ export const prerender = false;
 export async function POST(context: APIContext): Promise<Response> {
   // Only available in non-production
   const isProduction =
-    (context.locals as Record<string, unknown>)?.runtime?.env?.NODE_ENV === 'production' ||
+    (context.locals as { runtime?: { env?: Record<string, unknown> } })?.runtime?.env?.NODE_ENV === 'production' ||
     process.env.NODE_ENV === 'production';
 
   if (isProduction) {
@@ -27,7 +27,7 @@ export async function POST(context: APIContext): Promise<Response> {
     });
   }
 
-  const runtimeEnv = (context.locals as Record<string, unknown>)?.runtime?.env as
+  const runtimeEnv = (context.locals as { runtime?: { env?: Record<string, unknown> } })?.runtime?.env as
     | Record<string, unknown>
     | undefined;
   const kv = getOrdersKVFromEnv(runtimeEnv);

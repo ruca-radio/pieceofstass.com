@@ -3,11 +3,15 @@
 
 import type { User } from './lib/auth';
 
-declare namespace App {
-  interface Locals {
-    user?: User;
-    runtime?: {
-      env: Record<string, unknown>;
-    };
+declare global {
+  namespace App {
+    interface Locals {
+      user?: User;
+      runtime?: {
+        env: Record<string, unknown>;
+      };
+    }
   }
 }
+
+export {};

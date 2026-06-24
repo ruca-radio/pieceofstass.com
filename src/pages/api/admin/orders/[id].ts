@@ -39,7 +39,7 @@ export async function PATCH(context: APIContext): Promise<Response> {
   const { id } = context.params;
   if (!id) return json({ error: 'Missing order id' }, 400);
 
-  const runtimeEnv = (context.locals as Record<string, unknown>)?.runtime?.env as
+  const runtimeEnv = (context.locals as { runtime?: { env?: Record<string, unknown> } })?.runtime?.env as
     | Record<string, unknown>
     | undefined;
   const kv = getOrdersKVFromEnv(runtimeEnv);
@@ -161,7 +161,7 @@ export async function GET(context: APIContext): Promise<Response> {
   const { id } = context.params;
   if (!id) return json({ error: 'Missing order id' }, 400);
 
-  const runtimeEnv = (context.locals as Record<string, unknown>)?.runtime?.env as
+  const runtimeEnv = (context.locals as { runtime?: { env?: Record<string, unknown> } })?.runtime?.env as
     | Record<string, unknown>
     | undefined;
   const kv = getOrdersKVFromEnv(runtimeEnv);

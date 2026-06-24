@@ -18,7 +18,7 @@ function json(body: unknown, status = 200): Response {
 export async function GET(context: APIContext): Promise<Response> {
   if (!(await isAdminRequest(context))) return json({ error: 'Unauthorized' }, 401);
 
-  const runtimeEnv = (context.locals as Record<string, unknown>)?.runtime?.env as Record<string, unknown> | undefined;
+  const runtimeEnv = (context.locals as { runtime?: { env?: Record<string, unknown> } })?.runtime?.env as Record<string, unknown> | undefined;
   const kv = getOrdersKVFromEnv(runtimeEnv);
 
   const { orders: allOrders } = await listOrders(kv, { status: 'all', limit: 1000 });

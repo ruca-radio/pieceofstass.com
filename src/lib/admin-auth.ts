@@ -131,16 +131,16 @@ async function getJWTKey(secret: string): Promise<CryptoKey> {
   );
 }
 
-function base64url(buffer: ArrayBuffer): string {
-  const bytes = new Uint8Array(buffer);
+function base64url(buffer: ArrayBuffer | Uint8Array): string {
+  const bytes = buffer instanceof Uint8Array ? buffer : new Uint8Array(buffer);
   const bin = String.fromCharCode(...bytes);
   return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
 }
 
-function decodeBase64url(str: string): Uint8Array {
+function decodeBase64url(str: string): ArrayBuffer {
   const padded = str.replace(/-/g, '+').replace(/_/g, '/');
   const bin = atob(padded);
-  return Uint8Array.from(bin, (c) => c.charCodeAt(0));
+  return Uint8Array.from(bin, (c) => c.charCodeAt(0)).buffer;
 }
 
 /**

@@ -29,7 +29,7 @@ function json(body: unknown, status = 200): Response {
 export async function GET(context: APIContext): Promise<Response> {
   if (!(await isAdminRequest(context))) return json({ error: 'Unauthorized' }, 401);
 
-  const runtimeEnv = (context.locals as Record<string, unknown>)?.runtime?.env as Record<string, unknown> | undefined;
+  const runtimeEnv = (context.locals as { runtime?: { env?: Record<string, unknown> } })?.runtime?.env as Record<string, unknown> | undefined;
   const kv = getOrdersKVFromEnv(runtimeEnv);
 
   const raw = await kv.get('admin_users');
@@ -43,7 +43,7 @@ export async function GET(context: APIContext): Promise<Response> {
 export async function POST(context: APIContext): Promise<Response> {
   if (!(await isAdminRequest(context))) return json({ error: 'Unauthorized' }, 401);
 
-  const runtimeEnv = (context.locals as Record<string, unknown>)?.runtime?.env as Record<string, unknown> | undefined;
+  const runtimeEnv = (context.locals as { runtime?: { env?: Record<string, unknown> } })?.runtime?.env as Record<string, unknown> | undefined;
   const kv = getOrdersKVFromEnv(runtimeEnv);
 
   let body: { username: string; password: string };
@@ -75,7 +75,7 @@ export async function POST(context: APIContext): Promise<Response> {
 export async function DELETE(context: APIContext): Promise<Response> {
   if (!(await isAdminRequest(context))) return json({ error: 'Unauthorized' }, 401);
 
-  const runtimeEnv = (context.locals as Record<string, unknown>)?.runtime?.env as Record<string, unknown> | undefined;
+  const runtimeEnv = (context.locals as { runtime?: { env?: Record<string, unknown> } })?.runtime?.env as Record<string, unknown> | undefined;
   const kv = getOrdersKVFromEnv(runtimeEnv);
 
   let body: { username: string };
